@@ -49,7 +49,26 @@ project(${PROJECT_NAME} VERSION ${CURRENT_VERSION})
 # Locally, you must run `git submodule update --init --recursive` once
 # and later `git submodule update --remote --merge` to keep it up to date
 # On Github Actions, this is done as a part of actions/checkout
-add_subdirectory(JUCE)
+# EDIT::::::::::::: we dont wont checkout in project Folder, instead use central repo
+# Use JUCE from environment variable or fallback to local submodule
+# Set JUCE_DIR environment variable to point to your central JUCE repository
+if(NOT DEFINED JUCE_DIR OR JUCE_DIR STREQUAL "")
+    # First check environment variable
+    if(DEFINED ENV{JUCE_DIR})
+        set(JUCE_DIR "$ENV{JUCE_DIR}" CACHE PATH "Path to JUCE repository" FORCE)
+    else()
+        # Fallback to local submodule (for CI/CD)
+        set(JUCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/JUCE" CACHE PATH "Path to JUCE repository")
+    endif()
+endif()
+
+if (NOT EXISTS "${JUCE_DIR}/CMakeLists.txt")
+    message(FATAL_ERROR "JUCE not found at ${JUCE_DIR}. Set JUCE_DIR environment variable to your JUCE repository.")
+endif()
+
+message(STATUS "Using JUCE from: ${JUCE_DIR}")
+
+add_subdirectory(${JUCE_DIR} juce)
 
 # Add CLAP format
 add_subdirectory(modules/clap-juce-extensions EXCLUDE_FROM_ALL)
