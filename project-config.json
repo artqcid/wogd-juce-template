@@ -1,0 +1,11 @@
+{
+  "project": {
+    "name": "WOGD_JUCE_Template",
+    "displayName": "WOGD JUCE Template",
+    "version": "0.0.1",
+    "company": "WordOfGearDevelopment",
+    "bundleId": "com.wogd.jucetemplate",
+    "pluginCode": "WD01",
+    "manufacturerCode": "WOGD"
+  }
+}

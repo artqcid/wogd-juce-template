@@ -1,0 +1,69 @@
+{
+  "folders": [
+    {
+      "name": "🎸 Plugin (JUCE)",
+      "path": "./plugin"
+    },
+    {
+      "name": "🎨 GUI (Vue.js)",
+      "path": "./gui"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.git": false
+    },
+    "cmake.sourceDirectory": "${workspaceFolder:🎸 Plugin (JUCE)}",
+    "cmake.buildDirectory": "${workspaceFolder:🎸 Plugin (JUCE)}/build"
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.cmake-tools",
+      "ms-vscode.cpptools",
+      "Vue.volar",
+      "Vue.vscode-typescript-vue-plugin"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Plugin (VST3)",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder:🎸 Plugin (JUCE)}/build/Pamplejuce_artefacts/Debug/VST3/Pamplejuce.vst3",
+        "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}",
+        "preLaunchTask": "Build Plugin"
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Build Plugin",
+        "type": "shell",
+        "command": "cmake",
+        "args": ["--build", "build", "--config", "Debug"],
+        "options": {
+          "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+        }
+      },
+      {
+        "label": "Start GUI Dev Server",
+        "type": "npm",
+        "script": "dev",
+        "path": "gui/",
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "Build GUI",
+        "type": "npm",
+        "script": "build",
+        "path": "gui/"
+      }
+    ]
+  }
+}

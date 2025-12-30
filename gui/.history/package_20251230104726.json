@@ -1,15 +1,12 @@
 {
   "name": "wogd-juce-template-gui",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "sync-config": "node scripts/sync-config.js",
-    "predev": "npm run sync-config",
-    "prebuild": "npm run sync-config",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -33,6 +30,5 @@
     "vite": "^7.3.0",
     "vite-plugin-vue-devtools": "^8.0.5",
     "vue-tsc": "^3.2.1"
-  },
-  "description": "GUI for WOGD JUCE Template"
+  }
 }
