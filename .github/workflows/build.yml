@@ -1,0 +1,59 @@
+name: Build Plugin and GUI
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_plugin:
+    name: Build JUCE Plugin
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Configure CMake
+        working-directory: plugin
+        run: cmake -B build
+      
+      - name: Build
+        working-directory: plugin
+        run: cmake --build build --config Release
+
+  build_gui:
+    name: Build Vue.js GUI
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        working-directory: gui
+        run: npm ci
+      
+      - name: Build
+        working-directory: gui
+        run: npm run build
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gui-dist
+          path: gui/dist/

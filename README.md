@@ -1,55 +1,218 @@
-![PAMPLEJUCE](assets/images/pamplejuce.png)
-[![](https://github.com/sudara/pamplejuce/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/sudara/pamplejuce/actions)
+# Pamplejuce mit Vue.js + WebView2 GUI
 
-Pamplejuce is a ~~template~~ lifestyle for creating and building JUCE plugins in 2025.
+JUCE Audio Plugin Template mit moderner Web-UI über Microsoft Edge WebView2.
 
-Out-of-the-box, it:
+## 🎯 Architektur
 
-1. Runs C++23
-2. Uses JUCE 8.x as a git submodule (tracking develop).
-3. Uses CPM for dependency management.
-3. Relies on CMake 3.25 and higher for cross-platform building.
-4. Has [Catch2](https://github.com/catchorg/Catch2) v3.7.1 for the test framework and runner.
-5. Includes a `Tests` target and a `Benchmarks` target with examples to get started quickly.
-6. Has [Melatonin Inspector](https://github.com/sudara/melatonin_inspector) installed as a JUCE module to help relieve headaches when building plugin UI.
+```
+pamplejuce/
+├── plugin/              # C++ JUCE Audio Plugin
+│   ├── source/
+│   │   └── webview/    # WebView2 Integration
+│   └── CMakeLists.txt
+├── gui/                # Vue.js TypeScript GUI
+│   ├── src/
+│   │   ├── services/   # Plugin Communication
+│   │   └── components/ # UI Components
+│   └── package.json
+└── pamplejuce.code-workspace
+```
 
-It also has integration with GitHub Actions, specifically:
+## 🔌 Plugin ↔ GUI Kommunikation
 
-1. Building and testing cross-platform (linux, macOS, Windows) binaries
-2. Running tests and benchmarks in CI
-3. Running [pluginval](http://github.com/tracktion/pluginval) 1.x against the binaries for plugin validation
-4. Config for [installing Intel IPP](https://www.intel.com/content/www/us/en/developer/tools/oneapi/ipp.html)
-5. [Code signing and notarization on macOS](https://melatonin.dev/blog/how-to-code-sign-and-notarize-macos-audio-plugins-in-ci/)
-6. [Windows code signing via Azure Trusted Signing](https://melatonin.dev/blog/code-signing-on-windows-with-azure-trusted-signing/)
+### Native WebView2 Message-Passing (kein WebSocket!)
 
-It also contains:
+**JavaScript → C++ (Plugin):**
+```typescript
+// gui/src/services/pluginService.ts
+window.chrome.webview.postMessage({
+  type: 'setParameter',
+  data: { id: 'gain', value: 0.75 }
+})
+```
 
-1. A `.gitignore` for all platforms.
-2. A `.clang-format` file for keeping code tidy.
-3. A `VERSION` file that will propagate through JUCE and your app.
-4. A ton of useful comments and options around the CMake config.
+**C++ (Plugin) → JavaScript:**
+```cpp
+// plugin/source/webview/WebViewComponent.cpp
+webview->sendMessage(R"({
+  "type": "parameter",
+  "data": {"id": "gain", "value": 0.75}
+})");
+```
 
-## How does this all work at a high level?
+**JavaScript empfängt:**
+```typescript
+window.chrome.webview.addEventListener('message', (event) => {
+  const { type, data } = event.data
+  // Verarbeite Plugin-Nachricht
+})
+```
 
-Check out the [official Pamplejuce documentation](https://melatonin.dev/manuals/pamplejuce/how-does-this-all-work/).
+## 🚀 Schnellstart
 
-[![Arc - 2024-10-01 51@2x](https://github.com/user-attachments/assets/01d19d2d-fbac-481f-8cec-e9325b2abe57)](https://melatonin.dev/manuals/pamplejuce/how-does-this-all-work/)
+### 1. Workspace öffnen
+```powershell
+code C:\Users\marku\Documents\GitHub\pamplejuce\pamplejuce.code-workspace
+```
 
-## Setting up for YOUR project
+### 2. GUI entwickeln (Browser Dev-Mode)
+```bash
+cd gui
+npm install
+npm run dev
+```
+Öffnet: http://localhost:5173
+- ✅ Hot-Reload aktiv
+- ✅ Mock-Daten für Entwicklung
+- ✅ Browser DevTools verfügbar
 
-This is a template repo!
+### 3. Plugin mit WebView2 GUI bauen
+```bash
+cd plugin
+cmake -B build
+cmake --build build --config Debug
+```
 
-That means you can click "[Use this template](https://github.com/sudara/pamplejuce/generate)" here or at the top of the page to get your own copy (not fork) of the repo. Then you can make it private or keep it public, up to you.
+Das Plugin lädt automatisch:
+- **Dev:** `http://localhost:5173` (wenn npm dev läuft)
+- **Production:** `file:///path/to/gui/dist/index.html`
 
-Then check out the [documentation](https://melatonin.dev/manuals/pamplejuce/setting-your-project-up/) so you know what to tweak. 
+## 🔧 Entwicklungs-Workflow
 
-> [!NOTE]
-> Tests will immediately run and fail (go red) until you [set up code signing](https://melatonin.dev/manuals/pamplejuce/getting-started/code-signing/).
+### Parallele Entwicklung
+1. **Terminal 1:** `cd gui && npm run dev` (Vue Dev-Server)
+2. **Terminal 2:** Plugin in DAW/Host laden
+3. Parameter im Browser ändern → Sofort im Plugin sichtbar
+4. Plugin-Änderungen → Automatisch im Browser aktualisiert
 
-## Having Issues?
+### Debugging
+- **GUI:** Browser DevTools (F12 im WebView2)
+- **Plugin:** VS Code C++ Debugger mit Breakpoints
+- **Kommunikation:** Console logs in beiden Richtungen
 
-Thanks to everyone who has contributed to the repository. 
+## 📦 WebView2 Setup
 
-This repository covers a _lot_ of ground. JUCE itself has a lot of surface area. It's a group effort to maintain the garden and keep things nice!
+### Windows Voraussetzungen
+- **WebView2 Runtime:** Meist vorinstalliert (Windows 11)
+- Download: https://developer.microsoft.com/microsoft-edge/webview2/
 
-If something isn't just working out of the box — *it's probably not just you* — others are running into the problem, too, I promise. Check out [the official docs](https://melatonin.dev/manuals/pamplejuce), then please do [open an issue](https://github.com/sudara/pamplejuce/issues/new)!
+### CMakeLists.txt Integration
+```cmake
+# WebView2 NuGet Package hinzufügen
+find_package(Microsoft.Web.WebView2 REQUIRED)
+
+target_sources(${PROJECT_NAME} PRIVATE
+    source/webview/WebViewComponent.h
+    source/webview/WebViewComponent.cpp
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Microsoft.Web.WebView2
+)
+```
+
+## 🎨 GUI Features
+
+### Aktuell implementiert:
+- ✅ ParameterSlider Komponente
+- ✅ Auto-Detection (WebView2 vs. Browser)
+- ✅ Mock-Daten für Dev-Mode
+- ✅ Bidirektionale Kommunikation
+- ✅ Hot-Reload im Browser
+
+### Beispiel: Parameter im Plugin exponieren
+```cpp
+// Im PluginProcessor
+webview->onMessageReceived = [this](const juce::String& message) {
+    auto json = juce::JSON::parse(message);
+    auto type = json["type"].toString();
+    
+    if (type == "setParameter") {
+        auto id = json["data"]["id"].toString();
+        auto value = json["data"]["value"];
+        
+        if (auto* param = apvts.getParameter(id))
+            param->setValueNotifyingHost(value);
+    }
+};
+
+// Parameter-Änderungen an GUI senden
+void audioProcessorValueTreeStateChanged() {
+    juce::DynamicObject::Ptr data = new juce::DynamicObject();
+    data->setProperty("type", "parameter");
+    // ... Parameter-Daten hinzufügen
+    
+    webview->sendMessage(juce::JSON::toString(data));
+}
+```
+
+## 📁 Projekt-Struktur
+
+### Plugin (C++)
+```
+plugin/source/
+├── PluginProcessor.h/cpp    # Audio-Verarbeitung
+├── PluginEditor.h/cpp        # UI (enthält WebViewComponent)
+└── webview/
+    ├── WebViewComponent.h    # WebView2 Wrapper
+    └── WebViewComponent.cpp  # Platform-spezifisch
+```
+
+### GUI (TypeScript/Vue)
+```
+gui/src/
+├── services/
+│   └── pluginService.ts      # Kommunikation mit Plugin
+├── components/plugin/
+│   └── ParameterSlider.vue   # UI-Komponenten
+└── views/
+    └── PluginView.vue        # Haupt-View
+```
+
+## 🛠️ Build für Production
+
+### GUI bauen
+```bash
+cd gui
+npm run build
+# Output: gui/dist/
+```
+
+### Plugin mit eingebettetem GUI
+```cpp
+// In WebViewComponent: Pfad zum dist/ Ordner
+auto guiPath = juce::File::getSpecialLocation(
+    juce::File::currentExecutableFile
+).getParentDirectory().getChildFile("gui/dist/index.html");
+
+webview->loadURL("file:///" + guiPath.getFullPathName());
+```
+
+## 🎯 Nächste Schritte
+
+1. **WebView2 NuGet Package zu CMake hinzufügen**
+2. **PluginEditor.cpp: WebViewComponent integrieren**
+3. **Parameter-Synchronisation implementieren**
+4. **Custom UI-Komponenten erstellen** (Knobs, Meters, etc.)
+5. **Audio-Visualisierung** (Canvas API für Spektrum/Waveform)
+
+## 💡 Vorteile dieses Ansatzes
+
+- ✅ **Keine Netzwerk-Overhead:** Direkte Kommunikation (kein WebSocket)
+- ✅ **Moderne Web-Technologien:** Vue 3, TypeScript, Vite
+- ✅ **Hot-Reload:** Änderungen sofort sichtbar
+- ✅ **Cross-Platform GUI:** Selber Code, verschiedene Hosts
+- ✅ **Browser DevTools:** Professionelles Debugging
+- ✅ **NPM Ecosystem:** Tausende UI-Libraries verfügbar
+
+## 🛠️ Benötigte Tools
+
+- CMake 3.25+
+- MSVC 2022+ (Windows)
+- Node.js 20+
+- Git
+- WebView2 Runtime
+
+## 📄 Lizenz
+
+Siehe `plugin/LICENSE`
