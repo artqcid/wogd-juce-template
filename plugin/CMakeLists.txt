@@ -92,25 +92,29 @@ if(WIN32)
     endif()
     
     if(WEBVIEW2_SDK_DIR)
-        # Set include and lib directories
-        set(WEBVIEW2_INCLUDE_DIR "${WEBVIEW2_SDK_DIR}/build/native/include")
-        set(WEBVIEW2_LIB_DIR "${WEBVIEW2_SDK_DIR}/build/native/${CMAKE_VS_PLATFORM_NAME}")
+        # Bypass JUCE's FindWebView2 and set variables directly
+        # This allows us to use a custom WebView2 SDK location
+        set(WebView2_FOUND TRUE CACHE BOOL "WebView2 found" FORCE)
+        set(WebView2_include_dir "${WEBVIEW2_SDK_DIR}/build/native/include" CACHE PATH "WebView2 include directory" FORCE)
+        set(WebView2_library "${WEBVIEW2_SDK_DIR}/build/native/${CMAKE_VS_PLATFORM_NAME}/WebView2LoaderStatic.lib" CACHE FILEPATH "WebView2 library" FORCE)
+        set(WebView2_VERSION "1.0.2792.45" CACHE STRING "WebView2 version" FORCE)
+        
+        message(STATUS "Using custom WebView2 SDK from: ${WEBVIEW2_SDK_DIR}")
+        message(STATUS "WebView2 include dir: ${WebView2_include_dir}")
+        message(STATUS "WebView2 library: ${WebView2_library}")
         
         # Verify the SDK structure exists
-        if(NOT EXISTS "${WEBVIEW2_INCLUDE_DIR}/WebView2.h")
+        if(NOT EXISTS "${WebView2_include_dir}/WebView2.h")
             message(FATAL_ERROR "WebView2 SDK not found at ${WEBVIEW2_SDK_DIR}. Expected structure: build/native/include/WebView2.h")
         endif()
         
-        # Create an interface library for WebView2
-        add_library(WebView2 INTERFACE)
-        target_include_directories(WebView2 INTERFACE "${WEBVIEW2_INCLUDE_DIR}")
-        target_link_libraries(WebView2 INTERFACE "${WEBVIEW2_LIB_DIR}/WebView2LoaderStatic.lib")
+        if(NOT EXISTS "${WebView2_library}")
+            message(FATAL_ERROR "WebView2 library not found at ${WebView2_library}")
+        endif()
         
-        message(STATUS "Using WebView2 SDK from: ${WEBVIEW2_SDK_DIR}")
-        message(STATUS "WebView2 include dir: ${WEBVIEW2_INCLUDE_DIR}")
-        message(STATUS "WebView2 lib dir: ${WEBVIEW2_LIB_DIR}")
+        message(STATUS "✓ WebView2 SDK verified successfully")
     else()
-        message(FATAL_ERROR "WebView2 SDK not found. Set WEBVIEW2_SDK_DIR environment variable or allow CPM to download it.")
+        message(FATAL_ERROR "WebView2 SDK not found. Set WEBVIEW2_SDK_DIR environment variable.")
     endif()
 endif()
 
@@ -147,7 +151,11 @@ juce_add_plugin("${PROJECT_NAME}"
     # This is how it's listed in the DAW
     # This can be different from PROJECT_NAME and can have spaces!
     # You might want to use v${MAJOR_VERSION} here once you go to v2...
-    PRODUCT_NAME "${PRODUCT_NAME}")
+    PRODUCT_NAME "${PRODUCT_NAME}"
+    
+    # WebView support
+    NEEDS_WEB_BROWSER TRUE
+    NEEDS_WEBVIEW2 TRUE)
 
 # This lets us use our code in both the JUCE targets and our Test target
 # Without running into ODR violations
@@ -186,6 +194,7 @@ target_compile_definitions(SharedCode
     # WebView2 support enabled for embedded GUI
     JUCE_WEB_BROWSER=1
     JUCE_USE_CURL=0
+    JUCE_USE_WIN_WEBVIEW2_WITH_STATIC_LINKING=1
     JUCE_VST3_CAN_REPLACE_VST2=0
 
     # Uncomment if you are paying for a an Indie/Pro license or releasing under GPLv3

@@ -14,8 +14,18 @@ if(TestFiles)
     # Link against our SharedCode and Catch2
     target_link_libraries(Tests PRIVATE SharedCode Catch2::Catch2WithMain)
     
+    # Link WebView2 library
+    if(WebView2_library)
+        target_link_libraries(Tests PRIVATE "${WebView2_library}")
+    endif()
+    
     # Add the tests directory to include paths
     target_include_directories(Tests PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+    
+    # Add WebView2 include directory
+    if(WebView2_include_dir)
+        target_include_directories(Tests PRIVATE "${WebView2_include_dir}")
+    endif()
     
     # Copy plugin definitions so tests can use JucePlugin_Name etc.
     target_compile_definitions(Tests PRIVATE

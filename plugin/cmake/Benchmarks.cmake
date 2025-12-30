@@ -17,8 +17,18 @@ if(BenchmarkFiles)
     # Link against our SharedCode and Catch2
     target_link_libraries(Benchmarks PRIVATE SharedCode Catch2::Catch2WithMain)
     
+    # Link WebView2 library
+    if(WebView2_library)
+        target_link_libraries(Benchmarks PRIVATE "${WebView2_library}")
+    endif()
+    
     # Add the benchmarks directory to include paths
     target_include_directories(Benchmarks PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/benchmarks")
+    
+    # Add WebView2 include directory
+    if(WebView2_include_dir)
+        target_include_directories(Benchmarks PRIVATE "${WebView2_include_dir}")
+    endif()
     
     # Copy plugin definitions so benchmarks can use JucePlugin_Name etc.
     target_compile_definitions(Benchmarks PRIVATE

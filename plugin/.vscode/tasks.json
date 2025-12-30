@@ -36,10 +36,14 @@
         },
         {
             "label": "Start GUI Dev Server",
-            "type": "npm",
-            "script": "dev",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "run",
+                "dev"
+            ],
             "options": {
-                "cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+                "cwd": "${workspaceFolder}/../gui"
             },
             "isBackground": true,
             "problemMatcher": {
@@ -59,10 +63,14 @@
         },
         {
             "label": "Build GUI",
-            "type": "npm",
-            "script": "build",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "run",
+                "build"
+            ],
             "options": {
-                "cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+                "cwd": "${workspaceFolder}/../gui"
             },
             "problemMatcher": []
         },
