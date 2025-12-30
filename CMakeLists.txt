@@ -70,8 +70,29 @@ message(STATUS "Using JUCE from: ${JUCE_DIR}")
 
 add_subdirectory(${JUCE_DIR} juce)
 
-# Add CLAP format
-add_subdirectory(modules/clap-juce-extensions EXCLUDE_FROM_ALL)
+# Use CLAP from environment variable or fallback to CPM download
+if(NOT DEFINED CLAP_JUCE_EXTENSIONS_DIR OR CLAP_JUCE_EXTENSIONS_DIR STREQUAL "")
+    # First check environment variable
+    if(DEFINED ENV{CLAP_JUCE_EXTENSIONS_DIR})
+        set(CLAP_JUCE_EXTENSIONS_DIR "$ENV{CLAP_JUCE_EXTENSIONS_DIR}" CACHE PATH "Path to clap-juce-extensions repository" FORCE)
+    else()
+        # Fallback to CPM download
+        CPMAddPackage(
+            NAME clap-juce-extensions
+            GITHUB_REPOSITORY free-audio/clap-juce-extensions
+            GIT_TAG main
+        )
+        set(CLAP_JUCE_EXTENSIONS_DIR "${clap-juce-extensions_SOURCE_DIR}" CACHE PATH "Path to clap-juce-extensions repository")
+    endif()
+endif()
+
+if (NOT EXISTS "${CLAP_JUCE_EXTENSIONS_DIR}/CMakeLists.txt")
+    message(FATAL_ERROR "clap-juce-extensions not found at ${CLAP_JUCE_EXTENSIONS_DIR}. Set CLAP_JUCE_EXTENSIONS_DIR environment variable to your clap-juce-extensions repository.")
+endif()
+
+message(STATUS "Using clap-juce-extensions from: ${CLAP_JUCE_EXTENSIONS_DIR}")
+
+add_subdirectory(${CLAP_JUCE_EXTENSIONS_DIR} clap-juce-extensions EXCLUDE_FROM_ALL)
 
 # Add any other modules you want modules here, before the juce_add_plugin call
 # juce_add_module(modules/my_module)
