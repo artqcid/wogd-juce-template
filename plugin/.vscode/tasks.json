@@ -2,6 +2,103 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "🚀 Setup & Start Everything",
+            "detail": "Install dependencies, configure CMake, build plugin, and start GUI dev server",
+            "type": "shell",
+            "command": "echo",
+            "args": [
+                "Starting full setup..."
+            ],
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Install GUI Dependencies",
+                "Configure CMake",
+                "Build Plugin",
+                "Start GUI Dev Server"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Install GUI Dependencies",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "install"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Start GUI Dev Server",
+            "type": "npm",
+            "script": "dev",
+            "path": "gui/",
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "vite",
+                "pattern": {
+                    "regexp": "^(.*)$",
+                    "file": 1,
+                    "location": 2,
+                    "message": 3
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "VITE.*ready in",
+                    "endsPattern": "Local:.*http"
+                }
+            }
+        },
+        {
+            "label": "Build GUI",
+            "type": "npm",
+            "script": "build",
+            "path": "gui/",
+            "problemMatcher": []
+        },
+        {
+            "label": "Configure CMake",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-B",
+                "build",
+                "-G",
+                "Visual Studio 18 2026",
+                "-A",
+                "x64"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Plugin",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--config",
+                "Debug"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "CMake: Build (Incremental)",
             "type": "shell",
             "command": "cmake",
@@ -9,21 +106,14 @@
                 "--build",
                 "build"
             ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
+            "problemMatcher": []
         },
         {
             "label": "CMake: Clean Build",
@@ -34,18 +124,11 @@
                 "build",
                 "--clean-first"
             ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
             "group": "build",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
+            "problemMatcher": []
         },
         {
             "label": "CMake: Build Standalone",
@@ -57,18 +140,11 @@
                 "--target",
                 "Pamplejuce_Standalone"
             ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
             "group": "build",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
+            "problemMatcher": []
         },
         {
             "label": "CMake: Build VST3",
@@ -80,18 +156,11 @@
                 "--target",
                 "Pamplejuce_VST3"
             ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
             "group": "build",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
+            "problemMatcher": []
         },
         {
             "label": "CMake: Build AU",
@@ -103,41 +172,11 @@
                 "--target",
                 "Pamplejuce_AU"
             ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
             "group": "build",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "CMake: Configure",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-B",
-                "build",
-                "-G",
-                "Visual Studio 18 2026",
-                "-A",
-                "x64"
-            ],
-            "group": "build",
-            "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
+            "problemMatcher": []
         },
         {
             "label": "CMake: Build Tests",
@@ -149,18 +188,11 @@
                 "--target",
                 "Tests"
             ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
             "group": "build",
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
+            "problemMatcher": []
         }
     ]
 }
