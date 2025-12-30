@@ -17,9 +17,20 @@ A modern JUCE plugin template with embedded Vue.js GUI using WebView2.
 
 Click **"Use this template"** on GitHub to create your own repository.
 
-### 2. Configure Your Project
+### 2. Run Setup Script
 
-Edit `project-config.json`:
+```bash
+# Windows
+.\setup.ps1
+
+# The script will:
+# - Ask for your project name and details
+# - Update project-config.json automatically
+# - Rename the workspace file
+# - Delete itself when done
+```
+
+**Or manually edit** `project-config.json`:
 
 ```json
 {
@@ -38,7 +49,8 @@ Edit `project-config.json`:
 ### 3. Open Workspace in VS Code
 
 ```bash
-code wogd-juce-template.code-workspace
+code template.code-workspace
+# Or your-project-name.code-workspace if you ran setup.ps1
 ```
 
 ### 4. Build
@@ -66,8 +78,9 @@ The plugin will automatically load the Vue.js GUI from the dev server (`http://l
 ## 📁 Project Structure
 
 ```
-├── project-config.json          # 🎯 Central configuration (edit this!)
-├── wogd-juce-template.code-workspace
+├── project-config.json          # 🎯 Central configuration
+├── template.code-workspace      # VS Code workspace (gets renamed by setup.ps1)
+├── setup.ps1                    # 🔧 Setup script (run once, then deletes itself)
 ├── plugin/                      # C++ JUCE Plugin
 │   ├── CMakeLists.txt
 │   ├── cmake/
