@@ -70,6 +70,50 @@ message(STATUS "Using clap-juce-extensions from: ${CLAP_JUCE_EXTENSIONS_DIR}")
 
 add_subdirectory(${CLAP_JUCE_EXTENSIONS_DIR} clap-juce-extensions EXCLUDE_FROM_ALL)
 
+# WebView2 SDK for Windows - use central repository or download via CPM
+if(WIN32)
+    if(NOT DEFINED WEBVIEW2_SDK_DIR OR WEBVIEW2_SDK_DIR STREQUAL "")
+        # First check environment variable
+        if(DEFINED ENV{WEBVIEW2_SDK_DIR})
+            set(WEBVIEW2_SDK_DIR "$ENV{WEBVIEW2_SDK_DIR}" CACHE PATH "Path to WebView2 SDK" FORCE)
+        else()
+            # Fallback to CPM download
+            CPMAddPackage(
+                NAME webview2
+                VERSION 1.0.2792.45
+                URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.2792.45"
+                DOWNLOAD_ONLY YES
+            )
+            
+            if(webview2_ADDED)
+                set(WEBVIEW2_SDK_DIR "${webview2_SOURCE_DIR}" CACHE PATH "Path to WebView2 SDK")
+            endif()
+        endif()
+    endif()
+    
+    if(WEBVIEW2_SDK_DIR)
+        # Set include and lib directories
+        set(WEBVIEW2_INCLUDE_DIR "${WEBVIEW2_SDK_DIR}/build/native/include")
+        set(WEBVIEW2_LIB_DIR "${WEBVIEW2_SDK_DIR}/build/native/${CMAKE_VS_PLATFORM_NAME}")
+        
+        # Verify the SDK structure exists
+        if(NOT EXISTS "${WEBVIEW2_INCLUDE_DIR}/WebView2.h")
+            message(FATAL_ERROR "WebView2 SDK not found at ${WEBVIEW2_SDK_DIR}. Expected structure: build/native/include/WebView2.h")
+        endif()
+        
+        # Create an interface library for WebView2
+        add_library(WebView2 INTERFACE)
+        target_include_directories(WebView2 INTERFACE "${WEBVIEW2_INCLUDE_DIR}")
+        target_link_libraries(WebView2 INTERFACE "${WEBVIEW2_LIB_DIR}/WebView2LoaderStatic.lib")
+        
+        message(STATUS "Using WebView2 SDK from: ${WEBVIEW2_SDK_DIR}")
+        message(STATUS "WebView2 include dir: ${WEBVIEW2_INCLUDE_DIR}")
+        message(STATUS "WebView2 lib dir: ${WEBVIEW2_LIB_DIR}")
+    else()
+        message(FATAL_ERROR "WebView2 SDK not found. Set WEBVIEW2_SDK_DIR environment variable or allow CPM to download it.")
+    endif()
+endif()
+
 # Add any other modules you want modules here, before the juce_add_plugin call
 # juce_add_module(modules/my_module)
 
@@ -171,6 +215,11 @@ target_link_libraries(SharedCode
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags)
+
+# Link WebView2 on Windows
+if(WIN32 AND TARGET WebView2)
+    target_link_libraries(SharedCode INTERFACE WebView2)
+endif()
 
 # Link the JUCE plugin targets our SharedCode target
 target_link_libraries("${PROJECT_NAME}" PRIVATE SharedCode)
