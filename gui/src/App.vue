@@ -5,7 +5,3 @@ import { RouterView } from 'vue-router'
 <template>
   <RouterView />
 </template>
-
-<style scoped>
-/* Add your global styles here */
-</style>

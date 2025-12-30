@@ -8,12 +8,16 @@ PluginEditor::PluginEditor (PluginProcessor& p)
               juce::WebBrowserComponent::Options::WinWebView2{}
                   .withUserDataFolder(juce::File::getSpecialLocation(
                       juce::File::SpecialLocationType::tempDirectory)))
-          .withNativeIntegrationEnabled()}
+          .withNativeIntegrationEnabled()},
+      resizeCorner(this, nullptr)
 {
     juce::ignoreUnused (processorRef);
 
     // Initialize WebView for embedded GUI
     addAndMakeVisible (webView);
+    
+    // Add resize corner
+    addAndMakeVisible (resizeCorner);
     
     // Load Vue.js GUI - Dev server in Debug, embedded files in Release
     #if defined(DEBUG) || defined(_DEBUG)
@@ -28,6 +32,8 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (800, 600);
+    setResizable(true, true);
+    setResizeLimits(400, 300, 1920, 1080);
 }
 
 PluginEditor::~PluginEditor()
@@ -44,6 +50,10 @@ void PluginEditor::resized()
 {
     auto area = getLocalBounds();
     webView.setBounds(area);
+    
+    // Position resize corner in bottom right
+    const int cornerSize = 16;
+    resizeCorner.setBounds(getWidth() - cornerSize, getHeight() - cornerSize, cornerSize, cornerSize);
 }
 
 void PluginEditor::updateGUIParameter(const juce::String& paramId, float value)

@@ -1,0 +1,15 @@
+.plugin-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: #1e1e1e;
+}
+
+.plugin-view h1 {
+  color: #fff;
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: 400;
+  margin: 0;
+}

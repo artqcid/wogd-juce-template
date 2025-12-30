@@ -26,5 +26,8 @@ private:
     // WebView for Vue.js GUI
     juce::WebBrowserComponent webView;
     
+    // Resize corner for better UX
+    juce::ResizableCornerComponent resizeCorner;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };
