@@ -37,7 +37,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder:🎸 Plugin (JUCE)}/build/WOGD_JUCE_Template_artefacts/Debug/VST3/WOGD JUCE Template.vst3",
-        "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}",
+        "cwd": "${workspaceFolder:�� Plugin (JUCE)}",
         "preLaunchTask": "Build Plugin"
       }
     ]
@@ -46,15 +46,16 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "🚀 Setup & Start Everything",
-        "detail": "Install dependencies, configure CMake, build plugin, and start GUI dev server",
+        "label": "🚀 First Time Setup",
+        "detail": "Initialize GUI submodule, install dependencies, configure CMake, build plugin, and start dev server",
         "type": "shell",
         "command": "echo",
         "args": [
-          "Starting full setup..."
+          "Starting first time setup..."
         ],
         "dependsOrder": "sequence",
         "dependsOn": [
+          "Initialize GUI Submodule",
           "Install GUI Dependencies",
           "Configure CMake",
           "Build Plugin",
@@ -64,6 +65,19 @@
           "kind": "build",
           "isDefault": false
         },
+        "problemMatcher": []
+      },
+      {
+        "label": "Initialize GUI Submodule",
+        "detail": "Initialize and update the GUI git submodule",
+        "type": "shell",
+        "command": "git",
+        "args": [
+          "submodule",
+          "update",
+          "--init",
+          "--recursive"
+        ],
         "problemMatcher": []
       },
       {

@@ -7,13 +7,18 @@ Audio plugin template with JUCE 8 + Vue.js 3 WebView2 GUI
 ### 1. Create New Project
 Click "Use this template" on GitHub to create your own plugin project.
 
-### 2. Clone with Submodules
+### 2. Clone Repository
 ```bash
+# Option A: Clone without GUI (recommended for first setup)
+git clone https://github.com/YOUR_USERNAME/YOUR_PROJECT.git
+cd YOUR_PROJECT
+
+# Option B: Clone with GUI submodule
 git clone --recursive https://github.com/YOUR_USERNAME/YOUR_PROJECT.git
 cd YOUR_PROJECT
 ```
 
-### 3. Run Setup
+### 3. Run Setup Script (Optional)
 ```powershell
 ./setup.ps1
 ```
@@ -23,16 +28,31 @@ The setup will ask for:
 - **Company Name** (e.g., "Your Company")
 - **GUI Repository URL** (optional, uses default template)
 
+This script updates project names and can replace the GUI submodule.
+
 ### 4. Open in VS Code
 ```powershell
 code template.code-workspace
 ```
 
-### 5. Build & Run
-Use VS Code tasks (Ctrl+Shift+P → "Tasks: Run Task"):
-- **🚀 Setup & Start Everything** - Complete build + dev server
-- **Start GUI Dev Server** - Launch Vue dev server
-- **Build Plugin** - Compile the plugin
+### 5. First Time Setup Task
+If you cloned **without** `--recursive`, run this task to initialize everything:
+
+**Ctrl+Shift+P** → "Tasks: Run Task" → **🚀 First Time Setup**
+
+This will:
+1. Initialize GUI submodule (`git submodule update --init`)
+2. Install GUI dependencies (`npm install`)
+3. Configure CMake
+4. Build the plugin
+5. Start the GUI dev server
+
+### 6. Build & Run (After First Setup)
+Use VS Code tasks:
+- **Start GUI Dev Server** - Launch Vue dev server (localhost:5173)
+- **Build Plugin** - Compile the plugin (Debug config)
+- **CMake: Build (Incremental)** - Fast incremental build
+- **Build GUI** - Build production GUI bundle
 
 ## 📁 Structure
 
