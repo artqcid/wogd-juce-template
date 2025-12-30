@@ -1,24 +1,24 @@
 #include "PluginEditor.h"
+#include "webview/WebViewComponent.h"
 
 PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p), processorRef (p)
 {
     juce::ignoreUnused (processorRef);
 
-    // Initialize WebView for GUI using JUCE's WebBrowserComponent
-    #if JUCE_WINDOWS || JUCE_MAC || JUCE_LINUX
-    webView = std::make_unique<juce::WebBrowserComponent>();
+    // Initialize WebView2 Component for embedded GUI
+    #if JUCE_WINDOWS
+    webView = std::make_unique<WebViewComponent>();
     addAndMakeVisible (webView.get());
     
-    // Load Vue.js GUI - Dev server in Debug, built files in Release
+    // Load Vue.js GUI - Dev server in Debug, embedded files in Release
     #if defined(DEBUG) || defined(_DEBUG)
-        webView->goToURL("http://localhost:5173");
+        webView->loadURL("http://localhost:5173");
+        DBG("🔧 Debug Mode: Loading GUI from dev server (localhost:5173)");
     #else
-        // In Release: Load from embedded resources or file system
-        // TODO: Implement GUI file embedding and loading
-        auto guiPath = juce::File::getSpecialLocation(juce::File::currentApplicationFile)
-            .getParentDirectory().getChildFile("gui/dist/index.html");
-        webView->goToURL("file:///" + guiPath.getFullPathName());
+        // In Release: Load from embedded BinaryData resources
+        webView->loadEmbeddedGUI();
+        DBG("📦 Release Mode: Loading GUI from embedded resources");
     #endif
     #endif
 
@@ -50,7 +50,20 @@ void PluginEditor::resized()
 
 void PluginEditor::updateGUIParameter(const juce::String& paramId, float value)
 {
-    // TODO: WebBrowserComponent doesn't have built-in message passing
-    // Need to implement JavaScript communication via evaluateJavascript or similar
+    #if JUCE_WINDOWS
+    if (webView)
+    {
+        // Send parameter update to GUI via WebView2 message passing
+        juce::var messageObj = new juce::DynamicObject();
+        messageObj.getDynamicObject()->setProperty("type", "parameter");
+        juce::var dataObj = new juce::DynamicObject();
+        dataObj.getDynamicObject()->setProperty("id", paramId);
+        dataObj.getDynamicObject()->setProperty("value", value);
+        messageObj.getDynamicObject()->setProperty("data", dataObj);
+        
+        webView->sendMessage(juce::JSON::toString(messageObj));
+    }
+    #else
     juce::ignoreUnused(paramId, value);
+    #endif
 }

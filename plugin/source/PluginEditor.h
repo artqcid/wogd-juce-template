@@ -3,7 +3,9 @@
 #include "PluginProcessor.h"
 #include "BinaryData.h"
 // #include "melatonin_inspector/melatonin_inspector.h"
-// #include "webview/WebViewComponent.h"
+
+// Forward declaration
+class WebViewComponent;
 
 //==============================================================================
 class PluginEditor : public juce::AudioProcessorEditor
@@ -24,8 +26,8 @@ private:
     // access the processor object that created it.
     PluginProcessor& processorRef;
     
-    // WebView for Vue.js GUI using JUCE's built-in WebBrowserComponent
-    std::unique_ptr<juce::WebBrowserComponent> webView;
+    // WebView2 for Vue.js GUI with embedded resources support
+    std::unique_ptr<WebViewComponent> webView;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };

@@ -36,6 +36,9 @@ public:
     /** Lädt HTML direkt */
     void loadHTML(const juce::String& html);
     
+    /** Lädt die GUI aus eingebetteten BinaryData */
+    void loadEmbeddedGUI();
+    
     /** Sendet JSON-Nachricht an JavaScript (via window.chrome.webview.addEventListener) */
     void sendMessage(const juce::String& jsonMessage);
     

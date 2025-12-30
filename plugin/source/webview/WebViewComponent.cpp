@@ -1,8 +1,8 @@
 #include "WebViewComponent.h"
+#include "BinaryData.h"
 
 #if JUCE_WINDOWS
     #include <wrl.h>
-    #include <wil/com.h>
     #include "WebView2.h"
     using namespace Microsoft::WRL;
 #endif
@@ -210,4 +210,29 @@ void WebViewComponent::resized()
         pimpl->updateBounds(getLocalBounds());
     }
     #endif
+}
+
+void WebViewComponent::loadEmbeddedGUI()
+{
+    // Build the HTML with embedded resources
+    juce::String htmlContent;
+    
+    // Try to load index.html from BinaryData
+    int dataSize = 0;
+    if (auto* indexData = BinaryData::getNamedResource("index_html", dataSize))
+    {
+        htmlContent = juce::String::fromUTF8(indexData, dataSize);
+        
+        // Replace asset references with data URLs from BinaryData
+        // This is a simplified version - you might need more sophisticated parsing
+        // For now, load the HTML and let the WebView handle relative paths
+        
+        loadHTML(htmlContent);
+        DBG("✓ Embedded GUI loaded from BinaryData");
+    }
+    else
+    {
+        DBG("⚠️ No embedded GUI found in BinaryData");
+        DBG("   Make sure to run 'npm run build' in gui/ folder before building Release");
+    }
 }
