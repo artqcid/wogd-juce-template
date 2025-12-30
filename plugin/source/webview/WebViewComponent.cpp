@@ -21,9 +21,9 @@ public:
     void loadURL(const juce::String& url)
     {
         #if JUCE_WINDOWS
-        if (webViewController)
+        if (webView)
         {
-            webViewController->Navigate(url.toWideCharPointer());
+            webView->Navigate(url.toWideCharPointer());
         }
         else
         {
@@ -37,9 +37,9 @@ public:
     void loadHTML(const juce::String& html)
     {
         #if JUCE_WINDOWS
-        if (webViewController)
+        if (webView)
         {
-            webViewController->NavigateToString(html.toWideCharPointer());
+            webView->NavigateToString(html.toWideCharPointer());
         }
         #endif
     }
@@ -47,9 +47,9 @@ public:
     void sendMessage(const juce::String& message)
     {
         #if JUCE_WINDOWS
-        if (webViewController)
+        if (webView)
         {
-            webViewController->PostWebMessageAsJson(message.toWideCharPointer());
+            webView->PostWebMessageAsJson(message.toWideCharPointer());
             DBG("📤 Nachricht an JavaScript: " + message);
         }
         #endif
