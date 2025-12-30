@@ -2,20 +2,12 @@ cmake_minimum_required(VERSION 3.25)
 
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include (PamplejuceVersion)
-
-# Modern concise way to add dependencies to your project
-include (CPM)
-
-# Configures universal binaries and decides which version of macOS to support
-include(PamplejuceMacOS)
-
-# Couple tweaks that IMO should be JUCE defaults
-include(JUCEDefaults)
-
 # Load project configuration from central JSON file
 # Edit ../project-config.json to change project settings
 include(ProjectConfig)
+
+# Modern concise way to add dependencies to your project
+include(CPM)
 
 # Change me! Set the plugin formats you want built
 # Valid choices: AAX Unity VST VST3 AU AUv3 Standalone
@@ -27,7 +19,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0141        NEW      CACHE STRING "" FORCE)
 set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded CACHE STRING "" FORCE)
 
 # For simplicity, the name of the CMake project is also the name of the target
-project(${PROJECT_NAME} VERSION ${CURRENT_VERSION})
+project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
 
 # JUCE is setup as a submodule in the /JUCE folder
 # Locally, you must run `git submodule update --init --recursive` once
@@ -82,7 +74,7 @@ add_subdirectory(${CLAP_JUCE_EXTENSIONS_DIR} clap-juce-extensions EXCLUDE_FROM_A
 # juce_add_module(modules/my_module)
 
 # This adds the melatonin inspector module
-add_subdirectory (modules/melatonin_inspector)
+# add_subdirectory(modules/melatonin_inspector)
 
 # See `docs/CMake API.md` in the JUCE repo for all config options
 juce_add_plugin("${PROJECT_NAME}"
@@ -137,7 +129,7 @@ target_sources(SharedCode INTERFACE ${SourceFiles})
 include(Assets)
 
 # MacOS only: Cleans up folder and target organization on Xcode.
-include(XcodePrettify)
+# include(XcodePrettify)
 
 # This is where you can set preprocessor definitions for JUCE and your plugin
 target_compile_definitions(SharedCode
@@ -153,7 +145,7 @@ target_compile_definitions(SharedCode
 
     # lets the app known if we're Debug or Release
     CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}"
-    VERSION="${CURRENT_VERSION}"
+    VERSION="${PROJECT_VERSION}"
 
     # JucePlugin_Name is for some reason doesn't use the nicer PRODUCT_NAME
     PRODUCT_NAME_WITHOUT_VERSION="${PRODUCT_NAME}"
@@ -167,7 +159,6 @@ target_compile_definitions(SharedCode
 target_link_libraries(SharedCode
     INTERFACE
     Assets
-    melatonin_inspector
     juce_audio_utils
     juce_audio_processors
     juce_dsp
