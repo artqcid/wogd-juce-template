@@ -66,10 +66,10 @@
             "problemMatcher": {
                 "owner": "vite",
                 "pattern": {
-                    "regexp": "^(.*)$",
+                    "regexp": ".*",
                     "file": 1,
                     "location": 2,
-                    "message": 3
+                    "message": 0
                 },
                 "background": {
                     "activeOnStart": true,
