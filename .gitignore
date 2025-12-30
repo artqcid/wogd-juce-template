@@ -1,19 +1,35 @@
 # Build artifacts
 plugin/build/
 plugin/Builds/
+plugin/cmake-build-*/
+plugin/Testing/
+plugin/Install/
+plugin/.cache/
 
-# Node modules
+# GUI build artifacts
 gui/node_modules/
 gui/dist/
+gui/.vite/
+gui/.turbo/
 
-# IDE
+# IDE and History
 .vscode/*
 !.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+.history/
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
+*.swp
+*.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Workspace file (user-specific)
+*.code-workspace

@@ -1,3 +1,4 @@
+# CMake
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -10,21 +11,28 @@ CTestTestfile.cmake
 _deps
 **/.DS_Store
 
-# It's nice to have the Builds folder exist, to remind us where it is
+# Build directories
+build/
 Builds/*
 !Builds/.gitkeep
-
-# This should never exist
 Install/*
-
-# Running CTest makes a bunch o junk
 Testing
+cmake-build-*/
+.cache/
 
 # IDE config
 .idea
+.vscode/*
+!.vscode/extensions.json
+.history/
 
-# clion cmake builds
-cmake-build-debug
-cmake-build-release
-cmake-build-relwithdebinfo
+# Packaging output
 packaging/Output/*
+
+# Visual Studio
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+.vs/
