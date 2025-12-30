@@ -1,0 +1,2 @@
+# Windows PowerShell scripts should use LF line endings
+*.ps1 text eol=lf
