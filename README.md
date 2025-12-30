@@ -1,218 +1,158 @@
-# Pamplejuce mit Vue.js + WebView2 GUI
+# WOGD JUCE Template
 
-JUCE Audio Plugin Template mit moderner Web-UI über Microsoft Edge WebView2.
+A modern JUCE plugin template with embedded Vue.js GUI using WebView2.
 
-## 🎯 Architektur
+## ✨ Features
 
-```
-pamplejuce/
-├── plugin/              # C++ JUCE Audio Plugin
-│   ├── source/
-│   │   └── webview/    # WebView2 Integration
-│   └── CMakeLists.txt
-├── gui/                # Vue.js TypeScript GUI
-│   ├── src/
-│   │   ├── services/   # Plugin Communication
-│   │   └── components/ # UI Components
-│   └── package.json
-└── pamplejuce.code-workspace
-```
+- 🎸 **JUCE 8.x** - Modern C++ audio plugin framework
+- 🎨 **Vue.js 3 + TypeScript** - Embedded WebView2 GUI
+- 🔧 **CMake** - Cross-platform build system
+- 📦 **Centralized Configuration** - Single `project-config.json` for all settings
+- 🔄 **Live Reload** - Hot module replacement during development
+- 🧪 **Testing Ready** - Catch2 test framework included
 
-## 🔌 Plugin ↔ GUI Kommunikation
+## 🚀 Quick Start
 
-### Native WebView2 Message-Passing (kein WebSocket!)
+### 1. Use This Template
 
-**JavaScript → C++ (Plugin):**
-```typescript
-// gui/src/services/pluginService.ts
-window.chrome.webview.postMessage({
-  type: 'setParameter',
-  data: { id: 'gain', value: 0.75 }
-})
-```
+Click **"Use this template"** on GitHub to create your own repository.
 
-**C++ (Plugin) → JavaScript:**
-```cpp
-// plugin/source/webview/WebViewComponent.cpp
-webview->sendMessage(R"({
-  "type": "parameter",
-  "data": {"id": "gain", "value": 0.75}
-})");
+### 2. Configure Your Project
+
+Edit `project-config.json`:
+
+```json
+{
+  "project": {
+    "name": "MyPlugin",
+    "displayName": "My Awesome Plugin",
+    "version": "1.0.0",
+    "company": "YourCompany",
+    "bundleId": "com.yourcompany.myplugin",
+    "pluginCode": "Mplg",
+    "manufacturerCode": "Ycom"
+  }
+}
 ```
 
-**JavaScript empfängt:**
-```typescript
-window.chrome.webview.addEventListener('message', (event) => {
-  const { type, data } = event.data
-  // Verarbeite Plugin-Nachricht
-})
+### 3. Open Workspace in VS Code
+
+```bash
+code wogd-juce-template.code-workspace
 ```
 
-## 🚀 Schnellstart
+### 4. Build
 
-### 1. Workspace öffnen
-```powershell
-code C:\Users\marku\Documents\GitHub\pamplejuce\pamplejuce.code-workspace
+**Plugin (C++):**
+```bash
+cd plugin
+cmake -B build -G Ninja
+cmake --build build --config Debug
 ```
 
-### 2. GUI entwickeln (Browser Dev-Mode)
+**GUI (Vue.js):**
 ```bash
 cd gui
 npm install
 npm run dev
 ```
-Öffnet: http://localhost:5173
-- ✅ Hot-Reload aktiv
-- ✅ Mock-Daten für Entwicklung
-- ✅ Browser DevTools verfügbar
 
-### 3. Plugin mit WebView2 GUI bauen
-```bash
-cd plugin
-cmake -B build
-cmake --build build --config Debug
+### 5. Run & Debug
+
+Press **F5** in VS Code to launch the plugin with debugging.
+
+The plugin will automatically load the Vue.js GUI from the dev server (`http://localhost:5173`) with hot reload enabled.
+
+## 📁 Project Structure
+
+```
+├── project-config.json          # 🎯 Central configuration (edit this!)
+├── wogd-juce-template.code-workspace
+├── plugin/                      # C++ JUCE Plugin
+│   ├── CMakeLists.txt
+│   ├── cmake/
+│   │   └── ProjectConfig.cmake  # Reads project-config.json
+│   └── source/
+│       ├── PluginProcessor.cpp
+│       ├── PluginEditor.cpp     # WebView integration
+│       └── webview/
+│           └── WebViewComponent.h/cpp
+└── gui/                         # Vue.js GUI
+    ├── package.json
+    ├── scripts/
+    │   └── sync-config.js       # Syncs project name/version
+    └── src/
+        ├── views/
+        │   └── PluginView.vue
+        └── services/
+            └── pluginService.ts # C++ ↔ JS communication
 ```
 
-Das Plugin lädt automatisch:
-- **Dev:** `http://localhost:5173` (wenn npm dev läuft)
-- **Production:** `file:///path/to/gui/dist/index.html`
+## 🔄 Development Workflow
 
-## 🔧 Entwicklungs-Workflow
+### Debug Mode (Development)
+- Plugin loads GUI from `http://localhost:5173`
+- Hot reload enabled - changes instantly visible
+- `npm run dev` must be running
 
-### Parallele Entwicklung
-1. **Terminal 1:** `cd gui && npm run dev` (Vue Dev-Server)
-2. **Terminal 2:** Plugin in DAW/Host laden
-3. Parameter im Browser ändern → Sofort im Plugin sichtbar
-4. Plugin-Änderungen → Automatisch im Browser aktualisiert
+### Release Mode (Production)
+- Plugin loads GUI from embedded files
+- Run `npm run build` first to create `dist/` folder
 
-### Debugging
-- **GUI:** Browser DevTools (F12 im WebView2)
-- **Plugin:** VS Code C++ Debugger mit Breakpoints
-- **Kommunikation:** Console logs in beiden Richtungen
+## 💬 Communication (C++ ↔ JavaScript)
 
-## 📦 WebView2 Setup
+### JavaScript → C++
+```typescript
+import { pluginService } from '@/services/pluginService'
 
-### Windows Voraussetzungen
-- **WebView2 Runtime:** Meist vorinstalliert (Windows 11)
-- Download: https://developer.microsoft.com/microsoft-edge/webview2/
-
-### CMakeLists.txt Integration
-```cmake
-# WebView2 NuGet Package hinzufügen
-find_package(Microsoft.Web.WebView2 REQUIRED)
-
-target_sources(${PROJECT_NAME} PRIVATE
-    source/webview/WebViewComponent.h
-    source/webview/WebViewComponent.cpp
-)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE
-    Microsoft.Web.WebView2
-)
+pluginService.sendMessage({
+  type: 'setParameter',
+  data: { id: 'gain', value: 0.75 }
+})
 ```
 
-## 🎨 GUI Features
-
-### Aktuell implementiert:
-- ✅ ParameterSlider Komponente
-- ✅ Auto-Detection (WebView2 vs. Browser)
-- ✅ Mock-Daten für Dev-Mode
-- ✅ Bidirektionale Kommunikation
-- ✅ Hot-Reload im Browser
-
-### Beispiel: Parameter im Plugin exponieren
+### C++ → JavaScript
 ```cpp
-// Im PluginProcessor
-webview->onMessageReceived = [this](const juce::String& message) {
-    auto json = juce::JSON::parse(message);
-    auto type = json["type"].toString();
-    
-    if (type == "setParameter") {
-        auto id = json["data"]["id"].toString();
-        auto value = json["data"]["value"];
-        
-        if (auto* param = apvts.getParameter(id))
-            param->setValueNotifyingHost(value);
-    }
-};
+#include "webview/WebViewComponent.h"
 
-// Parameter-Änderungen an GUI senden
-void audioProcessorValueTreeStateChanged() {
-    juce::DynamicObject::Ptr data = new juce::DynamicObject();
-    data->setProperty("type", "parameter");
-    // ... Parameter-Daten hinzufügen
-    
-    webview->sendMessage(juce::JSON::toString(data));
-}
+webView->sendMessage(R"({
+  "type": "parameter",
+  "id": "gain",
+  "value": 0.75
+})")
 ```
 
-## 📁 Projekt-Struktur
-
-### Plugin (C++)
-```
-plugin/source/
-├── PluginProcessor.h/cpp    # Audio-Verarbeitung
-├── PluginEditor.h/cpp        # UI (enthält WebViewComponent)
-└── webview/
-    ├── WebViewComponent.h    # WebView2 Wrapper
-    └── WebViewComponent.cpp  # Platform-spezifisch
+### Receive Messages in JavaScript
+```typescript
+pluginService.onMessage((message) => {
+  console.log('From plugin:', message)
+  // Handle parameter updates, etc.
+})
 ```
 
-### GUI (TypeScript/Vue)
-```
-gui/src/
-├── services/
-│   └── pluginService.ts      # Kommunikation mit Plugin
-├── components/plugin/
-│   └── ParameterSlider.vue   # UI-Komponenten
-└── views/
-    └── PluginView.vue        # Haupt-View
-```
+## 🛠️ Requirements
 
-## 🛠️ Build für Production
+- **Windows**: Visual Studio 2019+ (for WebView2)
+- **CMake**: 3.25+
+- **Node.js**: 20.19+ or 22.12+
+- **Ninja** (recommended) or Visual Studio
 
-### GUI bauen
-```bash
-cd gui
-npm run build
-# Output: gui/dist/
-```
+### Optional Environment Variables
+- `JUCE_DIR` - Path to shared JUCE installation
+- `CLAP_JUCE_EXTENSIONS_DIR` - Path to clap-juce-extensions
 
-### Plugin mit eingebettetem GUI
-```cpp
-// In WebViewComponent: Pfad zum dist/ Ordner
-auto guiPath = juce::File::getSpecialLocation(
-    juce::File::currentExecutableFile
-).getParentDirectory().getChildFile("gui/dist/index.html");
+## 📝 Notes
 
-webview->loadURL("file:///" + guiPath.getFullPathName());
-```
+- **WebView2 is Windows-only** - macOS/Linux require native implementations
+- The `project-config.json` is the single source of truth for project settings
+- Both CMake and NPM read from this file automatically
 
-## 🎯 Nächste Schritte
+## 🎓 Learn More
 
-1. **WebView2 NuGet Package zu CMake hinzufügen**
-2. **PluginEditor.cpp: WebViewComponent integrieren**
-3. **Parameter-Synchronisation implementieren**
-4. **Custom UI-Komponenten erstellen** (Knobs, Meters, etc.)
-5. **Audio-Visualisierung** (Canvas API für Spektrum/Waveform)
+- [JUCE Documentation](https://juce.com/learn/documentation)
+- [Vue.js Documentation](https://vuejs.org/)
+- [WebView2 Documentation](https://learn.microsoft.com/en-us/microsoft-edge/webview2/)
 
-## 💡 Vorteile dieses Ansatzes
+## 📄 License
 
-- ✅ **Keine Netzwerk-Overhead:** Direkte Kommunikation (kein WebSocket)
-- ✅ **Moderne Web-Technologien:** Vue 3, TypeScript, Vite
-- ✅ **Hot-Reload:** Änderungen sofort sichtbar
-- ✅ **Cross-Platform GUI:** Selber Code, verschiedene Hosts
-- ✅ **Browser DevTools:** Professionelles Debugging
-- ✅ **NPM Ecosystem:** Tausende UI-Libraries verfügbar
-
-## 🛠️ Benötigte Tools
-
-- CMake 3.25+
-- MSVC 2022+ (Windows)
-- Node.js 20+
-- Git
-- WebView2 Runtime
-
-## 📄 Lizenz
-
-Siehe `plugin/LICENSE`
+Specify your license here.

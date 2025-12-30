@@ -30,6 +30,3 @@ gui/.turbo/
 # OS
 .DS_Store
 Thumbs.db
-
-# Workspace file (user-specific)
-*.code-workspace

@@ -32,7 +32,7 @@
         "name": "Debug Plugin (VST3)",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder:🎸 Plugin (JUCE)}/build/Pamplejuce_artefacts/Debug/VST3/Pamplejuce.vst3",
+        "program": "${workspaceFolder:🎸 Plugin (JUCE)}/build/WOGD_JUCE_Template_artefacts/Debug/VST3/WOGD JUCE Template.vst3",
         "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}",
         "preLaunchTask": "Build Plugin"
       }
