@@ -7,9 +7,6 @@
     {
       "name": "🎨 GUI (Vue.js)",
       "path": "./gui"
-    },
-    {
-      "path": "../../../thirdParty/JUCE"
     }
   ],
   "settings": {
