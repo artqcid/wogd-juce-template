@@ -38,7 +38,9 @@
             "label": "Start GUI Dev Server",
             "type": "npm",
             "script": "dev",
-            "path": "gui/",
+            "options": {
+                "cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+            },
             "isBackground": true,
             "problemMatcher": {
                 "owner": "vite",
@@ -59,7 +61,9 @@
             "label": "Build GUI",
             "type": "npm",
             "script": "build",
-            "path": "gui/",
+            "options": {
+                "cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+            },
             "problemMatcher": []
         },
         {
