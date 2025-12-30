@@ -15,7 +15,11 @@
       "**/.git": false
     },
     "cmake.sourceDirectory": "${workspaceFolder:🎸 Plugin (JUCE)}",
-    "cmake.buildDirectory": "${workspaceFolder:🎸 Plugin (JUCE)}/build"
+    "cmake.buildDirectory": "${workspaceFolder:🎸 Plugin (JUCE)}/build",
+    "cmake.configureOnOpen": false,
+    "cmake.configureOnEdit": false,
+    "typescript.tsc.autoDetect": "off",
+    "npm.autoDetect": "off"
   },
   "extensions": {
     "recommendations": [
