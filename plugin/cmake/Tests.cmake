@@ -17,6 +17,12 @@ if(TestFiles)
     # Add the tests directory to include paths
     target_include_directories(Tests PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests")
     
+    # Copy plugin definitions so tests can use JucePlugin_Name etc.
+    target_compile_definitions(Tests PRIVATE
+        JucePlugin_Name="${PRODUCT_NAME}"
+        JucePlugin_Manufacturer="${COMPANY_NAME}"
+    )
+    
     # Set C++23
     target_compile_features(Tests PRIVATE cxx_std_23)
 endif()
