@@ -17,6 +17,9 @@ public:
     
     // Send parameter updates to GUI
     void updateGUIParameter(const juce::String& paramId, float value);
+    
+    // Handle messages from GUI
+    void handleMessageFromGUI(const juce::String& message);
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -25,9 +28,6 @@ private:
     
     // WebView for Vue.js GUI
     juce::WebBrowserComponent webView;
-    
-    // Resize corner for better UX
-    juce::ResizableCornerComponent resizeCorner;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };

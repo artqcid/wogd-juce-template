@@ -1,4 +1,7 @@
 #include "PluginEditor.h"
+#include <juce_core/juce_core.h>
+#include <juce_gui_extra/juce_gui_extra.h>
+#include "BinaryData.h"
 
 PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p), processorRef (p),
@@ -8,29 +11,25 @@ PluginEditor::PluginEditor (PluginProcessor& p)
               juce::WebBrowserComponent::Options::WinWebView2{}
                   .withUserDataFolder(juce::File::getSpecialLocation(
                       juce::File::SpecialLocationType::tempDirectory)))
-          .withNativeIntegrationEnabled()},
-      resizeCorner(this, nullptr)
+          .withNativeIntegrationEnabled()}
 {
     juce::ignoreUnused (processorRef);
 
     // Initialize WebView for embedded GUI
     addAndMakeVisible (webView);
     
-    // Add resize corner
-    addAndMakeVisible (resizeCorner);
-    
     // Load Vue.js GUI - Dev server in Debug, embedded files in Release
     #if defined(DEBUG) || defined(_DEBUG)
-        webView.goToURL("http://localhost:5173");
+        webView.goToURL("http://localhost:5173/");
         DBG("🔧 Debug Mode: Loading GUI from dev server (localhost:5173)");
     #else
-        // In Release: Load from embedded BinaryData resources
-        // TODO: Implement ResourceProvider for embedded files
-        DBG("📦 Release Mode: Embedded resources not yet implemented");
+        webView.goToURL("/");
+        webView.setResourceProvider([](const juce::String& path) {
+            return resourceFromBinaryData(path);
+        });
+        DBG("📦 Release Mode: Loading GUI from BinaryData resources");
     #endif
 
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
     setSize (800, 600);
     setResizable(true, true);
     setResizeLimits(400, 300, 1920, 1080);
@@ -42,31 +41,34 @@ PluginEditor::~PluginEditor()
 
 void PluginEditor::paint (juce::Graphics& g)
 {
-    // WebView handles rendering, just fill background
     g.fillAll (juce::Colours::black);
 }
 
 void PluginEditor::resized()
 {
-    auto area = getLocalBounds();
-    webView.setBounds(area);
-    
-    // Position resize corner in bottom right
-    const int cornerSize = 16;
-    resizeCorner.setBounds(getWidth() - cornerSize, getHeight() - cornerSize, cornerSize, cornerSize);
+    webView.setBounds(getLocalBounds());
 }
 
-void PluginEditor::updateGUIParameter(const juce::String& paramId, float value)
-{
-    // Send parameter update to GUI via WebView message passing
-    juce::var messageObj = new juce::DynamicObject();
-    messageObj.getDynamicObject()->setProperty("type", "parameter");
-    juce::var dataObj = new juce::DynamicObject();
-    dataObj.getDynamicObject()->setProperty("id", paramId);
-    dataObj.getDynamicObject()->setProperty("value", value);
-    messageObj.getDynamicObject()->setProperty("data", dataObj);
-    
-    webView.evaluateJavascript(
-        "window.postMessage(" + juce::JSON::toString(messageObj) + ", '*')",
-        nullptr);
+static juce::WebBrowserComponent::Resource resourceFromBinaryData(const juce::String& path) {
+    // Map URL to BinaryData resource name
+    juce::String resourceName = path;
+    if (resourceName.isEmpty() || resourceName == "/")
+        resourceName = "index.html";
+    else if (resourceName.startsWithChar('/'))
+        resourceName = resourceName.substring(1);
+
+    // Replace / with _ for BinaryData symbol
+    resourceName = resourceName.replaceCharacter('/', '_');
+
+    const char* data = nullptr;
+    int dataSize = 0;
+    #define TRY_RESOURCE(res) if (resourceName == #res) { data = (const char*)BinaryData::res; dataSize = BinaryData::res##Size; }
+    // Add more resources as needed
+    TRY_RESOURCE(index_html)
+    // TODO: Add more assets (js, css, images) here
+    #undef TRY_RESOURCE
+
+    if (data && dataSize > 0)
+        return juce::WebBrowserComponent::Resource(juce::MemoryBlock(data, dataSize), juce::URL::getMIMETypeForFile(resourceName));
+    return {};
 }
