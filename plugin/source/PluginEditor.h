@@ -25,9 +25,12 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     PluginProcessor& processorRef;
-    
+
     // WebView for Vue.js GUI
     juce::WebBrowserComponent webView;
-    
+
+    // Resource provider for WebView (Release mode)
+    static juce::WebBrowserComponent::Resource resourceFromBinaryData(const juce::String& path);
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };
