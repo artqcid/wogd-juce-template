@@ -1,171 +1,74 @@
 # WOGD JUCE Template
 
-A modern JUCE plugin template with embedded Vue.js GUI using WebView2.
-
-## ✨ Features
-
-- 🎸 **JUCE 8.x** - Modern C++ audio plugin framework
-- 🎨 **Vue.js 3 + TypeScript** - Embedded WebView2 GUI
-- 🔧 **CMake** - Cross-platform build system
-- 📦 **Centralized Configuration** - Single `project-config.json` for all settings
-- 🔄 **Live Reload** - Hot module replacement during development
-- 🧪 **Testing Ready** - Catch2 test framework included
+Audio plugin template with JUCE 8 + Vue.js 3 WebView2 GUI
 
 ## 🚀 Quick Start
 
-### 1. Use This Template
+### 1. Create New Project
+Click "Use this template" on GitHub to create your own plugin project.
 
-Click **"Use this template"** on GitHub to create your own repository.
-
-### 2. Run Setup Script
-
+### 2. Clone with Submodules
 ```bash
-# Windows
-.\setup.ps1
-
-# The script will:
-# - Ask for your project name and details
-# - Update project-config.json automatically
-# - Rename the workspace file
-# - Delete itself when done
+git clone --recursive https://github.com/YOUR_USERNAME/YOUR_PROJECT.git
+cd YOUR_PROJECT
 ```
 
-**Or manually edit** `project-config.json`:
-
-```json
-{
-  "project": {
-    "name": "MyPlugin",
-    "displayName": "My Awesome Plugin",
-    "version": "1.0.0",
-    "company": "YourCompany",
-    "bundleId": "com.yourcompany.myplugin",
-    "pluginCode": "Mplg",
-    "manufacturerCode": "Ycom"
-  }
-}
+### 3. Run Setup
+```powershell
+./setup.ps1
 ```
 
-### 3. Open Workspace in VS Code
+The setup will ask for:
+- **Plugin Name** (e.g., "My Awesome Synth")
+- **Company Name** (e.g., "Your Company")
+- **GUI Repository URL** (optional, uses default template)
 
-```bash
+### 4. Open in VS Code
+```powershell
 code template.code-workspace
-# Or your-project-name.code-workspace if you ran setup.ps1
 ```
 
-### 4. Build
+### 5. Build & Run
+Use VS Code tasks (Ctrl+Shift+P → "Tasks: Run Task"):
+- **🚀 Setup & Start Everything** - Complete build + dev server
+- **Start GUI Dev Server** - Launch Vue dev server
+- **Build Plugin** - Compile the plugin
 
-**Plugin (C++):**
-```bash
-cd plugin
-cmake -B build -G Ninja
-cmake --build build --config Debug
-```
+## 📁 Structure
 
-**GUI (Vue.js):**
+- `plugin/` - JUCE C++ plugin code
+- `gui/` - Vue.js GUI (git submodule)
+- `template.code-workspace` - VS Code workspace
+
+## 🎨 GUI Development
+
+The GUI is a **separate repository** as a git submodule.
+
+**For GUI-only development:**
 ```bash
 cd gui
 npm install
 npm run dev
 ```
 
-### 5. Run & Debug
+Open http://localhost:5173 in your browser.
 
-Press **F5** in VS Code to launch the plugin with debugging.
+## 🔧 Requirements
 
-The plugin will automatically load the Vue.js GUI from the dev server (`http://localhost:5173`) with hot reload enabled.
+- Visual Studio 2026 or later
+- CMake 3.25+
+- Node.js 18+
+- WebView2 Runtime (usually pre-installed on Windows)
 
-## 📁 Project Structure
+## 📝 Customization
 
-```
-├── project-config.json          # 🎯 Central configuration
-├── template.code-workspace      # VS Code workspace (gets renamed by setup.ps1)
-├── setup.ps1                    # 🔧 Setup script (run once, then deletes itself)
-├── plugin/                      # C++ JUCE Plugin
-│   ├── CMakeLists.txt
-│   ├── cmake/
-│   │   └── ProjectConfig.cmake  # Reads project-config.json
-│   └── source/
-│       ├── PluginProcessor.cpp
-│       ├── PluginEditor.cpp     # WebView integration
-│       └── webview/
-│           └── WebViewComponent.h/cpp
-└── gui/                         # Vue.js GUI
-    ├── package.json
-    ├── scripts/
-    │   └── sync-config.js       # Syncs project name/version
-    └── src/
-        ├── views/
-        │   └── PluginView.vue
-        └── services/
-            └── pluginService.ts # C++ ↔ JS communication
-```
+After setup, customize:
+- Plugin parameters in `plugin/source/PluginProcessor.cpp`
+- GUI in `gui/src/views/PluginView.vue`
+- Styles in `gui/src/assets/master.css`
 
-## 🔄 Development Workflow
-
-### Debug Mode (Development)
-- Plugin loads GUI from `http://localhost:5173`
-- Hot reload enabled - changes instantly visible
-- `npm run dev` must be running
-
-### Release Mode (Production)
-- Plugin loads GUI from embedded files
-- Run `npm run build` first to create `dist/` folder
-
-## 💬 Communication (C++ ↔ JavaScript)
-
-### JavaScript → C++
-```typescript
-import { pluginService } from '@/services/pluginService'
-
-pluginService.sendMessage({
-  type: 'setParameter',
-  data: { id: 'gain', value: 0.75 }
-})
-```
-
-### C++ → JavaScript
-```cpp
-#include "webview/WebViewComponent.h"
-
-webView->sendMessage(R"({
-  "type": "parameter",
-  "id": "gain",
-  "value": 0.75
-})")
-```
-
-### Receive Messages in JavaScript
-```typescript
-pluginService.onMessage((message) => {
-  console.log('From plugin:', message)
-  // Handle parameter updates, etc.
-})
-```
-
-## 🛠️ Requirements
-
-- **Windows**: Visual Studio 2019+ (for WebView2)
-- **CMake**: 3.25+
-- **Node.js**: 20.19+ or 22.12+
-- **Ninja** (recommended) or Visual Studio
-
-### Optional Environment Variables
-- `JUCE_DIR` - Path to shared JUCE installation
-- `CLAP_JUCE_EXTENSIONS_DIR` - Path to clap-juce-extensions
-
-## 📝 Notes
-
-- **WebView2 is Windows-only** - macOS/Linux require native implementations
-- The `project-config.json` is the single source of truth for project settings
-- Both CMake and NPM read from this file automatically
-
-## 🎓 Learn More
+## 📚 Resources
 
 - [JUCE Documentation](https://juce.com/learn/documentation)
-- [Vue.js Documentation](https://vuejs.org/)
-- [WebView2 Documentation](https://learn.microsoft.com/en-us/microsoft-edge/webview2/)
-
-## 📄 License
-
-Specify your license here.
+- [Vue.js 3 Guide](https://vuejs.org/guide/)
+- [WebView2 Docs](https://learn.microsoft.com/en-us/microsoft-edge/webview2/)

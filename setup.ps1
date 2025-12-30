@@ -1,113 +1,105 @@
 #!/usr/bin/env pwsh
-<#
-.SYNOPSIS
-    Setup script for WOGD JUCE Template - Run this once after cloning
-.DESCRIPTION
-    This script will:
-    - Ask for your project name
-    - Update project-config.json
-    - Optionally rename the workspace file
-    - Delete itself when done
-#>
+# WOGD JUCE Template Setup Script
+# This script configures a new plugin project from the template
 
-Write-Host "[SETUP] WOGD JUCE Template Setup" -ForegroundColor Cyan
+Write-Host "🎸 WOGD JUCE Template Setup" -ForegroundColor Cyan
 Write-Host "================================" -ForegroundColor Cyan
 Write-Host ""
 
-# Get project name
-$projectName = Read-Host "Enter your project name (e.g., 'MyAwesomePlugin')"
-if ([string]::IsNullOrWhiteSpace($projectName)) {
-    Write-Host "[ERROR] Project name cannot be empty" -ForegroundColor Red
+# Get project information
+$pluginName = Read-Host "Plugin Name (e.g., 'My Awesome Synth')"
+if ([string]::IsNullOrWhiteSpace($pluginName)) {
+    Write-Host "❌ Plugin name is required!" -ForegroundColor Red
     exit 1
 }
 
-# Generate internal name (no spaces)
-$internalName = $projectName -replace '\s+', '_'
-
-# Get company name
-$companyName = Read-Host "Enter your company name (e.g., 'MyCompany')"
+$companyName = Read-Host "Company Name (e.g., 'WordOfGearDevelopment')"
 if ([string]::IsNullOrWhiteSpace($companyName)) {
-    $companyName = "YourCompany"
+    Write-Host "❌ Company name is required!" -ForegroundColor Red
+    exit 1
 }
 
-# Generate bundle ID
-$bundleIdBase = $companyName.ToLower() -replace '\s+', ''
-$bundleId = "com.$bundleIdBase." + ($projectName.ToLower() -replace '\s+', '')
-
-# Generate plugin codes
-Write-Host ""
-Write-Host "Plugin codes must be 4 characters:" -ForegroundColor Yellow
-$pluginCode = Read-Host "Enter plugin code (4 chars, e.g., 'Mplg')"
-if ($pluginCode.Length -ne 4) {
-    Write-Host "[WARNING] Using default: Plug" -ForegroundColor Yellow
-    $pluginCode = "Plug"
-}
-
-$manufacturerCode = Read-Host "Enter manufacturer code (4 chars, e.g., 'Ycom')"
-if ($manufacturerCode.Length -ne 4) {
-    Write-Host "[WARNING] Using default: Demo" -ForegroundColor Yellow
-    $manufacturerCode = "Demo"
+$guiRepoDefault = "https://github.com/artqcid/wogd-juce-template-gui.git"
+$guiRepo = Read-Host "GUI Repository URL (press Enter for default template)"
+if ([string]::IsNullOrWhiteSpace($guiRepo)) {
+    $guiRepo = $guiRepoDefault
 }
 
 Write-Host ""
-Write-Host "[CONFIG] Configuration:" -ForegroundColor Green
-Write-Host "  Project Name: $projectName" -ForegroundColor Gray
-Write-Host "  Internal Name: $internalName" -ForegroundColor Gray
-Write-Host "  Company: $companyName" -ForegroundColor Gray
-Write-Host "  Bundle ID: $bundleId" -ForegroundColor Gray
-Write-Host "  Plugin Code: $pluginCode" -ForegroundColor Gray
-Write-Host "  Manufacturer Code: $manufacturerCode" -ForegroundColor Gray
+Write-Host "📋 Configuration:" -ForegroundColor Yellow
+Write-Host "  Plugin Name: $pluginName"
+Write-Host "  Company: $companyName"
+Write-Host "  GUI Repo: $guiRepo"
 Write-Host ""
 
-$confirm = Read-Host "Proceed? (y/n)"
+$confirm = Read-Host "Proceed with setup? (y/n)"
 if ($confirm -ne 'y') {
-    Write-Host "[ERROR] Setup cancelled" -ForegroundColor Red
+    Write-Host "Setup cancelled." -ForegroundColor Yellow
     exit 0
 }
 
-# Update project-config.json
 Write-Host ""
-Write-Host "[UPDATE] Updating project-config.json..." -ForegroundColor Cyan
-$config = @{
-    project = @{
-        name = $internalName
-        displayName = $projectName
-        version = "0.0.1"
-        company = $companyName
-        bundleId = $bundleId
-        pluginCode = $pluginCode
-        manufacturerCode = $manufacturerCode
-    }
-} | ConvertTo-Json -Depth 10
+Write-Host "🔧 Setting up project..." -ForegroundColor Green
 
-Set-Content -Path "project-config.json" -Value $config
+# Create safe identifiers (no spaces, special chars)
+$pluginId = $pluginName -replace '[^a-zA-Z0-9]', '_'
+$pluginIdSpaces = $pluginName -replace '[^a-zA-Z0-9 ]', ''
 
-# Rename workspace file
-$workspaceName = ($projectName -replace '\s+', '-').ToLower()
-$newWorkspaceFile = "$workspaceName.code-workspace"
+# Update CMakeLists.txt
+Write-Host "  → Updating CMakeLists.txt..." -ForegroundColor Gray
+$cmakePath = "plugin/CMakeLists.txt"
+$cmakeContent = Get-Content $cmakePath -Raw
+$cmakeContent = $cmakeContent -replace 'set\(PRODUCT_NAME "WOGD JUCE Template"\)', "set(PRODUCT_NAME `"$pluginIdSpaces`")"
+$cmakeContent = $cmakeContent -replace 'set\(COMPANY_NAME "WordOfGearDevelopment"\)', "set(COMPANY_NAME `"$companyName`")"
+$cmakeContent = $cmakeContent -replace 'project\(WOGD_JUCE_Template', "project($pluginId"
+Set-Content $cmakePath -Value $cmakeContent
 
-Write-Host "[FILE] Renaming workspace file to $newWorkspaceFile..." -ForegroundColor Cyan
-if (Test-Path "template.code-workspace") {
-    Rename-Item -Path "template.code-workspace" -NewName $newWorkspaceFile
+# Update VERSION file
+Write-Host "  → Updating VERSION..." -ForegroundColor Gray
+Set-Content "plugin/VERSION" -Value "0.0.1"
+
+# Update template.code-workspace
+Write-Host "  → Updating workspace file..." -ForegroundColor Gray
+$workspacePath = "template.code-workspace"
+if (Test-Path $workspacePath) {
+    $workspaceContent = Get-Content $workspacePath -Raw
+    $workspaceContent = $workspaceContent -replace 'WOGD JUCE Template', $pluginIdSpaces
+    $workspaceContent = $workspaceContent -replace 'WOGD_JUCE_Template', $pluginId
+    Set-Content $workspacePath -Value $workspaceContent
 }
 
-Write-Host ""
-Write-Host "[OK] Setup complete!" -ForegroundColor Green
-Write-Host ""
-Write-Host "Next steps:" -ForegroundColor Yellow
-Write-Host "  1. Open workspace: code $newWorkspaceFile" -ForegroundColor Gray
-Write-Host "  2. Install GUI dependencies: cd gui; npm install" -ForegroundColor Gray
-Write-Host "  3. Configure CMake: cd plugin; cmake -B build" -ForegroundColor Gray
-Write-Host "  4. Press F5 to build and debug" -ForegroundColor Gray
-Write-Host ""
-
-# Ask to delete setup script
-$deleteScript = Read-Host "Delete this setup script? (y/n)"
-if ($deleteScript -eq 'y') {
-    Write-Host "[DELETE] Deleting setup script..." -ForegroundColor Cyan
-    Remove-Item -Path $PSCommandPath -Force
-    Write-Host "[OK] Script deleted. Happy coding! " -ForegroundColor Green
+# Remove existing gui submodule if present
+Write-Host "  → Removing template GUI submodule..." -ForegroundColor Gray
+if (Test-Path "gui") {
+    git submodule deinit -f gui 2`>$null
+    git rm -f gui 2`>$null
+    Remove-Item -Recurse -Force .git/modules/gui -ErrorAction SilentlyContinue
 }
 
+# Add new GUI submodule
+Write-Host "  → Adding GUI submodule from $guiRepo..." -ForegroundColor Gray
+git submodule add $guiRepo gui
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "❌ Failed to add GUI submodule!" -ForegroundColor Red
+    exit 1
+}
 
+# Initialize and update submodule
+Write-Host "  → Initializing GUI submodule..." -ForegroundColor Gray
+git submodule update --init --recursive
 
+# Commit changes
+Write-Host "  → Committing changes..." -ForegroundColor Gray
+git add -A
+git commit -m "Setup: Configure project as '$pluginIdSpaces' by $companyName"
+
+Write-Host ""
+Write-Host "✅ Setup complete!" -ForegroundColor Green
+Write-Host ""
+Write-Host "Next steps:" -ForegroundColor Cyan
+Write-Host "  1. Open template.code-workspace in VS Code"
+Write-Host "  2. Run task 'Install GUI Dependencies'"
+Write-Host "  3. Run task 'Configure CMake'"
+Write-Host "  4. Run task '🚀 Setup & Start Everything'"
+Write-Host ""
+Write-Host "Happy coding! 🎵" -ForegroundColor Magenta
