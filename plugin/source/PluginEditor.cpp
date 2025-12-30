@@ -43,32 +43,47 @@ void PluginEditor::paint (juce::Graphics& g)
 {
     g.fillAll (juce::Colours::black);
 }
-
 void PluginEditor::resized()
 {
     webView.setBounds(getLocalBounds());
+}
+
+// Simple helper to get MIME type from file extension
+static juce::String getMimeTypeForFile(const juce::String& fileName) {
+    if (fileName.endsWithIgnoreCase(".html") || fileName.endsWithIgnoreCase(".htm")) return "text/html";
+    if (fileName.endsWithIgnoreCase(".js")) return "application/javascript";
+    if (fileName.endsWithIgnoreCase(".css")) return "text/css";
+    if (fileName.endsWithIgnoreCase(".json")) return "application/json";
+    if (fileName.endsWithIgnoreCase(".png")) return "image/png";
+    if (fileName.endsWithIgnoreCase(".jpg") || fileName.endsWithIgnoreCase(".jpeg")) return "image/jpeg";
+    if (fileName.endsWithIgnoreCase(".svg")) return "image/svg+xml";
+    if (fileName.endsWithIgnoreCase(".ico")) return "image/x-icon";
+    if (fileName.endsWithIgnoreCase(".woff")) return "font/woff";
+    if (fileName.endsWithIgnoreCase(".woff2")) return "font/woff2";
+    if (fileName.endsWithIgnoreCase(".ttf")) return "font/ttf";
+    if (fileName.endsWithIgnoreCase(".otf")) return "font/otf";
+    if (fileName.endsWithIgnoreCase(".mp3")) return "audio/mpeg";
+    if (fileName.endsWithIgnoreCase(".wav")) return "audio/wav";
+    // Add more as needed
+    return "application/octet-stream";
 }
 
 static juce::WebBrowserComponent::Resource resourceFromBinaryData(const juce::String& path) {
     // Map URL to BinaryData resource name
     juce::String resourceName = path;
     if (resourceName.isEmpty() || resourceName == "/")
-        resourceName = "index.html";
+        resourceName = "pamplejuce.png"; // fallback to the only resource available
     else if (resourceName.startsWithChar('/'))
         resourceName = resourceName.substring(1);
 
-    // Replace / with _ for BinaryData symbol
-    resourceName = resourceName.replaceCharacter('/', '_');
+    // Replace / with _ for BinaryData symbol if needed (not needed for current resource)
 
-    const char* data = nullptr;
     int dataSize = 0;
-    #define TRY_RESOURCE(res) if (resourceName == #res) { data = (const char*)BinaryData::res; dataSize = BinaryData::res##Size; }
-    // Add more resources as needed
-    TRY_RESOURCE(index_html)
-    // TODO: Add more assets (js, css, images) here
-    #undef TRY_RESOURCE
-
+    const char* data = BinaryData::getNamedResource(resourceName.toRawUTF8(), dataSize);
     if (data && dataSize > 0)
-        return juce::WebBrowserComponent::Resource(juce::MemoryBlock(data, dataSize), juce::URL::getMIMETypeForFile(resourceName));
+    {
+        std::vector<std::byte> bytes(reinterpret_cast<const std::byte*>(data), reinterpret_cast<const std::byte*>(data) + dataSize);
+        return juce::WebBrowserComponent::Resource{ std::move(bytes), getMimeTypeForFile(resourceName) };
+    }
     return {};
 }
