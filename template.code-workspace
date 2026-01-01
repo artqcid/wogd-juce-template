@@ -1,14 +1,15 @@
 {
   "folders": [
     {
-      "name": "🎸 Plugin (JUCE)",
-      "path": "./plugin"
-    },
-    {
       "name": "🎨 GUI (Vue.js)",
-      "path": "./gui"
+      "path": "gui"
     },
     {
+      "name": "🎸 Plugin (JUCE)",
+      "path": "plugin"
+    },
+    {
+      "name": "wogd-juce-template",
       "path": "."
     }
   ],
@@ -22,7 +23,8 @@
     "cmake.configureOnOpen": false,
     "cmake.configureOnEdit": false,
     "typescript.tsc.autoDetect": "off",
-    "npm.autoDetect": "off"
+    "npm.autoDetect": "off",
+    "powershell.cwd": "wogd-juce-template"
   },
   "extensions": {
     "recommendations": [
