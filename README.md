@@ -45,15 +45,13 @@ This will:
 2. Install GUI dependencies (`npm install`)
 3. Configure CMake
 4. Build the plugin
-5. Start the GUI dev server
+5. Start the GUI dev server (manuell ausführen)
 
 ### 6. Build & Run (After First Setup)
 Use VS Code tasks:
-- **Start GUI Dev Server** - Launch Vue dev server (localhost:5173)
-- **Build Plugin** - Compile the plugin (Debug config)
-- **CMake: Build (Incremental)** - Fast incremental build
-- **Build GUI** - Build production GUI bundle
 
+**Optional/Manuell:**
+4. Start GUI dev server (manuell ausführen)
 ## 📁 Structure
 
 - `plugin/` - JUCE C++ plugin code

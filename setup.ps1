@@ -66,12 +66,16 @@ Write-Host "  Updating workspace file..." -ForegroundColor Gray
 $workspacePath = "template.code-workspace"
 $newWorkspacePath = "$pluginId.code-workspace"
 if (Test-Path $workspacePath) {
-    $workspaceContent = Get-Content $workspacePath -Raw
-    $workspaceContent = $workspaceContent -replace 'WOGD JUCE Template', $pluginIdSpaces
-    $workspaceContent = $workspaceContent -replace 'WOGD_JUCE_Template', $pluginId
-    Set-Content $newWorkspacePath -Value $workspaceContent
+    $workspaceContent = Get-Content $workspacePath -Raw | ConvertFrom-Json
+    # Passe den Namen des Root-Ordners an den Projektnamen an
+    foreach ($folder in $workspaceContent.folders) {
+        if ($folder.path -eq ".") {
+            $folder.name = $pluginIdSpaces
+        }
+    }
+    $workspaceContent | ConvertTo-Json -Depth 10 | Set-Content $newWorkspacePath -Encoding UTF8
     Remove-Item $workspacePath
-    Write-Host "  Renamed workspace: $workspacePath -> $newWorkspacePath" -ForegroundColor Gray
+    Write-Host "  Renamed workspace: $workspacePath -> $newWorkspacePath (Root-Ordner-Name angepasst)" -ForegroundColor Gray
 }
 
 # Remove existing gui submodule if present

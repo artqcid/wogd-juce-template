@@ -13,8 +13,7 @@
             "dependsOn": [
                 "Install GUI Dependencies",
                 "Configure CMake",
-                "Build Plugin",
-                "Start GUI Dev Server"
+                "Build Plugin"
             ],
             "group": {
                 "kind": "build",
