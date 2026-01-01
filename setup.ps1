@@ -77,9 +77,10 @@ if (Test-Path $workspacePath) {
 # Remove existing gui submodule if present
 Write-Host "  Removing template GUI submodule..." -ForegroundColor Gray
 if (Test-Path "gui") {
-    git submodule deinit -f gui 2`>$null
-    git rm -f gui 2`>$null
+    git submodule deinit -f gui 2>$null
+    git rm -f gui 2>$null
     Remove-Item -Recurse -Force .git/modules/gui -ErrorAction SilentlyContinue
+    Remove-Item -Recurse -Force gui -ErrorAction SilentlyContinue
 }
 
 # Add new GUI submodule
