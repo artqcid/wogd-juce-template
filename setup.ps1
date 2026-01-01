@@ -2,20 +2,20 @@
 # WOGD JUCE Template Setup Script
 # This script configures a new plugin project from the template
 
-Write-Host "🎸 WOGD JUCE Template Setup" -ForegroundColor Cyan
+Write-Host "WOGD JUCE Template Setup" -ForegroundColor Cyan
 Write-Host "================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Get project information
 $pluginName = Read-Host "Plugin Name (e.g., 'My Awesome Synth')"
 if ([string]::IsNullOrWhiteSpace($pluginName)) {
-    Write-Host "❌ Plugin name is required!" -ForegroundColor Red
+    Write-Host "[ERROR] Plugin name is required!" -ForegroundColor Red
     exit 1
 }
 
 $companyName = Read-Host "Company Name (e.g., 'WordOfGearDevelopment')"
 if ([string]::IsNullOrWhiteSpace($companyName)) {
-    Write-Host "❌ Company name is required!" -ForegroundColor Red
+    Write-Host "[ERROR] Company name is required!" -ForegroundColor Red
     exit 1
 }
 
@@ -26,7 +26,7 @@ if ([string]::IsNullOrWhiteSpace($guiRepo)) {
 }
 
 Write-Host ""
-Write-Host "📋 Configuration:" -ForegroundColor Yellow
+Write-Host "Configuration:" -ForegroundColor Yellow
 Write-Host "  Plugin Name: $pluginName"
 Write-Host "  Company: $companyName"
 Write-Host "  GUI Repo: $guiRepo"
@@ -39,14 +39,14 @@ if ($confirm -ne 'y') {
 }
 
 Write-Host ""
-Write-Host "🔧 Setting up project..." -ForegroundColor Green
+Write-Host "Setting up project..." -ForegroundColor Green
 
 # Create safe identifiers (no spaces, special chars)
 $pluginId = $pluginName -replace '[^a-zA-Z0-9]', '_'
 $pluginIdSpaces = $pluginName -replace '[^a-zA-Z0-9 ]', ''
 
 # Update CMakeLists.txt
-Write-Host "  → Updating CMakeLists.txt..." -ForegroundColor Gray
+Write-Host "  Updating CMakeLists.txt..." -ForegroundColor Gray
 $cmakePath = "plugin/CMakeLists.txt"
 $cmakeContent = Get-Content $cmakePath -Raw
 $cmakeContent = $cmakeContent -replace 'set\(PRODUCT_NAME "WOGD JUCE Template"\)', "set(PRODUCT_NAME `"$pluginIdSpaces`")"
@@ -55,11 +55,11 @@ $cmakeContent = $cmakeContent -replace 'project\(WOGD_JUCE_Template', "project($
 Set-Content $cmakePath -Value $cmakeContent
 
 # Update VERSION file
-Write-Host "  → Updating VERSION..." -ForegroundColor Gray
+Write-Host "  Updating VERSION..." -ForegroundColor Gray
 Set-Content "plugin/VERSION" -Value "0.0.1"
 
 # Update template.code-workspace
-Write-Host "  → Updating workspace file..." -ForegroundColor Gray
+Write-Host "  Updating workspace file..." -ForegroundColor Gray
 $workspacePath = "template.code-workspace"
 $newWorkspacePath = "$pluginId.code-workspace"
 if (Test-Path $workspacePath) {
@@ -68,11 +68,11 @@ if (Test-Path $workspacePath) {
     $workspaceContent = $workspaceContent -replace 'WOGD_JUCE_Template', $pluginId
     Set-Content $newWorkspacePath -Value $workspaceContent
     Remove-Item $workspacePath
-    Write-Host "  → Renamed workspace: $workspacePath → $newWorkspacePath" -ForegroundColor Gray
+    Write-Host "  Renamed workspace: $workspacePath -> $newWorkspacePath" -ForegroundColor Gray
 }
 
 # Remove existing gui submodule if present
-Write-Host "  → Removing template GUI submodule..." -ForegroundColor Gray
+Write-Host "  Removing template GUI submodule..." -ForegroundColor Gray
 if (Test-Path "gui") {
     git submodule deinit -f gui 2`>$null
     git rm -f gui 2`>$null
@@ -80,29 +80,29 @@ if (Test-Path "gui") {
 }
 
 # Add new GUI submodule
-Write-Host "  → Adding GUI submodule from $guiRepo..." -ForegroundColor Gray
+Write-Host "  Adding GUI submodule from $guiRepo..." -ForegroundColor Gray
 git submodule add $guiRepo gui
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "❌ Failed to add GUI submodule!" -ForegroundColor Red
+    Write-Host "[ERROR] Failed to add GUI submodule!" -ForegroundColor Red
     exit 1
 }
 
 # Initialize and update submodule
-Write-Host "  → Initializing GUI submodule..." -ForegroundColor Gray
+Write-Host "  Initializing GUI submodule..." -ForegroundColor Gray
 git submodule update --init --recursive
 
 # Commit changes
-Write-Host "  → Committing changes..." -ForegroundColor Gray
+Write-Host "  Committing changes..." -ForegroundColor Gray
 git add -A
 git commit -m "Setup: Configure project as '$pluginIdSpaces' by $companyName"
 
 Write-Host ""
-Write-Host "✅ Setup complete!" -ForegroundColor Green
+Write-Host "Setup complete!" -ForegroundColor Green
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Cyan
 Write-Host "  1. Open template.code-workspace in VS Code"
 Write-Host "  2. Run task 'Install GUI Dependencies'"
 Write-Host "  3. Run task 'Configure CMake'"
-Write-Host "  4. Run task '🚀 Setup & Start Everything'"
+Write-Host "  4. Run task 'Setup & Start Everything'"
 Write-Host ""
-Write-Host "Happy coding! 🎵" -ForegroundColor Magenta
+Write-Host "Happy coding!" -ForegroundColor Magenta
