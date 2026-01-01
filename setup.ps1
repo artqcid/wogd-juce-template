@@ -10,12 +10,14 @@ Write-Host ""
 $pluginName = Read-Host "Plugin Name (e.g., 'My Awesome Synth')"
 if ([string]::IsNullOrWhiteSpace($pluginName)) {
     Write-Host "[ERROR] Plugin name is required!" -ForegroundColor Red
+    Read-Host "Press Enter to exit..."
     exit 1
 }
 
 $companyName = Read-Host "Company Name (e.g., 'WordOfGearDevelopment')"
 if ([string]::IsNullOrWhiteSpace($companyName)) {
     Write-Host "[ERROR] Company name is required!" -ForegroundColor Red
+    Read-Host "Press Enter to exit..."
     exit 1
 }
 
@@ -35,6 +37,7 @@ Write-Host ""
 $confirm = Read-Host "Proceed with setup? (y/n)"
 if ($confirm -ne 'y') {
     Write-Host "Setup cancelled." -ForegroundColor Yellow
+    Read-Host "Press Enter to exit..."
     exit 0
 }
 
@@ -84,6 +87,7 @@ Write-Host "  Adding GUI submodule from $guiRepo..." -ForegroundColor Gray
 git submodule add $guiRepo gui
 if ($LASTEXITCODE -ne 0) {
     Write-Host "[ERROR] Failed to add GUI submodule!" -ForegroundColor Red
+    Read-Host "Press Enter to exit..."
     exit 1
 }
 
