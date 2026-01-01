@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.25)
 
+# Enable clangd support (compile_commands.json)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # Load project configuration from central JSON file
@@ -96,7 +99,7 @@ if(WIN32)
         # This allows us to use a custom WebView2 SDK location
         set(WebView2_FOUND TRUE CACHE BOOL "WebView2 found" FORCE)
         set(WebView2_include_dir "${WEBVIEW2_SDK_DIR}/build/native/include" CACHE PATH "WebView2 include directory" FORCE)
-        set(WebView2_library "${WEBVIEW2_SDK_DIR}/build/native/${CMAKE_VS_PLATFORM_NAME}/WebView2LoaderStatic.lib" CACHE FILEPATH "WebView2 library" FORCE)
+        set(WebView2_library "${WEBVIEW2_SDK_DIR}/build/native/x64/WebView2LoaderStatic.lib" CACHE FILEPATH "WebView2 library" FORCE)
         set(WebView2_VERSION "1.0.2792.45" CACHE STRING "WebView2 version" FORCE)
         
         message(STATUS "Using custom WebView2 SDK from: ${WEBVIEW2_SDK_DIR}")
