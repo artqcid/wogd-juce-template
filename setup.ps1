@@ -61,11 +61,14 @@ Set-Content "plugin/VERSION" -Value "0.0.1"
 # Update template.code-workspace
 Write-Host "  → Updating workspace file..." -ForegroundColor Gray
 $workspacePath = "template.code-workspace"
+$newWorkspacePath = "$pluginId.code-workspace"
 if (Test-Path $workspacePath) {
     $workspaceContent = Get-Content $workspacePath -Raw
     $workspaceContent = $workspaceContent -replace 'WOGD JUCE Template', $pluginIdSpaces
     $workspaceContent = $workspaceContent -replace 'WOGD_JUCE_Template', $pluginId
-    Set-Content $workspacePath -Value $workspaceContent
+    Set-Content $newWorkspacePath -Value $workspaceContent
+    Remove-Item $workspacePath
+    Write-Host "  → Renamed workspace: $workspacePath → $newWorkspacePath" -ForegroundColor Gray
 }
 
 # Remove existing gui submodule if present
