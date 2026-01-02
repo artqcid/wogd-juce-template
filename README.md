@@ -36,17 +36,32 @@ code template.code-workspace
 # After setup.ps1, the workspace file will be renamed to <YourPluginName>.code-workspace
 ```
 
-### 5. First Time Setup Task
-Wenn du **ohne** `--recursive` geklont hast, führe diesen Task aus, um alles zu initialisieren:
+### 5. First Time Setup
+
+**With VS Code (Recommended):**
 
 **Ctrl+Shift+P** → "Tasks: Run Task" → **First Time Setup**
 
-Dieser Task erledigt:
+Dieser Task erledigt alles automatisch:
 1. Initialisiert das GUI-Submodul (`git submodule update --init`)
 2. Installiert GUI-Abhängigkeiten (`npm install`)
-3. Konfiguriert CMake
+3. Konfiguriert CMake (lädt JUCE automatisch herunter, falls nicht vorhanden)
 4. Baut das Plugin
-5. (GUI-Dev-Server manuell starten mit **GUI: Start Dev Server**)
+5. Startet GUI-Dev-Server im Hintergrund
+
+**Without VS Code (Manual):**
+```bash
+# Initialize submodules
+git submodule update --init --recursive
+
+# Install GUI dependencies
+cd gui && npm install && cd ..
+
+# Configure and build plugin
+cd plugin
+cmake --preset ninja-clang
+cmake --build build
+```
 
 ### 6. Build & Run (Nach dem First Setup)
 Verwende die VS Code Tasks mit den neuen Namen:
@@ -103,6 +118,119 @@ Open http://localhost:5173 in your browser.
 - **CMake 3.25+**
 - **Node.js 18+**
 - **WebView2 Runtime** (usually pre-installed on Windows 10/11)
+
+### CMake Presets
+- `ninja-clang` - Windows with Ninja + Clang (recommended)
+- `vs2026-clang` - Visual Studio 2026 with Clang
+
+## 🎯 JUCE Setup
+
+The project supports **4 flexible options** for JUCE integration. Choose the one that fits your workflow:
+
+### Option 1: Environment Variable (Recommended for Power Users)
+Use a central JUCE installation shared across multiple projects:
+
+```powershell
+# Set environment variable
+$env:WOGD_JUCE_DIR = "C:/dev/juce-8.0.4"
+
+# Make it permanent (optional)
+[System.Environment]::SetEnvironmentVariable('WOGD_JUCE_DIR', 'C:/dev/juce-8.0.4', 'User')
+```
+
+**Pros:** Shared across projects, faster builds, easy updates  
+**Cons:** Requires manual JUCE installation
+
+### Option 2: Git Submodule (Recommended for Teams)
+Version-controlled JUCE for consistent builds across developers:
+
+```bash
+# Add JUCE as submodule at repository root
+git submodule add https://github.com/juce-framework/JUCE.git juce
+git submodule update --init --recursive
+```
+
+**Pros:** Version-controlled, offline builds, team consistency  
+**Cons:** Larger repository size, slower clone
+
+### Option 3: Prebuilt Installation (Legacy)
+Place a prebuilt JUCE installation in `juce-install/` folder.
+
+**Pros:** Fast builds, no environment variables needed  
+**Cons:** Not version-controlled, manual setup required
+
+### Option 4: Automatic Download (Zero-Config)
+If none of the above are set, JUCE will be **automatically downloaded** via CPM:
+
+**With VS Code (Recommended):**
+```
+Ctrl+Shift+P → Tasks: Run Task → First Time Setup
+```
+The task handles everything automatically (CMake configure, build, dependencies).
+
+**Without VS Code (Manual):**
+```bash
+# Configure - JUCE downloads automatically
+cmake --preset ninja-clang
+cmake --build build
+```
+
+**Pros:** Zero configuration, perfect for first-time users  
+**Cons:** Requires internet, slower first build
+
+## 🌐 Environment Variables
+
+Optional environment variables for advanced configuration:
+
+| Variable | Purpose | Example |
+|----------|---------|---------|
+| `WOGD_JUCE_DIR` | Path to JUCE installation | `C:/dev/juce-8.0.4` |
+| `CLAP_JUCE_EXTENSIONS_DIR` | Path to clap-juce-extensions | `C:/dev/clap-juce-extensions` |
+| `WEBVIEW2_SDK_DIR` | Path to WebView2 SDK | `C:/dev/webview2-sdk` |
+| `JUCE_AUDIO_PLUGIN_HOST` | Path to AudioPluginHost.exe (debugging) | `C:/path/to/AudioPluginHost.exe` |
+
+Create a `.env` file (gitignored) or set them system-wide.
+
+## 🔧 VS Code Configuration
+
+The project is pre-configured for VS Code with optimal C++ development settings:
+
+### IntelliSense & Code Completion
+- **clangd** is used for C++ IntelliSense (Native C/C++ extension is disabled)
+- Automatically uses `compile_commands.json` from CMake build
+- Configured in `.vscode/settings.json` and `.vscode/c_cpp_properties.json`
+
+### Recommended Extensions
+Install these when prompted (or manually):
+- **C/C++** (Microsoft) - For debugging support
+- **clangd** (LLVM) - For IntelliSense and code navigation
+- **CMake Tools** (Microsoft) - For CMake integration
+- **Vue - Official** (Vue) - For GUI development
+- **Prettier** (Prettier) - For code formatting
+
+### Available VS Code Files
+```
+.vscode/
+├── settings.json           # clangd and editor configuration
+├── c_cpp_properties.json   # C++ IntelliSense paths
+├── tasks.json              # Build and run tasks
+└── launch.json             # Debugging configuration
+```
+
+### Debugging Setup
+To debug the plugin with AudioPluginHost:
+
+1. **Set environment variable:**
+   ```powershell
+   $env:JUCE_AUDIO_PLUGIN_HOST = "C:/path/to/AudioPluginHost.exe"
+   ```
+
+2. **Launch configuration:**
+   - Press `F5` or use "Debug Plugin (AudioPluginHost)" configuration
+   - The plugin will launch in AudioPluginHost automatically
+
+3. **Build the plugin first:**
+   - Run task: **Plugin: Build** or **Plugin: CMake Build (Incremental)**
 
 ### CMake Presets
 - `ninja-clang` - Windows with Ninja + Clang (recommended)

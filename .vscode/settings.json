@@ -1,0 +1,13 @@
+{
+    "C_Cpp.intelliSenseEngine": "Disabled",
+    "clangd.path": "clangd",
+    "clangd.arguments": [
+        "--compile-commands-dir=plugin/build"
+    ],
+    "files.associations": {
+        "*.h": "cpp",
+        "*.hpp": "cpp",
+        "*.ino": "cpp"
+    },
+    "C_Cpp.default.intelliSenseMode": "windows-clang-x64"
+}

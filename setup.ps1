@@ -128,10 +128,45 @@ if (Test-Path "build") {
     Remove-Item -Recurse -Force "build"
 }
 
-# MSVC 18 Umgebung laden
-$vcvarsPath = "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
-if (Test-Path $vcvarsPath) {
-    Write-Host "  Lade MSVC 18 Umgebung..." -ForegroundColor Gray
+# Automatische MSVC-Erkennung via vswhere.exe
+$vswherePath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+$vcvarsPath = $null
+
+if (Test-Path $vswherePath) {
+    Write-Host "  Suche Visual Studio Installation..." -ForegroundColor Gray
+    $vsInstallPath = & $vswherePath -latest -property installationPath -prerelease
+    
+    if ($vsInstallPath) {
+        $vcvarsPath = Join-Path $vsInstallPath "VC\Auxiliary\Build\vcvars64.bat"
+        if (Test-Path $vcvarsPath) {
+            Write-Host "  Visual Studio gefunden: $vsInstallPath" -ForegroundColor Green
+        } else {
+            $vcvarsPath = $null
+        }
+    }
+}
+
+# Fallback: Manuelle Pfade für bekannte VS-Versionen
+if (-not $vcvarsPath) {
+    $possiblePaths = @(
+        "C:\Program Files\Microsoft Visual Studio\2026\Community\VC\Auxiliary\Build\vcvars64.bat",
+        "C:\Program Files\Microsoft Visual Studio\2026\Professional\VC\Auxiliary\Build\vcvars64.bat",
+        "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Auxiliary\Build\vcvars64.bat",
+        "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
+    )
+    
+    foreach ($path in $possiblePaths) {
+        if (Test-Path $path) {
+            $vcvarsPath = $path
+            Write-Host "  Visual Studio gefunden: $path" -ForegroundColor Green
+            break
+        }
+    }
+}
+
+# MSVC-Umgebung laden
+if ($vcvarsPath) {
+    Write-Host "  Lade MSVC-Umgebung..." -ForegroundColor Gray
     cmd /c "`"$vcvarsPath`" && set" | ForEach-Object {
         if ($_ -match "^(.*?)=(.*)$") {
             $name = $matches[1]
@@ -140,7 +175,8 @@ if (Test-Path $vcvarsPath) {
         }
     }
 } else {
-    Write-Host "[WARN] vcvars64.bat nicht gefunden! MSVC-Umgebung muss ggf. manuell geladen werden." -ForegroundColor Yellow
+    Write-Host "[WARN] Visual Studio nicht gefunden!" -ForegroundColor Yellow
+    Write-Host "       Installiere Visual Studio 2026 oder setze MSVC-Umgebung manuell." -ForegroundColor Yellow
 }
 
 # CMake-Konfiguration und Build

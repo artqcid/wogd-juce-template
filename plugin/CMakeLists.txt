@@ -54,15 +54,36 @@ endforeach()
 
 
 
-# JUCE als externes/prebuilt Framework einbinden (muss VOR clap-juce-extensions stehen)
+# JUCE Setup - Hybrid Approach (3 options for maximum flexibility)
+# Option 1: Use JUCE from environment variable (for central installation)
 if(DEFINED ENV{WOGD_JUCE_DIR})
     set(JUCE_DIR "$ENV{WOGD_JUCE_DIR}" CACHE PATH "Path to JUCE install directory (WOGD_JUCE_DIR)" FORCE)
-else()
-    set(JUCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../juce-install" CACHE PATH "Path to JUCE install directory")
-endif()
+    set(CMAKE_PREFIX_PATH "${JUCE_DIR}" ${CMAKE_PREFIX_PATH})
+    find_package(JUCE CONFIG REQUIRED)
+    message(STATUS "Using JUCE from environment variable: ${JUCE_DIR}")
 
-set(CMAKE_PREFIX_PATH "${JUCE_DIR}" ${CMAKE_PREFIX_PATH})
-find_package(JUCE CONFIG REQUIRED)
+# Option 2: Use JUCE from git submodule (for versioned builds)
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../juce/CMakeLists.txt")
+    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/../../juce" juce EXCLUDE_FROM_ALL)
+    message(STATUS "Using JUCE from git submodule")
+
+# Option 3: Use JUCE from prebuilt installation (legacy fallback)
+elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../juce-install")
+    set(JUCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../juce-install" CACHE PATH "Path to JUCE install directory")
+    set(CMAKE_PREFIX_PATH "${JUCE_DIR}" ${CMAKE_PREFIX_PATH})
+    find_package(JUCE CONFIG REQUIRED)
+    message(STATUS "Using JUCE from prebuilt installation: ${JUCE_DIR}")
+
+# Option 4: Download JUCE automatically via CPM (requires internet)
+else()
+    message(STATUS "JUCE not found locally, downloading via CPM...")
+    CPMAddPackage(
+        NAME JUCE
+        GITHUB_REPOSITORY juce-framework/JUCE
+        GIT_TAG 8.0.4
+    )
+    message(STATUS "JUCE downloaded and configured via CPM")
+endif()
 
 # Use CLAP from environment variable or fallback to CPM download (NACH JUCE)
 if(NOT DEFINED CLAP_JUCE_EXTENSIONS_DIR OR CLAP_JUCE_EXTENSIONS_DIR STREQUAL "")

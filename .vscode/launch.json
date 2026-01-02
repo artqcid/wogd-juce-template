@@ -5,12 +5,13 @@
             "name": "Debug Plugin (AudioPluginHost)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "C:/Users/marku/Documents/GitHub/thirdParty/JUCE/extras/AudioPluginHost/Builds/VisualStudio2026/x64/Release/App/AudioPluginHost.exe",
+            "program": "${env:JUCE_AUDIO_PLUGIN_HOST}",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "description": "Launch plugin with AudioPluginHost. Set JUCE_AUDIO_PLUGIN_HOST environment variable to your AudioPluginHost.exe path."
         }
     ]
 }

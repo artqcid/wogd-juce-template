@@ -17,6 +17,8 @@ gui/.turbo/
 !.vscode/extensions.json
 !.vscode/tasks.json
 !.vscode/launch.json
+!.vscode/settings.json
+!.vscode/c_cpp_properties.json
 .idea/
 .history/
 *.suo
@@ -30,3 +32,17 @@ gui/.turbo/
 # OS
 .DS_Store
 Thumbs.db
+
+# Environment and local configuration
+.env
+.env.local
+local.settings.json
+local.config.json
+
+# Downloaded dependencies (CPM cache)
+plugin/_deps/
+plugin/.cpm/
+
+# JUCE submodule (if using Option 2)
+# Uncomment if you don't want to commit JUCE as submodule
+# juce/
