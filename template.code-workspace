@@ -126,16 +126,12 @@
         "problemMatcher": []
       },
       {
-        "label": "Configure CMake",
+        "label": "Configure CMake (Plugin)",
         "type": "shell",
         "command": "cmake",
         "args": [
-          "-B",
-          "build",
-          "-G",
-          "Visual Studio 18 2026",
-          "-A",
-          "x64"
+          "--preset",
+          "vs2026-clang"
         ],
         "options": {
           "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
