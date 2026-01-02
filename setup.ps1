@@ -121,80 +121,12 @@ Write-Host ""
 Write-Host "Setup complete!" -ForegroundColor Green
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Cyan
-Write-Host "  1. Open template.code-workspace in VS Code"
-Write-Host "  2. Run task 'Install GUI Dependencies'"
-Write-Host "  3. Run task 'Configure CMake'"
-Write-Host "  4. Run task 'Setup & Start Everything'"
+Write-Host "  1. Open $newWorkspacePath in VS Code"
+Write-Host "  2. Run task 'GUI Install Dependencies'"
+Write-Host "  3. Run task 'PLUGIN CMake Configure'"
+Write-Host "  4. Run task 'PLUGIN CMake Build'"
+Write-Host "  5. Run task 'GUI Start Dev Server'"
 Write-Host ""
 Write-Host "Happy coding!" -ForegroundColor Magenta
-
-# --- Automatischer Build mit MSVC + Clang ---
-Write-Host "" -ForegroundColor Cyan
-Write-Host "Automatischer Build mit MSVC 18 + Clang (Ninja)..." -ForegroundColor Cyan
-
-# Lösche build-Ordner
-if (Test-Path "build") {
-    Write-Host "  Lösche build-Ordner..." -ForegroundColor Gray
-    Remove-Item -Recurse -Force "build"
-}
-
-# Automatische MSVC-Erkennung via vswhere.exe
-$vswherePath = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-$vcvarsPath = $null
-
-if (Test-Path $vswherePath) {
-    Write-Host "  Suche Visual Studio Installation..." -ForegroundColor Gray
-    $vsInstallPath = & $vswherePath -latest -property installationPath -prerelease
-    
-    if ($vsInstallPath) {
-        $vcvarsPath = Join-Path $vsInstallPath "VC\Auxiliary\Build\vcvars64.bat"
-        if (Test-Path $vcvarsPath) {
-            Write-Host "  Visual Studio gefunden: $vsInstallPath" -ForegroundColor Green
-        } else {
-            $vcvarsPath = $null
-        }
-    }
-}
-
-# Fallback: Manuelle Pfade für bekannte VS-Versionen
-if (-not $vcvarsPath) {
-    $possiblePaths = @(
-        "C:\Program Files\Microsoft Visual Studio\2026\Community\VC\Auxiliary\Build\vcvars64.bat",
-        "C:\Program Files\Microsoft Visual Studio\2026\Professional\VC\Auxiliary\Build\vcvars64.bat",
-        "C:\Program Files\Microsoft Visual Studio\2026\Enterprise\VC\Auxiliary\Build\vcvars64.bat",
-        "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
-    )
-    
-    foreach ($path in $possiblePaths) {
-        if (Test-Path $path) {
-            $vcvarsPath = $path
-            Write-Host "  Visual Studio gefunden: $path" -ForegroundColor Green
-            break
-        }
-    }
-}
-
-# MSVC-Umgebung laden
-if ($vcvarsPath) {
-    Write-Host "  Lade MSVC-Umgebung..." -ForegroundColor Gray
-    cmd /c "`"$vcvarsPath`" && set" | ForEach-Object {
-        if ($_ -match "^(.*?)=(.*)$") {
-            $name = $matches[1]
-            $value = $matches[2]
-            [System.Environment]::SetEnvironmentVariable($name, $value, 'Process')
-        }
-    }
-} else {
-    Write-Host "[WARN] Visual Studio nicht gefunden!" -ForegroundColor Yellow
-    Write-Host "       Installiere Visual Studio 2026 oder setze MSVC-Umgebung manuell." -ForegroundColor Yellow
-}
-
-# CMake-Konfiguration und Build
-Write-Host "  Starte cmake --preset ninja-clang..." -ForegroundColor Gray
-& cmake --preset ninja-clang
-Write-Host "  Starte cmake --build build..." -ForegroundColor Gray
-& cmake --build build
-Write-Host "Build abgeschlossen!" -ForegroundColor Green
-
 Write-Host ""
 Read-Host "Press Enter to close..."
