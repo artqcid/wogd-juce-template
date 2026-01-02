@@ -57,9 +57,8 @@
             "command": "cmake",
             "args": [
                 "--build",
-                "build",
-                "--config",
-                "Debug"
+                "--preset",
+                "ninja-clang-debug"
             ],
             "options": {
                 "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
