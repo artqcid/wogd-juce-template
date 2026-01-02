@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "🚀 First Time Setup",
-            "detail": "Initialize GUI submodule, install dependencies, configure CMake, build plugin, and start dev server",
+            "detail": "Initialize GUI submodule, install dependencies, configure CMake, build plugin",
             "type": "shell",
             "command": "echo",
             "args": [
