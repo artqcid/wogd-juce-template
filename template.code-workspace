@@ -18,8 +18,8 @@
       "**/node_modules": true,
       "**/.git": false
     },
-    "cmake.sourceDirectory": "${workspaceFolder:🎸 Plugin (JUCE)}",
-    "cmake.buildDirectory": "${workspaceFolder:🎸 Plugin (JUCE)}/build",
+    "cmake.sourceDirectory": "${workspaceFolder:Plugin (JUCE)}",
+    "cmake.buildDirectory": "${workspaceFolder:Plugin (JUCE)}/build",
     "cmake.configureOnOpen": false,
     "cmake.configureOnEdit": false,
     "typescript.tsc.autoDetect": "off",
@@ -93,7 +93,7 @@
           "install"
         ],
         "options": {
-          "cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+          "cwd": "${workspaceFolder:GUI (Vue.js)}"
         },
         "problemMatcher": []
       },
@@ -134,7 +134,7 @@
           "vs2026-clang"
         ],
         "options": {
-          "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+          "cwd": "${workspaceFolder:Plugin (JUCE)}"
         },
         "problemMatcher": []
       },
@@ -149,7 +149,7 @@
           "Debug"
         ],
         "options": {
-          "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+          "cwd": "${workspaceFolder:Plugin (JUCE)}"
         },
         "group": {
           "kind": "build",
@@ -167,7 +167,7 @@
           "--clean-first"
         ],
         "options": {
-          "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+          "cwd": "${workspaceFolder:Plugin (JUCE)}"
         },
         "group": "build",
         "problemMatcher": []
@@ -181,7 +181,7 @@
           "build"
         ],
         "options": {
-          "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+          "cwd": "${workspaceFolder:Plugin (JUCE)}"
         },
         "group": {
           "kind": "build",
