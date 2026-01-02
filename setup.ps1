@@ -149,3 +149,6 @@ Write-Host "  Starte cmake --preset ninja-clang..." -ForegroundColor Gray
 Write-Host "  Starte cmake --build build..." -ForegroundColor Gray
 & cmake --build build
 Write-Host "Build abgeschlossen!" -ForegroundColor Green
+
+Write-Host ""
+Read-Host "Press Enter to close..."

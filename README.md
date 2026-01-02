@@ -33,12 +33,13 @@ This script updates project names and can replace the GUI submodule.
 ### 4. Open in VS Code
 ```powershell
 code template.code-workspace
+# After setup.ps1, the workspace file will be renamed to <YourPluginName>.code-workspace
 ```
 
 ### 5. First Time Setup Task
 Wenn du **ohne** `--recursive` geklont hast, führe diesen Task aus, um alles zu initialisieren:
 
-**Ctrl+Shift+P** → "Tasks: Run Task" → **Plugin: 🚀 First Time Setup**
+**Ctrl+Shift+P** → "Tasks: Run Task" → **First Time Setup**
 
 Dieser Task erledigt:
 1. Initialisiert das GUI-Submodul (`git submodule update --init`)
@@ -57,18 +58,29 @@ Verwende die VS Code Tasks mit den neuen Namen:
 
 | Task-Name                      | Funktion                        |
 |--------------------------------|---------------------------------|
-| Plugin: 🚀 First Time Setup     | Initialisiert alles fürs Plugin  |
+| First Time Setup               | Initialisiert alles fürs Plugin  |
 | Plugin: Build                  | Baut das Plugin                  |
 | Plugin: Configure CMake        | CMake-Konfiguration fürs Plugin  |
+| Plugin: CMake Build (Incremental) | Inkrementelles Build (Standard) |
 | GUI: Install Dependencies      | Installiert GUI-Abhängigkeiten   |
 | GUI: Build                     | Baut das GUI                     |
 | GUI: Start Dev Server          | Startet den GUI-Dev-Server       |
 
 ## 📁 Structure
 
-- `plugin/` - JUCE C++ plugin code
-- `gui/` - Vue.js GUI (git submodule)
-- `template.code-workspace` - VS Code workspace
+```
+wogd-juce-template/
+├── plugin/                    # JUCE C++ plugin code
+├── gui/                       # Vue.js GUI (git submodule)
+├── cmake/                     # CMake configuration files
+├── template.code-workspace    # VS Code workspace (renamed after setup)
+└── setup.ps1                  # Setup script
+```
+
+### Workspace Folders
+- **GUI (Vue.js)** - Frontend development
+- **Plugin (JUCE)** - C++ plugin development
+- **Root** - Project configuration
 
 ## 🎨 GUI Development
 
@@ -85,10 +97,16 @@ Open http://localhost:5173 in your browser.
 
 ## 🔧 Requirements
 
-- Ninja + Clang (clang-cl) toolchain
-- CMake 3.25+
-- Node.js 18+
-- WebView2 Runtime (usually pre-installed on Windows)
+- **Visual Studio 2026** (MSVC 18) with C++ Desktop Development workload
+- **Clang/LLVM** (for clang-cl)
+- **Ninja** build system
+- **CMake 3.25+**
+- **Node.js 18+**
+- **WebView2 Runtime** (usually pre-installed on Windows 10/11)
+
+### CMake Presets
+- `ninja-clang` - Windows with Ninja + Clang (recommended)
+- `vs2026-clang` - Visual Studio 2026 with Clang
 
 ## 📝 Customization
 

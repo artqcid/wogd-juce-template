@@ -2,7 +2,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "🚀 First Time Setup",
+			"label": "First Time Setup",
 			"detail": "Initialize GUI submodule, install dependencies, configure CMake, build plugin, and start dev server",
 			"type": "shell",
 			"command": "echo",
@@ -47,7 +47,7 @@
 				"install"
 			],
 			"options": {
-				"cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+				"cwd": "${workspaceFolder:GUI (Vue.js)}"
 			},
 			"problemMatcher": []
 		},
@@ -100,7 +100,7 @@
 				"ninja-clang"
 			],
 			"options": {
-				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+				"cwd": "${workspaceFolder:Plugin (JUCE)}"
 			},
 			"problemMatcher": []
 		},
@@ -115,7 +115,7 @@
 				"Debug"
 			],
 			"options": {
-				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+				"cwd": "${workspaceFolder:Plugin (JUCE)}"
 			},
 			"group": {
 				"kind": "build",
@@ -132,7 +132,7 @@
 				"build"
 			],
 			"options": {
-				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+				"cwd": "${workspaceFolder:Plugin (JUCE)}"
 			},
 			"group": {
 				"kind": "build",
@@ -150,7 +150,7 @@
 				"--clean-first"
 			],
 			"options": {
-				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+				"cwd": "${workspaceFolder:Plugin (JUCE)}"
 			},
 			"group": "build",
 			"problemMatcher": []
@@ -166,7 +166,7 @@
 				"Pamplejuce_Standalone"
 			],
 			"options": {
-				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+				"cwd": "${workspaceFolder:Plugin (JUCE)}"
 			},
 			"group": "build",
 			"problemMatcher": []
@@ -182,7 +182,7 @@
 				"Pamplejuce_VST3"
 			],
 			"options": {
-				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+				"cwd": "${workspaceFolder:Plugin (JUCE)}"
 			},
 			"group": "build",
 			"problemMatcher": []
@@ -198,7 +198,7 @@
 				"Pamplejuce_AU"
 			],
 			"options": {
-				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+				"cwd": "${workspaceFolder:Plugin (JUCE)}"
 			},
 			"group": "build",
 			"problemMatcher": []
@@ -214,7 +214,7 @@
 				"Tests"
 			],
 			"options": {
-				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+				"cwd": "${workspaceFolder:Plugin (JUCE)}"
 			},
 			"group": "build",
 			"problemMatcher": []
