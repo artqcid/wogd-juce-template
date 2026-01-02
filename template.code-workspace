@@ -43,7 +43,7 @@
         "request": "launch",
         "program": "${workspaceFolder:🎸 Plugin (JUCE)}/build/WOGD_JUCE_Template_artefacts/Debug/VST3/WOGD JUCE Template.vst3",
         "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}",
-        "preLaunchTask": "Build Plugin"
+        "preLaunchTask": "PLUGIN CMake Build"
       }
     ]
   },
@@ -51,7 +51,7 @@
     "version": "2.0.0",
     "tasks": [
       {
-        "label": "🚀 First Time Setup",
+        "label": "🚀 PROJECT First Time Setup",
         "detail": "Initialize GUI submodule, install dependencies, configure CMake, build plugin, and start dev server",
         "type": "shell",
         "command": "echo",
@@ -60,11 +60,11 @@
         ],
         "dependsOrder": "sequence",
         "dependsOn": [
-          "Initialize GUI Submodule",
-          "Install GUI Dependencies",
-          "Configure CMake",
-          "Build Plugin",
-          "Start GUI Dev Server"
+          "GUI Initialize Submodule",
+          "GUI Install Dependencies",
+          "PLUGIN CMake Configure",
+          "PLUGIN CMake Build",
+          "GUI Start Dev Server"
         ],
         "group": {
           "kind": "build",
@@ -73,7 +73,7 @@
         "problemMatcher": []
       },
       {
-        "label": "Initialize GUI Submodule",
+        "label": "GUI Initialize Submodule",
         "detail": "Initialize and update the GUI git submodule",
         "type": "shell",
         "command": "git",
@@ -86,7 +86,7 @@
         "problemMatcher": []
       },
       {
-        "label": "Install GUI Dependencies",
+        "label": "GUI Install Dependencies",
         "type": "shell",
         "command": "npm",
         "args": [
@@ -98,7 +98,7 @@
         "problemMatcher": []
       },
       {
-        "label": "Start GUI Dev Server",
+        "label": "GUI Start Dev Server",
         "type": "npm",
         "script": "dev",
         "path": "gui/",
@@ -119,14 +119,14 @@
         }
       },
       {
-        "label": "Build GUI",
+        "label": "GUI Build",
         "type": "npm",
         "script": "build",
         "path": "gui/",
         "problemMatcher": []
       },
       {
-        "label": "Configure CMake (Plugin)",
+        "label": "PLUGIN CMake Configure",
         "type": "shell",
         "command": "cmake",
         "args": [
@@ -139,7 +139,7 @@
         "problemMatcher": []
       },
       {
-        "label": "Build Plugin",
+        "label": "PLUGIN CMake Build",
         "type": "shell",
         "command": "cmake",
         "args": [
@@ -155,6 +155,21 @@
           "kind": "build",
           "isDefault": false
         },
+        "problemMatcher": []
+      },
+      {
+        "label": "PLUGIN CMake Clean Build",
+        "type": "shell",
+        "command": "cmake",
+        "args": [
+          "--build",
+          "build",
+          "--clean-first"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+        },
+        "group": "build",
         "problemMatcher": []
       },
       {

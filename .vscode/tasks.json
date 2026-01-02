@@ -2,15 +2,15 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "First Time Setup",
+            "label": "PROJECT First Time Setup",
             "type": "shell",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Initialize GUI Submodule",
-                "Install GUI Dependencies",
-                "Configure CMake (Plugin)",
-                "Build Plugin",
-                "Start GUI Dev Server"
+                "GUI Initialize Submodule",
+                "GUI Install Dependencies",
+                "PLUGIN CMake Configure",
+                "PLUGIN CMake Build",
+                "GUI Start Dev Server"
             ],
             "command": "echo",
             "args": [
@@ -18,7 +18,7 @@
             ]
         },
         {
-            "label": "Initialize GUI Submodule",
+            "label": "GUI Initialize Submodule",
             "type": "shell",
             "command": "git",
             "args": [
@@ -29,7 +29,7 @@
             ]
         },
         {
-            "label": "Install GUI Dependencies",
+            "label": "GUI Install Dependencies",
             "type": "shell",
             "command": "npm",
             "args": [
@@ -40,7 +40,7 @@
             }
         },
         {
-            "label": "Configure CMake (Plugin)",
+            "label": "PLUGIN CMake Configure",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -52,7 +52,7 @@
             }
         },
         {
-            "label": "Build Plugin",
+            "label": "PLUGIN CMake Build",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -69,7 +69,21 @@
             }
         },
         {
-            "label": "Start GUI Dev Server",
+            "label": "PLUGIN CMake Clean Build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--clean-first"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:Plugin (JUCE)}"
+            },
+            "group": "build"
+        },
+        {
+            "label": "GUI Start Dev Server",
             "type": "shell",
             "command": "npm",
             "args": [

@@ -40,7 +40,7 @@ code template.code-workspace
 
 **With VS Code (Recommended):**
 
-**Ctrl+Shift+P** → "Tasks: Run Task" → **First Time Setup**
+**Ctrl+Shift+P** → "Tasks: Run Task" → **PROJECT First Time Setup**
 
 Dieser Task erledigt alles automatisch:
 1. Initialisiert das GUI-Submodul (`git submodule update --init`)
@@ -66,20 +66,21 @@ cmake --build build
 ### 6. Build & Run (Nach dem First Setup)
 Verwende die VS Code Tasks mit den neuen Namen:
 
-- **Plugin: Build** – baut das Plugin
-- **GUI: Build** – baut das GUI
-- **GUI: Start Dev Server** – startet den GUI-Entwicklungsserver
+- **PLUGIN CMake Build** – baut das Plugin
+- **GUI Build** – baut das GUI
+- **GUI Start Dev Server** – startet den GUI-Entwicklungsserver
 ## 🏷️ Task-Übersicht
 
 | Task-Name                      | Funktion                        |
 |--------------------------------|---------------------------------|
-| First Time Setup               | Initialisiert alles fürs Plugin  |
-| Plugin: Build                  | Baut das Plugin                  |
-| Plugin: Configure CMake        | CMake-Konfiguration fürs Plugin  |
+| PROJECT First Time Setup       | Initialisiert alles fürs Plugin  |
+| PLUGIN CMake Build             | Baut das Plugin                  |
+| PLUGIN CMake Configure         | CMake-Konfiguration fürs Plugin  |
+| PLUGIN CMake Clean Build       | Clean Build (bei Problemen)      |
 | Plugin: CMake Build (Incremental) | Inkrementelles Build (Standard) |
-| GUI: Install Dependencies      | Installiert GUI-Abhängigkeiten   |
-| GUI: Build                     | Baut das GUI                     |
-| GUI: Start Dev Server          | Startet den GUI-Dev-Server       |
+| GUI Install Dependencies       | Installiert GUI-Abhängigkeiten   |
+| GUI Build                      | Baut das GUI                     |
+| GUI Start Dev Server           | Startet den GUI-Dev-Server       |
 
 ## 📁 Structure
 
@@ -230,7 +231,7 @@ To debug the plugin with AudioPluginHost:
    - The plugin will launch in AudioPluginHost automatically
 
 3. **Build the plugin first:**
-   - Run task: **Plugin: Build** or **Plugin: CMake Build (Incremental)**
+   - Run task: **PLUGIN CMake Build** or **Plugin: CMake Build (Incremental)**
 
 ### CMake Presets
 - `ninja-clang` - Windows with Ninja + Clang (recommended)
