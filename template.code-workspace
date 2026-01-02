@@ -1,11 +1,11 @@
 {
   "folders": [
     {
-      "name": "🎨 GUI (Vue.js)",
+      "name": "GUI (Vue.js)",
       "path": "gui"
     },
     {
-      "name": "🎸 Plugin (JUCE)",
+      "name": "Plugin (JUCE)",
       "path": "plugin"
     },
     {
