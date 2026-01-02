@@ -57,10 +57,16 @@
             "command": "cmake",
             "args": [
                 "--build",
-                "build"
+                "build",
+                "--config",
+                "Debug"
             ],
             "options": {
                 "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
             }
         },
         {

@@ -20,6 +20,13 @@ if(TestFiles)
     # Make binary resources available to tests
     target_compile_definitions(Tests PRIVATE
         DONT_SET_USING_JUCE_NAMESPACE=1
+        JucePlugin_Name="${PRODUCT_NAME}"
+        JucePlugin_IsMidiEffect=0
+        JucePlugin_IsSynth=0
+        JucePlugin_WantsMidiInput=0
+        JucePlugin_ProducesMidiOutput=0
+        JucePlugin_IsMidiEffect=0
+        JucePlugin_EditorRequiresKeyboardFocus=0
     )
 
     # Register tests with CTest

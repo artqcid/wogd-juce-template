@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Plugin (AudioPluginHost)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "C:/Users/marku/Documents/GitHub/thirdParty/JUCE/extras/AudioPluginHost/Builds/VisualStudio2026/x64/Release/App/AudioPluginHost.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}",
+            "environment": [],
+            "console": "integratedTerminal"
+        }
+    ]
+}

@@ -22,5 +22,12 @@ if(BenchmarkFiles)
     # Make binary resources available to benchmarks
     target_compile_definitions(Benchmarks PRIVATE
         DONT_SET_USING_JUCE_NAMESPACE=1
+        JUCE_STANDALONE_APPLICATION=1
+        JucePlugin_Name="${PRODUCT_NAME}"
+        JucePlugin_IsSynth=0
+        JucePlugin_WantsMidiInput=0
+        JucePlugin_ProducesMidiOutput=0
+        JucePlugin_IsMidiEffect=0
+        JucePlugin_EditorRequiresKeyboardFocus=0
     )
 endif()

@@ -46,35 +46,35 @@ void PluginEditor::resized()
 static juce::String getMimeTypeForFile (const juce::String& fileName)
 {
     if (fileName.endsWithIgnoreCase (".html") || fileName.endsWithIgnoreCase (".htm"))
-        return "text/html";
+        return juce::String ("text/html");
     if (fileName.endsWithIgnoreCase (".js"))
-        return "application/javascript";
+        return juce::String ("application/javascript");
     if (fileName.endsWithIgnoreCase (".css"))
-        return "text/css";
+        return juce::String ("text/css");
     if (fileName.endsWithIgnoreCase (".json"))
-        return "application/json";
+        return juce::String ("application/json");
     if (fileName.endsWithIgnoreCase (".png"))
-        return "image/png";
+        return juce::String ("image/png");
     if (fileName.endsWithIgnoreCase (".jpg") || fileName.endsWithIgnoreCase (".jpeg"))
-        return "image/jpeg";
+        return juce::String ("image/jpeg");
     if (fileName.endsWithIgnoreCase (".svg"))
-        return "image/svg+xml";
+        return juce::String ("image/svg+xml");
     if (fileName.endsWithIgnoreCase (".ico"))
-        return "image/x-icon";
+        return juce::String ("image/x-icon");
     if (fileName.endsWithIgnoreCase (".woff"))
-        return "font/woff";
+        return juce::String ("font/woff");
     if (fileName.endsWithIgnoreCase (".woff2"))
-        return "font/woff2";
+        return juce::String ("font/woff2");
     if (fileName.endsWithIgnoreCase (".ttf"))
-        return "font/ttf";
+        return juce::String ("font/ttf");
     if (fileName.endsWithIgnoreCase (".otf"))
-        return "font/otf";
+        return juce::String ("font/otf");
     if (fileName.endsWithIgnoreCase (".mp3"))
-        return "audio/mpeg";
+        return juce::String ("audio/mpeg");
     if (fileName.endsWithIgnoreCase (".wav"))
-        return "audio/wav";
+        return juce::String ("audio/wav");
     // Add more as needed
-    return "application/octet-stream";
+    return juce::String ("application/octet-stream");
 }
 
 static juce::WebBrowserComponent::Resource resourceFromBinaryData (const juce::String& path)

@@ -12,7 +12,7 @@ include(ProjectConfig)
 include(CPM)
 
 
-# Set C++ Standard explizit auf 17 (für JUCE und moderne Syntax)
+## Setze C++17 als globalen Standard (für alles, inkl. JUCE und eigene Targets)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -22,13 +22,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(FORMATS Standalone AU VST3 AUv3)
 
 
-# Enable sccache for clang-cl if available
-find_program(SCCACHE_PROGRAM sccache)
-if(SCCACHE_PROGRAM)
-    message(STATUS "Using sccache: ${SCCACHE_PROGRAM}")
-    set(CMAKE_C_COMPILER_LAUNCHER   "${SCCACHE_PROGRAM}" CACHE STRING "" FORCE)
-    set(CMAKE_CXX_COMPILER_LAUNCHER "${SCCACHE_PROGRAM}" CACHE STRING "" FORCE)
-endif()
+## sccache deaktiviert (entfernt)
 
 # instruct MSVC to embed debug info (/Z7) instead of emitting a .pdb
 set(CMAKE_POLICY_DEFAULT_CMP0141        NEW      CACHE STRING "" FORCE)
@@ -44,28 +38,33 @@ project(${PROJECT_NAME} VERSION ${MY_PROJECT_VERSION})
 # Locally, you must run `git submodule update --init --recursive` once
 # and later `git submodule update --remote --merge` to keep it up to date
 # On Github Actions, this is done as a part of actions/checkout
-# EDIT::::::::::::: we dont wont checkout in project Folder, instead use central repo
-# Use JUCE from environment variable or fallback to local submodule
-# Set JUCE_DIR environment variable to point to your central JUCE repository
-if(NOT DEFINED JUCE_DIR OR JUCE_DIR STREQUAL "")
-    # First check environment variable
-    if(DEFINED ENV{JUCE_DIR})
-        set(JUCE_DIR "$ENV{JUCE_DIR}" CACHE PATH "Path to JUCE repository" FORCE)
-    else()
-        # Fallback to local submodule (for CI/CD)
-        set(JUCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/JUCE" CACHE PATH "Path to JUCE repository")
+
+# Setze C++17 explizit für alle nicht-ALIAS-TARGETS (Workaround für JUCE)
+get_property(all_targets GLOBAL PROPERTY TARGETS)
+foreach(target ${all_targets})
+    get_target_property(alias ${target} ALIAS_GLOBAL)
+    if(NOT alias)
+        set_target_properties(${target} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
     endif()
+endforeach()
+# EDIT::::::::::::: we dont wont checkout in project Folder, instead use central repo
+
+
+
+
+
+
+# JUCE als externes/prebuilt Framework einbinden (muss VOR clap-juce-extensions stehen)
+if(DEFINED ENV{WOGD_JUCE_DIR})
+    set(JUCE_DIR "$ENV{WOGD_JUCE_DIR}" CACHE PATH "Path to JUCE install directory (WOGD_JUCE_DIR)" FORCE)
+else()
+    set(JUCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../juce-install" CACHE PATH "Path to JUCE install directory")
 endif()
 
-if (NOT EXISTS "${JUCE_DIR}/CMakeLists.txt")
-    message(FATAL_ERROR "JUCE not found at ${JUCE_DIR}. Set JUCE_DIR environment variable to your JUCE repository.")
-endif()
+set(CMAKE_PREFIX_PATH "${JUCE_DIR}" ${CMAKE_PREFIX_PATH})
+find_package(JUCE CONFIG REQUIRED)
 
-message(STATUS "Using JUCE from: ${JUCE_DIR}")
-
-add_subdirectory(${JUCE_DIR} juce)
-
-# Use CLAP from environment variable or fallback to CPM download
+# Use CLAP from environment variable or fallback to CPM download (NACH JUCE)
 if(NOT DEFINED CLAP_JUCE_EXTENSIONS_DIR OR CLAP_JUCE_EXTENSIONS_DIR STREQUAL "")
     # First check environment variable
     if(DEFINED ENV{CLAP_JUCE_EXTENSIONS_DIR})
@@ -81,13 +80,9 @@ if(NOT DEFINED CLAP_JUCE_EXTENSIONS_DIR OR CLAP_JUCE_EXTENSIONS_DIR STREQUAL "")
     endif()
 endif()
 
-if (NOT EXISTS "${CLAP_JUCE_EXTENSIONS_DIR}/CMakeLists.txt")
-    message(FATAL_ERROR "clap-juce-extensions not found at ${CLAP_JUCE_EXTENSIONS_DIR}. Set CLAP_JUCE_EXTENSIONS_DIR environment variable to your clap-juce-extensions repository.")
-endif()
-
 message(STATUS "Using clap-juce-extensions from: ${CLAP_JUCE_EXTENSIONS_DIR}")
-
 add_subdirectory(${CLAP_JUCE_EXTENSIONS_DIR} clap-juce-extensions EXCLUDE_FROM_ALL)
+
 
 # WebView2 SDK for Windows - use central repository or download via CPM
 if(WIN32)
@@ -103,34 +98,27 @@ if(WIN32)
                 URL "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.2792.45"
                 DOWNLOAD_ONLY YES
             )
-            
             if(webview2_ADDED)
                 set(WEBVIEW2_SDK_DIR "${webview2_SOURCE_DIR}" CACHE PATH "Path to WebView2 SDK")
             endif()
         endif()
     endif()
-    
     if(WEBVIEW2_SDK_DIR)
         # Bypass JUCE's FindWebView2 and set variables directly
-        # This allows us to use a custom WebView2 SDK location
         set(WebView2_FOUND TRUE CACHE BOOL "WebView2 found" FORCE)
         set(WebView2_include_dir "${WEBVIEW2_SDK_DIR}/build/native/include" CACHE PATH "WebView2 include directory" FORCE)
         set(WebView2_library "${WEBVIEW2_SDK_DIR}/build/native/x64/WebView2LoaderStatic.lib" CACHE FILEPATH "WebView2 library" FORCE)
         set(WebView2_VERSION "1.0.2792.45" CACHE STRING "WebView2 version" FORCE)
-        
         message(STATUS "Using custom WebView2 SDK from: ${WEBVIEW2_SDK_DIR}")
         message(STATUS "WebView2 include dir: ${WebView2_include_dir}")
         message(STATUS "WebView2 library: ${WebView2_library}")
-        
         # Verify the SDK structure exists
         if(NOT EXISTS "${WebView2_include_dir}/WebView2.h")
             message(FATAL_ERROR "WebView2 SDK not found at ${WEBVIEW2_SDK_DIR}. Expected structure: build/native/include/WebView2.h")
         endif()
-        
         if(NOT EXISTS "${WebView2_library}")
             message(FATAL_ERROR "WebView2 library not found at ${WebView2_library}")
         endif()
-        
         message(STATUS "✓ WebView2 SDK verified successfully")
     else()
         message(FATAL_ERROR "WebView2 SDK not found. Set WEBVIEW2_SDK_DIR environment variable.")
@@ -174,11 +162,44 @@ juce_add_plugin("${PROJECT_NAME}"
     
     # WebView support
     NEEDS_WEB_BROWSER TRUE
-    NEEDS_WEBVIEW2 TRUE)
+
+    NEEDS_WEBVIEW2 FALSE)
+
+# Erzwinge C++20 explizit für das Haupt-Plugin-Target
+
+# Erzwinge C++20 explizit für Haupt-Plugin, Tests und Benchmarks
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+if(TARGET Tests)
+    set_target_properties(Tests PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+endif()
+if(TARGET Benchmarks)
+    set_target_properties(Benchmarks PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+endif()
+
+# Setze C++20 explizit für alle relevanten JUCE-Module (Workaround für ALIAS/INTERFACE)
+foreach(_juce_mod IN ITEMS juce_audio_utils juce_audio_processors juce_dsp juce_gui_basics juce_gui_extra)
+    if(TARGET ${_juce_mod})
+        get_target_property(_is_alias ${_juce_mod} ALIAS_GLOBAL)
+        if(NOT _is_alias)
+            set_target_properties(${_juce_mod} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+        endif()
+    endif()
+    if(TARGET juce::${_juce_mod})
+        get_target_property(_is_alias juce::${_juce_mod} ALIAS_GLOBAL)
+        if(NOT _is_alias)
+            set_target_properties(juce::${_juce_mod} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED YES CXX_EXTENSIONS NO)
+        endif()
+    endif()
+endforeach()
+
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 
 # This lets us use our code in both the JUCE targets and our Test target
 # Without running into ODR violations
+
+# INTERFACE-Target für gemeinsamen Code, C++17 explizit setzen
 add_library(SharedCode INTERFACE)
+target_compile_features(SharedCode INTERFACE cxx_std_17)
 
 clap_juce_extensions_plugin(TARGET "${PROJECT_NAME}"
     CLAP_ID "${BUNDLE_ID}"
@@ -245,8 +266,9 @@ target_link_libraries(SharedCode
     juce::juce_recommended_warning_flags)
 
 # Link WebView2 on Windows
-if(WIN32 AND TARGET WebView2)
-    target_link_libraries(SharedCode INTERFACE WebView2)
+if(WIN32)
+    target_include_directories(SharedCode INTERFACE "${WebView2_include_dir}")
+    target_link_libraries(SharedCode INTERFACE "${WebView2_library}")
 endif()
 
 # Link the JUCE plugin targets our SharedCode target

@@ -1,223 +1,254 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "🚀 First Time Setup",
-            "detail": "Initialize GUI submodule, install dependencies, configure CMake, build plugin, and start dev server",
-            "type": "shell",
-            "command": "echo",
-            "args": [
-                "Starting first time setup..."
-            ],
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Plugin: Initialize GUI Submodule",
-                "GUI: Install Dependencies",
-                "Plugin: Configure CMake",
-                "Plugin: Build",
-                "GUI: Start Dev Server"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Plugin: Initialize GUI Submodule",
-            "detail": "Initialize and update the GUI git submodule",
-            "type": "shell",
-            "command": "git",
-            "args": [
-                "submodule",
-                "update",
-                "--init",
-                "--recursive"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/.."
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "GUI: Install Dependencies",
-            "type": "shell",
-            "command": "npm",
-            "args": [
-                "install"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "GUI: Start Dev Server",
-            "type": "shell",
-            "command": "npm",
-            "args": [
-                "run",
-                "dev"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/../gui"
-            },
-            "isBackground": true,
-            "problemMatcher": {
-                "owner": "vite",
-                "pattern": {
-                    "regexp": ".*",
-                    "file": 1,
-                    "location": 2,
-                    "message": 0
-                },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "VITE.*ready in",
-                    "endsPattern": "Local:.*http"
-                }
-            }
-        },
-        {
-            "label": "GUI: Build",
-            "type": "shell",
-            "command": "npm",
-            "args": [
-                "run",
-                "build"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/../gui"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Plugin: Configure CMake",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--preset",
-                "ninja-clang"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Plugin: Build",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build",
-                "--config",
-                "Debug"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Plugin: CMake Build (Incremental)",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Plugin: CMake Clean Build",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build",
-                "--clean-first"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-            },
-            "group": "build",
-            "problemMatcher": []
-        },
-        {
-            "label": "Plugin: CMake Build Standalone",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build",
-                "--target",
-                "Pamplejuce_Standalone"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-            },
-            "group": "build",
-            "problemMatcher": []
-        },
-        {
-            "label": "Plugin: CMake Build VST3",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build",
-                "--target",
-                "Pamplejuce_VST3"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-            },
-            "group": "build",
-            "problemMatcher": []
-        },
-        {
-            "label": "Plugin: CMake Build AU",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build",
-                "--target",
-                "Pamplejuce_AU"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-            },
-            "group": "build",
-            "problemMatcher": []
-        },
-        {
-            "label": "Plugin: CMake Build Tests",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build",
-                "--target",
-                "Tests"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-            },
-            "group": "build",
-            "problemMatcher": []
-        }
-    ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "🚀 First Time Setup",
+			"detail": "Initialize GUI submodule, install dependencies, configure CMake, build plugin, and start dev server",
+			"type": "shell",
+			"command": "echo",
+			"args": [
+				"Starting first time setup..."
+			],
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Plugin: Initialize GUI Submodule",
+				"GUI: Install Dependencies",
+				"Plugin: Configure CMake",
+				"Plugin: Build",
+				"GUI: Start Dev Server"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: Initialize GUI Submodule",
+			"detail": "Initialize and update the GUI git submodule",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"submodule",
+				"update",
+				"--init",
+				"--recursive"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/.."
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "GUI: Install Dependencies",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"install"
+			],
+			"options": {
+				"cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "GUI: Start Dev Server",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/../gui"
+			},
+			"isBackground": true,
+			"problemMatcher": {
+				"owner": "vite",
+				"pattern": {
+					"regexp": ".*",
+					"file": 1,
+					"location": 2,
+					"message": 0
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "VITE.*ready in",
+					"endsPattern": "Local:.*http"
+				}
+			}
+		},
+		{
+			"label": "GUI: Build",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}/../gui"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: Configure CMake",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--preset",
+				"ninja-clang"
+			],
+			"options": {
+				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: Build",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--config",
+				"Debug"
+			],
+			"options": {
+				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: CMake Build (Incremental)",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build"
+			],
+			"options": {
+				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+			},
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: CMake Clean Build",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--clean-first"
+			],
+			"options": {
+				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+			},
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: CMake Build Standalone",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--target",
+				"Pamplejuce_Standalone"
+			],
+			"options": {
+				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+			},
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: CMake Build VST3",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--target",
+				"Pamplejuce_VST3"
+			],
+			"options": {
+				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+			},
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: CMake Build AU",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--target",
+				"Pamplejuce_AU"
+			],
+			"options": {
+				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+			},
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: CMake Build Tests",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--target",
+				"Tests"
+			],
+			"options": {
+				"cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+			},
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Plugin: Build",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--config",
+				"Debug"
+			]
+		},
+		{
+			"label": "Plugin: Configure CMake",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--preset",
+				"ninja-clang"
+			]
+		},
+		{
+			"label": "Plugin: Build",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--config",
+				"Debug"
+			]
+		}
+	]
 }
