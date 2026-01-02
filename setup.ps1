@@ -33,6 +33,11 @@ Write-Host "  Plugin Name: $pluginName"
 Write-Host "  Company: $companyName"
 Write-Host "  GUI Repo: $guiRepo"
 Write-Host ""
+
+# Create safe identifiers (no spaces, special chars)
+$pluginId = $pluginName -replace '[^a-zA-Z0-9]', '_'
+$pluginIdSpaces = $pluginName -replace '[^a-zA-Z0-9 ]', ''
+
 $configPath = "project-config.json"
 if (Test-Path $configPath) {
     Write-Host "  Updating project-config.json..." -ForegroundColor Gray
@@ -53,10 +58,6 @@ if ($confirm -ne 'y') {
 
 Write-Host ""
 Write-Host "Setting up project..." -ForegroundColor Green
-
-# Create safe identifiers (no spaces, special chars)
-$pluginId = $pluginName -replace '[^a-zA-Z0-9]', '_'
-$pluginIdSpaces = $pluginName -replace '[^a-zA-Z0-9 ]', ''
 
 # Update CMakeLists.txt
 Write-Host "  Updating CMakeLists.txt..." -ForegroundColor Gray
