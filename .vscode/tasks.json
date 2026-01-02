@@ -43,41 +43,38 @@
             "label": "Configure CMake (Plugin)",
             "type": "shell",
             "command": "cmake",
-            "--preset",
-            "ninja-clang"
-        ],
-        "args": [
-            "--preset",
-            "vs2026-clang"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-        }
-    },
-    {
-        "label": "Build Plugin",
-        "type": "shell",
-        "command": "cmake",
-        "args": [
-            "--build",
-            "build"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-        }
-    },
-    {
-        "label": "Start GUI Dev Server",
-        "type": "shell",
-        "command": "npm",
-        "args": [
-            "run",
-            "dev"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+            "args": [
+                "--preset",
+                "ninja-clang"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            }
         },
-        "isBackground": true
-    }
-        "tasks": []
+        {
+            "label": "Build Plugin",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            }
+        },
+        {
+            "label": "Start GUI Dev Server",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "run",
+                "dev"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎨 GUI (Vue.js)}"
+            },
+            "isBackground": true
+        }
+    ]
 }

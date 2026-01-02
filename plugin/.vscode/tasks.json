@@ -95,132 +95,129 @@
             "label": "Plugin: Configure CMake",
             "type": "shell",
             "command": "cmake",
-            "--preset",
-            "ninja-clang"
-        ],
-        "args": [
-            "--preset",
-            "vs2026-clang"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            "args": [
+                "--preset",
+                "ninja-clang"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "problemMatcher": []
         },
-        "problemMatcher": []
-    },
-    {
-        "label": "Plugin: Build",
-        "type": "shell",
-        "command": "cmake",
-        "args": [
-            "--build",
-            "build",
-            "--config",
-            "Debug"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+        {
+            "label": "Plugin: Build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--config",
+                "Debug"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
         },
-        "group": {
-            "kind": "build",
-            "isDefault": false
+        {
+            "label": "Plugin: CMake Build (Incremental)",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
         },
-        "problemMatcher": []
-    },
-    {
-        "label": "Plugin: CMake Build (Incremental)",
-        "type": "shell",
-        "command": "cmake",
-        "args": [
-            "--build",
-            "build"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+        {
+            "label": "Plugin: CMake Clean Build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--clean-first"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "group": "build",
+            "problemMatcher": []
         },
-        "group": {
-            "kind": "build",
-            "isDefault": true
+        {
+            "label": "Plugin: CMake Build Standalone",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--target",
+                "Pamplejuce_Standalone"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "group": "build",
+            "problemMatcher": []
         },
-        "problemMatcher": []
-    },
-    {
-        "label": "Plugin: CMake Clean Build",
-        "type": "shell",
-        "command": "cmake",
-        "args": [
-            "--build",
-            "build",
-            "--clean-first"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+        {
+            "label": "Plugin: CMake Build VST3",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--target",
+                "Pamplejuce_VST3"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "group": "build",
+            "problemMatcher": []
         },
-        "group": "build",
-        "problemMatcher": []
-    },
-    {
-        "label": "Plugin: CMake Build Standalone",
-        "type": "shell",
-        "command": "cmake",
-        "args": [
-            "--build",
-            "build",
-            "--target",
-            "Pamplejuce_Standalone"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+        {
+            "label": "Plugin: CMake Build AU",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--target",
+                "Pamplejuce_AU"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "group": "build",
+            "problemMatcher": []
         },
-        "group": "build",
-        "problemMatcher": []
-    },
-    {
-        "label": "Plugin: CMake Build VST3",
-        "type": "shell",
-        "command": "cmake",
-        "args": [
-            "--build",
-            "build",
-            "--target",
-            "Pamplejuce_VST3"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-        },
-        "group": "build",
-        "problemMatcher": []
-    },
-    {
-        "label": "Plugin: CMake Build AU",
-        "type": "shell",
-        "command": "cmake",
-        "args": [
-            "--build",
-            "build",
-            "--target",
-            "Pamplejuce_AU"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-        },
-        "group": "build",
-        "problemMatcher": []
-    },
-    {
-        "label": "Plugin: CMake Build Tests",
-        "type": "shell",
-        "command": "cmake",
-        "args": [
-            "--build",
-            "build",
-            "--target",
-            "Tests"
-        ],
-        "options": {
-            "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
-        },
-        "group": "build",
-        "problemMatcher": []
-    }
-]
+        {
+            "label": "Plugin: CMake Build Tests",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build",
+                "--target",
+                "Tests"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+            },
+            "group": "build",
+            "problemMatcher": []
+        }
+    ]
 }

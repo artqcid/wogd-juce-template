@@ -7,22 +7,37 @@
   },
   "configurePresets": [
     {
-      "name": "vs2026-clang",
-      "displayName": "Visual Studio 2026 + ClangCL",
-      "generator": "Visual Studio 18 2026",
+      "name": "default",
+      "hidden": true,
       "binaryDir": "${sourceDir}/build",
-      "description": "Configure with VS 2026 and ClangCL toolset",
       "cacheVariables": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "ninja-clang",
+      "inherits": "default",
+      "displayName": "Ninja + ClangCL",
+      "generator": "Ninja",
+      "description": "Build with Ninja and clang-cl",
+      "cacheVariables": {
         "CMAKE_C_COMPILER": "clang-cl",
         "CMAKE_CXX_COMPILER": "clang-cl"
-      },
-      "toolset": "ClangCL",
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
       }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja-clang-debug",
+      "configurePreset": "ninja-clang",
+      "displayName": "Build Debug",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-clang-release",
+      "configurePreset": "ninja-clang",
+      "displayName": "Build Release",
+      "configuration": "Release"
     }
   ]
 }

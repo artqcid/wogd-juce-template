@@ -85,7 +85,7 @@ Open http://localhost:5173 in your browser.
 
 ## 🔧 Requirements
 
-- Visual Studio 2026 or later
+- Ninja + Clang (clang-cl) toolchain
 - CMake 3.25+
 - Node.js 18+
 - WebView2 Runtime (usually pre-installed on Windows)

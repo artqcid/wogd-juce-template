@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.25)
 # Enable clangd support (compile_commands.json)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# This tells cmake we have goodies in the /cmake folder
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
 # Load project configuration from central JSON file
 # Edit ../project-config.json to change project settings
 include(ProjectConfig)
@@ -30,7 +29,10 @@ set(CMAKE_POLICY_DEFAULT_CMP0141        NEW      CACHE STRING "" FORCE)
 set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded CACHE STRING "" FORCE)
 
 # For simplicity, the name of the CMake project is also the name of the target
-project(${PROJECT_NAME} VERSION ${PROJECT_VERSION})
+if(NOT DEFINED MY_PROJECT_VERSION OR "${MY_PROJECT_VERSION}" STREQUAL "")
+    set(MY_PROJECT_VERSION "0.0.1")
+endif()
+project(${PROJECT_NAME} VERSION ${MY_PROJECT_VERSION})
 
 # JUCE is setup as a submodule in the /JUCE folder
 # Locally, you must run `git submodule update --init --recursive` once
@@ -193,7 +195,7 @@ target_sources(SharedCode INTERFACE ${SourceFiles})
 include(Assets)
 
 # Embed GUI files for Release builds
-include(EmbedGUI)
+# include(EmbedGUI)
 
 # MacOS only: Cleans up folder and target organization on Xcode.
 # include(XcodePrettify)
