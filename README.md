@@ -36,22 +36,34 @@ code template.code-workspace
 ```
 
 ### 5. First Time Setup Task
-If you cloned **without** `--recursive`, run this task to initialize everything:
+Wenn du **ohne** `--recursive` geklont hast, führe diesen Task aus, um alles zu initialisieren:
 
-**Ctrl+Shift+P** → "Tasks: Run Task" → **🚀 First Time Setup**
+**Ctrl+Shift+P** → "Tasks: Run Task" → **Plugin: 🚀 First Time Setup**
 
-This will:
-1. Initialize GUI submodule (`git submodule update --init`)
-2. Install GUI dependencies (`npm install`)
-3. Configure CMake
-4. Build the plugin
-5. Start the GUI dev server (manuell ausführen)
+Dieser Task erledigt:
+1. Initialisiert das GUI-Submodul (`git submodule update --init`)
+2. Installiert GUI-Abhängigkeiten (`npm install`)
+3. Konfiguriert CMake
+4. Baut das Plugin
+5. (GUI-Dev-Server manuell starten mit **GUI: Start Dev Server**)
 
-### 6. Build & Run (After First Setup)
-Use VS Code tasks:
+### 6. Build & Run (Nach dem First Setup)
+Verwende die VS Code Tasks mit den neuen Namen:
 
-**Optional/Manuell:**
-4. Start GUI dev server (manuell ausführen)
+- **Plugin: Build** – baut das Plugin
+- **GUI: Build** – baut das GUI
+- **GUI: Start Dev Server** – startet den GUI-Entwicklungsserver
+## 🏷️ Task-Übersicht
+
+| Task-Name                      | Funktion                        |
+|--------------------------------|---------------------------------|
+| Plugin: 🚀 First Time Setup     | Initialisiert alles fürs Plugin  |
+| Plugin: Build                  | Baut das Plugin                  |
+| Plugin: Configure CMake        | CMake-Konfiguration fürs Plugin  |
+| GUI: Install Dependencies      | Installiert GUI-Abhängigkeiten   |
+| GUI: Build                     | Baut das GUI                     |
+| GUI: Start Dev Server          | Startet den GUI-Dev-Server       |
+
 ## 📁 Structure
 
 - `plugin/` - JUCE C++ plugin code

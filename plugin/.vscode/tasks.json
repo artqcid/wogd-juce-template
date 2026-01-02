@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "🚀 First Time Setup",
+            "label": "Plugin: 🚀 First Time Setup",
             "detail": "Initialize GUI submodule, install dependencies, configure CMake, build plugin",
             "type": "shell",
             "command": "echo",
@@ -24,7 +24,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Initialize GUI Submodule",
+            "label": "Plugin: Initialize GUI Submodule",
             "detail": "Initialize and update the GUI git submodule",
             "type": "shell",
             "command": "git",
@@ -40,7 +40,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Install GUI Dependencies",
+            "label": "GUI: Install Dependencies",
             "type": "shell",
             "command": "npm",
             "args": [
@@ -52,7 +52,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Start GUI Dev Server",
+            "label": "GUI: Start Dev Server",
             "type": "shell",
             "command": "npm",
             "args": [
@@ -79,7 +79,7 @@
             }
         },
         {
-            "label": "Build GUI",
+            "label": "GUI: Build",
             "type": "shell",
             "command": "npm",
             "args": [
@@ -92,7 +92,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Configure CMake",
+            "label": "Plugin: Configure CMake",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -107,7 +107,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Build Plugin",
+            "label": "Plugin: Build",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -126,7 +126,7 @@
             "problemMatcher": []
         },
         {
-            "label": "CMake: Build (Incremental)",
+            "label": "Plugin: CMake Build (Incremental)",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -143,7 +143,7 @@
             "problemMatcher": []
         },
         {
-            "label": "CMake: Clean Build",
+            "label": "Plugin: CMake Clean Build",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -158,7 +158,7 @@
             "problemMatcher": []
         },
         {
-            "label": "CMake: Build Standalone",
+            "label": "Plugin: CMake Build Standalone",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -174,7 +174,7 @@
             "problemMatcher": []
         },
         {
-            "label": "CMake: Build VST3",
+            "label": "Plugin: CMake Build VST3",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -190,7 +190,7 @@
             "problemMatcher": []
         },
         {
-            "label": "CMake: Build AU",
+            "label": "Plugin: CMake Build AU",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -206,7 +206,7 @@
             "problemMatcher": []
         },
         {
-            "label": "CMake: Build Tests",
+            "label": "Plugin: CMake Build Tests",
             "type": "shell",
             "command": "cmake",
             "args": [
