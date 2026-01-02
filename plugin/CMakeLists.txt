@@ -11,6 +11,12 @@ include(ProjectConfig)
 # Modern concise way to add dependencies to your project
 include(CPM)
 
+
+# Set C++ Standard explizit auf 17 (für JUCE und moderne Syntax)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # Change me! Set the plugin formats you want built
 # Valid choices: AAX Unity VST VST3 AU AUv3 Standalone
 set(FORMATS Standalone AU VST3 AUv3)

@@ -1,9 +1,8 @@
 #include "PluginEditor.h"
-#include "BinaryData.h"
+#include "../build/juce_binarydata_Assets/JuceLibraryCode/BinaryData.h"
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_core/juce_core.h>
 #include <juce_gui_extra/juce_gui_extra.h>
-
 
 PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p), processorRef (p), webView { juce::WebBrowserComponent::Options {}.withBackend (juce::WebBrowserComponent::Options::Backend::webview2).withWinWebView2Options (juce::WebBrowserComponent::Options::WinWebView2 {}.withUserDataFolder (juce::File::getSpecialLocation (juce::File::SpecialLocationType::tempDirectory))).withNativeIntegrationEnabled() }
