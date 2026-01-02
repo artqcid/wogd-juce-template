@@ -1,0 +1,28 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "vs2026-clang",
+      "displayName": "Visual Studio 2026 + ClangCL",
+      "generator": "Visual Studio 18 2026",
+      "binaryDir": "${sourceDir}/build",
+      "description": "Configure with VS 2026 and ClangCL toolset",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_C_COMPILER": "clang-cl",
+        "CMAKE_CXX_COMPILER": "clang-cl"
+      },
+      "toolset": "ClangCL",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    }
+  ]
+}

@@ -117,3 +117,35 @@ Write-Host "  3. Run task 'Configure CMake'"
 Write-Host "  4. Run task 'Setup & Start Everything'"
 Write-Host ""
 Write-Host "Happy coding!" -ForegroundColor Magenta
+
+# --- Automatischer Build mit MSVC + Clang ---
+Write-Host "" -ForegroundColor Cyan
+Write-Host "Automatischer Build mit MSVC 18 + Clang (Ninja)..." -ForegroundColor Cyan
+
+# Lösche build-Ordner
+if (Test-Path "build") {
+    Write-Host "  Lösche build-Ordner..." -ForegroundColor Gray
+    Remove-Item -Recurse -Force "build"
+}
+
+# MSVC 18 Umgebung laden
+$vcvarsPath = "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
+if (Test-Path $vcvarsPath) {
+    Write-Host "  Lade MSVC 18 Umgebung..." -ForegroundColor Gray
+    cmd /c "`"$vcvarsPath`" && set" | ForEach-Object {
+        if ($_ -match "^(.*?)=(.*)$") {
+            $name = $matches[1]
+            $value = $matches[2]
+            [System.Environment]::SetEnvironmentVariable($name, $value, 'Process')
+        }
+    }
+} else {
+    Write-Host "[WARN] vcvars64.bat nicht gefunden! MSVC-Umgebung muss ggf. manuell geladen werden." -ForegroundColor Yellow
+}
+
+# CMake-Konfiguration und Build
+Write-Host "  Starte cmake --preset ninja-clang..." -ForegroundColor Gray
+& cmake --preset ninja-clang
+Write-Host "  Starte cmake --build build..." -ForegroundColor Gray
+& cmake --build build
+Write-Host "Build abgeschlossen!" -ForegroundColor Green

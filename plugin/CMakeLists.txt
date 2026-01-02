@@ -16,7 +16,15 @@ include(CPM)
 # Valid choices: AAX Unity VST VST3 AU AUv3 Standalone
 set(FORMATS Standalone AU VST3 AUv3)
 
-# Force JUCE to work with sccache
+
+# Enable sccache for clang-cl if available
+find_program(SCCACHE_PROGRAM sccache)
+if(SCCACHE_PROGRAM)
+    message(STATUS "Using sccache: ${SCCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER   "${SCCACHE_PROGRAM}" CACHE STRING "" FORCE)
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${SCCACHE_PROGRAM}" CACHE STRING "" FORCE)
+endif()
+
 # instruct MSVC to embed debug info (/Z7) instead of emitting a .pdb
 set(CMAKE_POLICY_DEFAULT_CMP0141        NEW      CACHE STRING "" FORCE)
 set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded CACHE STRING "" FORCE)
