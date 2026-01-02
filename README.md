@@ -422,6 +422,33 @@ Options:
 
 ---
 
+## 🏷️ Template Versioning & Releases
+
+When you use the "Use this template" button on GitHub, you always get the latest state of the `main` branch. If you want a stable, tested version, use a tagged release.
+
+### Recommended Workflow
+- **main branch:** Always stable and production-ready
+- **development branch:** For new features and testing (optional)
+- **Releases:** Mark stable milestones (e.g. v1.0.0)
+
+### Using a Specific Version
+To start from a specific release:
+```bash
+# Clone the template
+git clone https://github.com/artqcid/wogd-juce-template.git my-plugin
+cd my-plugin
+# Checkout the desired version
+git checkout v1.0.0
+```
+
+### Downloading a Release
+You can also download a ZIP of any release from the [Releases page](https://github.com/artqcid/wogd-juce-template/releases).
+
+### For Contributors
+- Only merge tested, stable changes to `main`
+- Update `CHANGELOG.md` and bump version for each release
+- See CONTRIBUTING.md for the full release process
+
 **Extended by:** [WordOfGearDevelopment](https://github.com/artqcid)  
 **License:** MIT (see LICENSE file)
 

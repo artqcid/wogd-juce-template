@@ -85,6 +85,42 @@ Thank you for your interest in contributing! This document provides guidelines f
    - Include screenshots/videos for UI changes
    - List breaking changes if any
 
+## 🚀 Release Process & Template Versioning
+
+### Why Releases Matter
+- The GitHub template always uses the latest `main` branch when someone clicks "Use this template".
+- To provide a stable starting point, create releases (tags) for major versions.
+- Communicate in the README which release is recommended for production use.
+
+### How to Create a Release
+1. Ensure `main` is stable and all changes are documented in `CHANGELOG.md`.
+2. Bump the version in `plugin/VERSION` and update `CHANGELOG.md`.
+3. Commit and push all changes:
+   ```bash
+   git add .
+   git commit -m "chore: Prepare v1.0.0 release"
+   git push origin main
+   ```
+4. Tag the release:
+   ```bash
+   git tag -a v1.0.0 -m "Release 1.0.0 - Initial stable template"
+   git push origin v1.0.0
+   ```
+5. On GitHub, go to "Releases" → "Draft a new release"
+   - Select the tag (e.g. `v1.0.0`)
+   - Add release notes (copy from `CHANGELOG.md`)
+   - Publish the release
+
+### Important Notes
+- The template button always uses the latest `main` branch.
+- To use a specific version, clone the repo and checkout the tag:
+  ```bash
+  git clone https://github.com/artqcid/wogd-juce-template.git my-plugin
+  cd my-plugin
+  git checkout v1.0.0
+  ```
+- Document recommended versions in the README.
+
 ## 🐛 Reporting Bugs
 
 When reporting bugs, please include:
