@@ -73,7 +73,9 @@ if (Test-Path $workspacePath) {
             $folder.name = $pluginIdSpaces
         }
     }
-    $workspaceContent | ConvertTo-Json -Depth 10 | Set-Content $newWorkspacePath -Encoding UTF8
+    # Speichere Workspace-Datei explizit als UTF-8 mit BOM für Emoji-Kompatibilität
+    $json = $workspaceContent | ConvertTo-Json -Depth 10
+    [System.IO.File]::WriteAllText($newWorkspacePath, $json, [System.Text.Encoding]::UTF8)
     Remove-Item $workspacePath
     Write-Host "  Renamed workspace: $workspacePath -> $newWorkspacePath (Root-Ordner-Name angepasst)" -ForegroundColor Gray
 }
