@@ -33,6 +33,16 @@ Write-Host "  Plugin Name: $pluginName"
 Write-Host "  Company: $companyName"
 Write-Host "  GUI Repo: $guiRepo"
 Write-Host ""
+$configPath = "project-config.json"
+if (Test-Path $configPath) {
+    Write-Host "  Updating project-config.json..." -ForegroundColor Gray
+    $configContent = Get-Content $configPath -Raw | ConvertFrom-Json
+    $configContent.project.name = $pluginId
+    $configContent.project.displayName = $pluginName
+    $configContent.project.company = $companyName
+    $json = $configContent | ConvertTo-Json -Depth 10
+    [System.IO.File]::WriteAllText($configPath, $json, [System.Text.Encoding]::UTF8)
+}
 
 $confirm = Read-Host "Proceed with setup? (y/n)"
 if ($confirm -ne 'y') {
