@@ -292,6 +292,136 @@ This template builds upon the excellent work of the open-source community:
 
 ---
 
+## 🔧 Troubleshooting
+
+### CMake can't find JUCE
+
+**Problem:** `CMake Error: Could not find a package configuration file provided by "JUCE"`
+
+**Solution:**
+1. Set environment variable:
+   ```powershell
+   $env:WOGD_JUCE_DIR = "C:/path/to/juce-installation"
+   ```
+2. OR add JUCE as submodule:
+   ```bash
+   git submodule add https://github.com/juce-framework/JUCE.git juce
+   ```
+3. OR let CMake download automatically (requires internet)
+
+### clangd IntelliSense not working
+
+**Problem:** Red squiggles everywhere, no code completion
+
+**Solution:**
+1. Make sure clangd extension is installed
+2. Build the project first to generate `compile_commands.json`:
+   ```bash
+   cmake --preset ninja-clang
+   ```
+3. Check `.vscode/settings.json` has correct path to compile commands
+4. Reload VS Code window: `Ctrl+Shift+P` → "Reload Window"
+
+### WebView2 Runtime not found
+
+**Problem:** Plugin crashes or shows black screen
+
+**Solution:**
+1. Install WebView2 Runtime: https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+2. OR set environment variable to local SDK:
+   ```powershell
+   $env:WEBVIEW2_SDK_DIR = "C:/path/to/webview2-sdk"
+   ```
+
+### Build fails after Git pull
+
+**Problem:** Build errors after pulling changes or switching branches
+
+**Solution:**
+1. Run clean build:
+   - VS Code: **PLUGIN CMake Clean Build** task
+   - OR manually: `cmake --build build --clean-first`
+2. If still failing, delete build folder and reconfigure:
+   ```bash
+   Remove-Item -Recurse -Force plugin/build
+   cmake --preset ninja-clang
+   ```
+
+### GUI not loading in plugin
+
+**Problem:** Plugin shows blank/white screen
+
+**Debug Build:**
+1. Make sure GUI dev server is running:
+   - Task: **GUI Start Dev Server**
+   - OR manually: `cd gui && npm run dev`
+2. Check console for connection errors
+
+**Release Build:**
+1. Build GUI first: **GUI Build** task
+2. Rebuild plugin to include bundled GUI
+
+### Visual Studio not found (setup.ps1)
+
+**Problem:** Setup script can't find Visual Studio
+
+**Solution:**
+1. Install Visual Studio 2026 with C++ Desktop Development workload
+2. OR manually set MSVC environment before running setup
+3. Check if `vswhere.exe` is available at default location
+
+### Node modules errors
+
+**Problem:** `npm install` fails or module not found errors
+
+**Solution:**
+```bash
+cd gui
+Remove-Item -Recurse -Force node_modules
+Remove-Item package-lock.json
+npm install
+```
+
+### Plugin format not found (VST3/AU/Standalone)
+
+**Problem:** Built plugin binary doesn't exist
+
+**Solution:**
+1. Check `CMakeLists.txt` line 23 for enabled formats
+2. Build specific target:
+   ```bash
+   cmake --build build --target YourPlugin_VST3
+   ```
+
+---
+
+## 📖 Additional Documentation
+
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Guidelines for contributing to this project
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history and changes
+- **[plugin/BUILD_WITH_GUI.md](plugin/BUILD_WITH_GUI.md)** - Detailed GUI integration guide
+- **[docs/WEBVIEW2_SETUP.md](plugin/docs/WEBVIEW2_SETUP.md)** - WebView2 setup instructions
+
+## 🚀 Quick Start Script
+
+For an even easier setup experience, use the quick-start script:
+
+```powershell
+.\quick-start.ps1
+```
+
+This script will:
+- ✓ Check all prerequisites (Git, CMake, Node.js, Visual Studio)
+- ✓ Optionally install recommended VS Code extensions
+- ✓ Guide you through environment variable setup
+- ✓ Run the complete first-time setup process
+
+Options:
+- `.\quick-start.ps1 -SkipExtensions` - Skip VS Code extension installation
+- `.\quick-start.ps1 -NoInteractive` - Run without prompts (CI mode)
+
+---
+
 **Extended by:** [WordOfGearDevelopment](https://github.com/artqcid)  
 **License:** MIT (see LICENSE file)
 

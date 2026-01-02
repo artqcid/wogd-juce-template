@@ -87,7 +87,14 @@ The plugin editor loads the Vue.js GUI via WebView2:
 - **Debug builds**: Loads from `http://localhost:5173` (hot reload)
 - **Release builds**: Loads from bundled `dist/index.html`
 
-See `source/PluginEditor.cpp` for WebView2 integration.
+See [source/PluginEditor.cpp](source/PluginEditor.cpp) for WebView2 integration.
+
+### Communication with GUI
+Parameters are synchronized bidirectionally:
+- Plugin → GUI: Automatic updates via parameter listeners
+- GUI → Plugin: Via `setParameter()` calls from JavaScript
+
+See [../gui/src/services/pluginService.ts](../gui/src/services/pluginService.ts) for the communication layer.
 
 ## Testing
 
