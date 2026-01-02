@@ -248,3 +248,50 @@ After setup, customize:
 - [JUCE Documentation](https://juce.com/learn/documentation)
 - [Vue.js 3 Guide](https://vuejs.org/guide/)
 - [WebView2 Docs](https://learn.microsoft.com/en-us/microsoft-edge/webview2/)
+
+## 🙏 Credits & Acknowledgments
+
+This template builds upon the excellent work of the open-source community:
+
+### Core Framework
+- **[Pamplejuce](https://github.com/sudara/pamplejuce)** by [Sudara Williams](https://github.com/sudara)  
+  Modern JUCE template with CMake, CPM, and CI/CD integration
+
+- **[JUCE](https://github.com/juce-framework/JUCE)** by [JUCE Team](https://juce.com)  
+  Cross-platform C++ framework for audio applications
+
+### Build System & Tools
+- **[cmake-includes](https://github.com/sudara/cmake-includes)** by Sudara  
+  Reusable CMake configurations for JUCE projects
+
+- **[CPM.cmake](https://github.com/cpm-cmake/CPM.cmake)**  
+  CMake's missing package manager
+
+### JUCE Modules & Extensions
+- **[Melatonin Inspector](https://github.com/sudara/melatonin_inspector)** by Sudara  
+  Visual debugging tool for JUCE UI components
+
+- **[clap-juce-extensions](https://github.com/free-audio/clap-juce-extensions)** by free-audio  
+  CLAP plugin format support for JUCE
+
+### Testing
+- **[Catch2](https://github.com/catchorg/Catch2)**  
+  Modern C++ test framework
+
+### WebView Integration
+- **[Microsoft WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)**  
+  Embed web technologies in native applications
+
+### Frontend
+- **[Vue.js](https://github.com/vuejs/core)** by Evan You & Vue Team  
+  Progressive JavaScript framework
+
+- **[Vite](https://github.com/vitejs/vite)** by Evan You & Vite Team  
+  Next-generation frontend tooling
+
+---
+
+**Extended by:** [WordOfGearDevelopment](https://github.com/artqcid)  
+**License:** MIT (see LICENSE file)
+
+Special thanks to all contributors who make open-source audio development possible! 🎵
