@@ -9,36 +9,64 @@ Click "Use this template" on GitHub to create your own plugin project.
 
 ### 2. Clone Repository
 ```bash
-# Option A: Clone without GUI (recommended for first setup)
 git clone https://github.com/YOUR_USERNAME/YOUR_PROJECT.git
-cd YOUR_PROJECT
-
-# Option B: Clone with GUI submodule
-git clone --recursive https://github.com/YOUR_USERNAME/YOUR_PROJECT.git
 cd YOUR_PROJECT
 ```
 
-### 3. Run Setup Script (Optional)
+### 3. Quick Start - Automated Setup (Recommended)
+
+**Für Einsteiger - alles automatisch:**
+
+```powershell
+.\quick-start.ps1
+```
+
+**Was macht das Quick-Start-Script?**
+1. ✅ **Prüft alle Voraussetzungen** (Git, CMake, Node.js, Visual Studio, Clang, Ninja)
+2. 🔧 **Installiert VS Code Extensions** (optional, C++, CMake, Vue.js, etc.)
+3. 🌐 **Hilft bei Environment Variables** (optional, z.B. WOGD_JUCE_DIR)
+4. 🚀 **Führt komplettes First-Time Setup durch** (Submodul, Dependencies, Build)
+5. ✓ **Plugin ist sofort einsatzbereit!**
+
+**Optionen:**
+```powershell
+# Extensions überspringen
+.\quick-start.ps1 -SkipExtensions
+
+# Ohne Interaktion (für CI/CD)
+.\quick-start.ps1 -NoInteractive
+```
+
+---
+
+### Alternative: Manuelle Konfiguration (für Fortgeschrittene)
+
+#### 3a. Setup Script - Projekt konfigurieren
 ```powershell
 ./setup.ps1
 ```
 
-The setup will ask for:
-- **Plugin Name** (e.g., "My Awesome Synth")
-- **Company Name** (e.g., "Your Company")
-- **GUI Repository URL** (optional, uses default template)
+**Was macht das Setup-Script?**
+- 📝 Fragt nach **Plugin Name**, **Company Name** und **GUI Repository**
+- 🔄 Aktualisiert `project-config.json` mit deinen Daten
+- 📦 Ersetzt GUI-Submodule mit deinem eigenen Repository (optional)
+- 📄 Benennt Workspace-Datei um nach deinem Plugin-Namen
+- ⚠️ **Wichtig:** Baut NICHT das Projekt - nur Konfiguration!
 
-This script updates project names and can replace the GUI submodule.
+**Wann verwenden?**
+- Du willst nur die Projekt-Namen anpassen
+- Du hast ein eigenes GUI-Repository
+- Du möchtest manuell bauen
 
-### 4. Open in VS Code
+#### 3b. Open in VS Code
 ```powershell
 code template.code-workspace
-# After setup.ps1, the workspace file will be renamed to <YourPluginName>.code-workspace
+# Nach setup.ps1 wird die Workspace-Datei umbenannt zu <DeinPluginName>.code-workspace
 ```
 
-### 5. First Time Setup
+#### 3c. First Time Setup - Manuell in VS Code
 
-**With VS Code (Recommended):**
+**Mit VS Code (Empfohlen):**
 
 **Ctrl+Shift+P** → "Tasks: Run Task" → **PROJECT First Time Setup**
 
@@ -49,7 +77,7 @@ Dieser Task erledigt alles automatisch:
 4. Baut das Plugin
 5. Startet GUI-Dev-Server im Hintergrund
 
-**Without VS Code (Manual):**
+**Ohne VS Code (Kommandozeile):**
 ```bash
 # Initialize submodules
 git submodule update --init --recursive
@@ -63,7 +91,9 @@ cmake --preset ninja-clang
 cmake --build build
 ```
 
-### 6. Build & Run (Nach dem First Setup)
+---
+
+### 4. Build & Run (Nach dem First Setup)
 Verwende die VS Code Tasks mit den neuen Namen:
 
 - **PLUGIN CMake Build** – baut das Plugin
@@ -402,23 +432,111 @@ npm install
 - **[plugin/BUILD_WITH_GUI.md](plugin/BUILD_WITH_GUI.md)** - Detailed GUI integration guide
 - **[docs/WEBVIEW2_SETUP.md](plugin/docs/WEBVIEW2_SETUP.md)** - WebView2 setup instructions
 
-## 🚀 Quick Start Script
+---
 
-For an even easier setup experience, use the quick-start script:
+## 🔄 Setup Scripts im Detail
 
+### quick-start.ps1 - Komplettes Projekt-Setup
+
+**Für wen:** Einsteiger und alle, die schnell loslegen wollen
+
+**Was macht es:**
 ```powershell
 .\quick-start.ps1
 ```
 
-This script will:
-- ✓ Check all prerequisites (Git, CMake, Node.js, Visual Studio)
-- ✓ Optionally install recommended VS Code extensions
-- ✓ Guide you through environment variable setup
-- ✓ Run the complete first-time setup process
+1. **Prerequisite Check:**
+   - Git, CMake 3.25+, Node.js 18+
+   - Visual Studio 2026 mit C++ Workload
+   - Clang/LLVM, Ninja Build System
 
-Options:
-- `.\quick-start.ps1 -SkipExtensions` - Skip VS Code extension installation
-- `.\quick-start.ps1 -NoInteractive` - Run without prompts (CI mode)
+2. **VS Code Extensions (optional):**
+   - C/C++ (Microsoft) - Debugging
+   - clangd (LLVM) - IntelliSense
+   - CMake Tools (Microsoft)
+   - Vue - Official (Vue.js)
+   - Prettier - Code Formatter
+
+3. **Environment Variables (optional):**
+   - Hilft bei WOGD_JUCE_DIR Setup
+   - WebView2 SDK Path
+   - AudioPluginHost für Debugging
+
+4. **First-Time Build:**
+   - Initialisiert GUI-Submodule
+   - `npm install` für Dependencies
+   - CMake Configure + Build
+   - Startet Dev Server
+
+**Parameter:**
+```powershell
+# Extensions überspringen
+.\quick-start.ps1 -SkipExtensions
+
+# Ohne User-Interaktion (für CI/CD)
+.\quick-start.ps1 -NoInteractive
+```
+
+**Ergebnis:** Lauffertiges Plugin-Projekt, sofort entwicklungsbereit!
+
+---
+
+### setup.ps1 - Projekt-Konfiguration
+
+**Für wen:** Fortgeschrittene, die nur Namen/Config ändern wollen
+
+**Was macht es:**
+```powershell
+.\setup.ps1
+```
+
+1. **Interaktive Konfiguration:**
+   - Plugin Name eingeben (z.B. "My Awesome Synth")
+   - Company Name eingeben
+   - Optional: Eigenes GUI-Repository URL
+
+2. **project-config.json Update:**
+   - Aktualisiert Namen und IDs
+   - Setzt Company/Bundle Identifier
+   - Plugin- und Manufacturer-Codes
+
+3. **GUI Submodule (optional):**
+   - Kann Standard-GUI durch eigenes ersetzen
+   - Klont neues GUI-Repository
+   - Initialisiert Submodule
+
+4. **Workspace Rename:**
+   - Benennt `template.code-workspace` um
+   - Neuer Name: `<DeinPluginName>.code-workspace`
+
+**⚠️ Wichtig:** 
+- Baut NICHT das Projekt
+- Nur Konfiguration, keine Dependencies
+- Du musst danach manuell bauen (First-Time Setup Task)
+
+**Typischer Workflow:**
+```powershell
+# 1. Projekt konfigurieren
+.\setup.ps1
+
+# 2. VS Code öffnen
+code MeinPlugin.code-workspace
+
+# 3. First-Time Setup Task ausführen
+# Ctrl+Shift+P → Tasks: Run Task → PROJECT First Time Setup
+```
+
+---
+
+### Welches Script soll ich verwenden?
+
+| Situation | Script | Grund |
+|-----------|--------|-------|
+| Erstes Mal Template verwenden | `quick-start.ps1` | Alles automatisch, nichts vergessen |
+| Nur Plugin-Namen ändern | `setup.ps1` | Schnell, keine Dependencies installieren |
+| Eigenes GUI-Repository | `setup.ps1` | Kann GUI-Submodule ersetzen |
+| Clean Install nach Git Pull | VS Code Task: **PROJECT First Time Setup** | Rebuild ohne Config ändern |
+| CI/CD Pipeline | `quick-start.ps1 -NoInteractive` | Automatisiert, keine Prompts |
 
 ---
 
