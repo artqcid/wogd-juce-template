@@ -1,4 +1,4 @@
-#!/usr/bin/env pwsh
+﻿#!/usr/bin/env pwsh
 # Framework Migration Helper
 # This script helps migrate existing projects to different GUI frameworks
 
@@ -22,6 +22,8 @@ Write-Host ""
 # Check if we're in the right directory
 if (-not (Test-Path "project-config.json")) {
     Write-Error "project-config.json not found. Run this script from the project root."
+    Write-Host "Press any key to exit..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit 1
 }
 
@@ -29,6 +31,8 @@ if (-not (Test-Path "project-config.json")) {
 $frameworkConfigPath = "framework-templates.json"
 if (-not (Test-Path $frameworkConfigPath)) {
     Write-Error "framework-templates.json not found."
+    Write-Host "Press any key to exit..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit 1
 }
 
@@ -62,6 +66,8 @@ if (-not $Framework) {
         "5" { $Framework = "custom" }
         default {
             Write-Error "Invalid choice!"
+            Write-Host "Press any key to exit..." -ForegroundColor Gray
+            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
             exit 1
         }
     }
@@ -78,6 +84,8 @@ if ($Framework -eq "custom") {
     $frameworkDetails = $frameworkConfig.frameworks.$Framework
     if (-not $frameworkDetails) {
         Write-Error "Framework '$Framework' not found in configuration."
+        Write-Host "Press any key to exit..." -ForegroundColor Gray
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         exit 1
     }
     
@@ -96,6 +104,8 @@ Write-Host ""
 $confirm = Read-Host "Proceed with migration? (y/n)"
 if ($confirm -ne 'y') {
     Write-Warning "Migration cancelled."
+    Write-Host "Press any key to exit..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit 0
 }
 
@@ -121,6 +131,8 @@ Write-Host "Step 2/5: Adding new GUI submodule..." -ForegroundColor Cyan
 git submodule add $guiRepo gui
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Failed to add GUI submodule!"
+    Write-Host "Press any key to exit..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit 1
 }
 Write-Success "New GUI submodule added"
@@ -166,7 +178,11 @@ Write-Host ""
 Write-Success "Migration complete!"
 Write-Host ""
 Write-Info "Next steps:"
-Write-Host "  1. cd gui && npm install"
+Write-Host "  1. cd gui; npm install"
 Write-Host "  2. npm run $devScript"
-Write-Host "  3. Rebuild plugin: cd plugin && cmake --build build"
+Write-Host "  3. Rebuild plugin: cd plugin; cmake --build build"
 Write-Host ""
+
+# Keep window open
+Write-Host "Press any key to exit..." -ForegroundColor Gray
+$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')

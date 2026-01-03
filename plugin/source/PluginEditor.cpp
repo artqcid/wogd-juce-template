@@ -14,7 +14,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
 // Load Vue.js GUI - Dev server in Debug, embedded files in Release
 #if defined(DEBUG) || defined(_DEBUG)
-    webView.goToURL ("http://localhost:5173/");
+    webView.goToURL ("http://localhost:4200/");
     DBG ("🔧 Debug Mode: Loading GUI from dev server (localhost:5173)");
 #else
     webView.goToURL ("/");
@@ -97,3 +97,4 @@ static juce::WebBrowserComponent::Resource resourceFromBinaryData (const juce::S
     }
     return {};
 }
+
