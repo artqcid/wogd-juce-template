@@ -122,6 +122,62 @@ gui-template/
 - Compiles to vanilla JS, smallest bundle size
 - Build output: `dist/`
 
+### Custom Framework
+
+The "Custom" option allows you to use **any web framework or technology stack** not included in the predefined templates.
+
+**When to use Custom:**
+- You want to use a different framework (e.g., Preact, Solid.js, Lit, Qwik, Alpine.js)
+- You have a company-internal UI framework
+- You're experimenting with new technologies
+- You need a specific build setup not covered by the templates
+
+**Custom Setup Process:**
+
+1. **Choose "Custom" during setup**:
+   ```powershell
+   ./setup.ps1
+   # Select option 6: Custom
+   ```
+
+2. **Provide configuration**:
+   - **Dev Server Port**: The port your dev server runs on (e.g., 3000, 8080, 5173)
+   - **Dev Script Name**: The npm script to start dev server (e.g., "dev", "start", "serve")
+   - **Repository URL**: Your custom GUI repository URL
+
+3. **GUI Repository Requirements**:
+   Your custom repository must have:
+   - `package.json` with the specified dev script
+   - A dev server that serves on the specified port
+   - Build output to `dist/` directory (configurable)
+   - WebView2 communication via `window.__JUCE__` API
+
+**Example Custom Setups:**
+
+```powershell
+# Preact
+Port: 5173
+Dev Script: dev
+Repo: https://github.com/user/my-plugin-gui-preact
+
+# Solid.js  
+Port: 3000
+Dev Script: start
+Repo: https://github.com/user/my-plugin-gui-solid
+
+# Company Framework
+Port: 8080
+Dev Script: serve
+Repo: https://internal-git.company.com/plugin-ui
+```
+
+**Custom Framework Checklist:**
+- ✅ Has `package.json` with dev and build scripts
+- ✅ Dev server runs on specified port
+- ✅ Builds to `dist/` directory
+- ✅ Implements WebView2 message-passing API
+- ✅ Compatible with C++ PluginEditor expectations
+
 ## 📝 Configuration
 
 ### framework-templates.json
