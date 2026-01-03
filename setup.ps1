@@ -49,10 +49,85 @@ do {
     }
 } while ($true)
 
-$guiRepoDefault = "please Provide a valid GUI repository URL"
-$guiRepo = Read-Host "GUI Repository URL (press Enter for default template)"
-if ([string]::IsNullOrWhiteSpace($guiRepo)) {
-    $guiRepo = $guiRepoDefault
+# GUI Framework Selection
+Write-Host ""
+Write-Host "GUI Framework Selection:" -ForegroundColor Cyan
+Write-Host "Available frameworks: Vue.js, React, Angular, Vanilla JS"
+Write-Host ""
+
+# Load framework templates
+$frameworkConfigPath = "framework-templates.json"
+if (Test-Path $frameworkConfigPath) {
+    $frameworkConfig = Get-Content $frameworkConfigPath -Raw | ConvertFrom-Json
+    
+    Write-Host "Select GUI Framework:" -ForegroundColor Yellow
+    Write-Host "  1. Vue.js (default)" -ForegroundColor Green
+    Write-Host "  2. React"
+    Write-Host "  3. Angular"
+    Write-Host "  4. Vanilla JavaScript"
+    Write-Host "  5. Custom (provide your own repository URL)"
+    Write-Host ""
+    
+    $frameworkChoice = Read-Host "Enter choice (1-5) [default: 1]"
+    if ([string]::IsNullOrWhiteSpace($frameworkChoice)) {
+        $frameworkChoice = "1"
+    }
+    
+    switch ($frameworkChoice) {
+        "1" {
+            $selectedFramework = "vue"
+            $guiRepo = $frameworkConfig.frameworks.vue.repository
+            $devPort = $frameworkConfig.frameworks.vue.devPort
+            $devScript = $frameworkConfig.frameworks.vue.devScript
+        }
+        "2" {
+            $selectedFramework = "react"
+            $guiRepo = $frameworkConfig.frameworks.react.repository
+            $devPort = $frameworkConfig.frameworks.react.devPort
+            $devScript = $frameworkConfig.frameworks.react.devScript
+        }
+        "3" {
+            $selectedFramework = "angular"
+            $guiRepo = $frameworkConfig.frameworks.angular.repository
+            $devPort = $frameworkConfig.frameworks.angular.devPort
+            $devScript = $frameworkConfig.frameworks.angular.devScript
+        }
+        "4" {
+            $selectedFramework = "vanilla"
+            $guiRepo = $frameworkConfig.frameworks.vanilla.repository
+            $devPort = $frameworkConfig.frameworks.vanilla.devPort
+            $devScript = $frameworkConfig.frameworks.vanilla.devScript
+        }
+        "5" {
+            $selectedFramework = "custom"
+            $guiRepo = Read-Host "GUI Repository URL"
+            $devPort = Read-Host "Dev Server Port [default: 5173]"
+            if ([string]::IsNullOrWhiteSpace($devPort)) {
+                $devPort = 5173
+            }
+            $devScript = Read-Host "Dev Script Name [default: dev]"
+            if ([string]::IsNullOrWhiteSpace($devScript)) {
+                $devScript = "dev"
+            }
+        }
+        default {
+            Write-Host "[ERROR] Invalid choice!" -ForegroundColor Red
+            Read-Host "Press Enter to exit..."
+            exit 1
+        }
+    }
+    
+    Write-Host ""
+    Write-Host "Selected Framework: $selectedFramework" -ForegroundColor Green
+    Write-Host "GUI Repository: $guiRepo" -ForegroundColor Gray
+    Write-Host "Dev Port: $devPort" -ForegroundColor Gray
+    Write-Host ""
+} else {
+    # Fallback if config file doesn't exist
+    Write-Host "[WARNING] framework-templates.json not found, using manual input" -ForegroundColor Yellow
+    $guiRepo = Read-Host "GUI Repository URL"
+    $devPort = 5173
+    $devScript = "dev"
 }
 
 # Plugin Format Selection
@@ -115,6 +190,18 @@ if (Test-Path $configPath) {
     $configContent.project.company = $companyName
     $configContent.project.pluginCode = $pluginCode
     $configContent.project.manufacturerCode = $manufacturerCode
+    
+    # Add GUI framework configuration
+    if (-not $configContent.gui) {
+        $configContent | Add-Member -MemberType NoteProperty -Name "gui" -Value @{}
+    }
+    $configContent.gui = @{
+        framework = $selectedFramework
+        repository = $guiRepo
+        devPort = [int]$devPort
+        devScript = $devScript
+    }
+    
     $json = $configContent | ConvertTo-Json -Depth 10
     [System.IO.File]::WriteAllText($configPath, $json, [System.Text.Encoding]::UTF8)
 }
