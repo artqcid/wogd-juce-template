@@ -128,9 +128,10 @@ Write-Host ""
 
 # Step 2: Add new GUI submodule
 Write-Host "Step 2/5: Adding new GUI submodule..." -ForegroundColor Cyan
-git submodule add $guiRepo gui
+$output = git submodule add $guiRepo gui 2>&1
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Failed to add GUI submodule!"
+    Write-Host "Error details: $output" -ForegroundColor Red
     Write-Host "Press any key to exit..." -ForegroundColor Gray
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     exit 1
@@ -171,8 +172,14 @@ Write-Host ""
 
 # Commit changes
 Write-Host "Committing changes..." -ForegroundColor Cyan
-git add -A
-git commit -m "Migrate GUI framework from $currentFramework to $Framework"
+git add -A 2>&1 | Out-Null
+$commitOutput = git commit -m "Migrate GUI framework from $currentFramework to $Framework" 2>&1
+if ($LASTEXITCODE -eq 0) {
+    Write-Success "Changes committed to git"
+} else {
+    Write-Warning "Git commit failed or nothing to commit"
+    Write-Host "Output: $commitOutput" -ForegroundColor Gray
+}
 
 Write-Host ""
 Write-Success "Migration complete!"
