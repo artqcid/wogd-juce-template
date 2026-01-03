@@ -1,6 +1,6 @@
 # Building Plugin with Embedded GUI
 
-This template supports embedding the Vue.js GUI directly into the plugin binary for Release builds.
+This template supports embedding the GUI directly into the plugin binary for Release builds.
 
 ## How it Works
 

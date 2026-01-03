@@ -36,7 +36,7 @@
                 "install"
             ],
             "options": {
-                "cwd": "${workspaceFolder:GUI (Vue.js)}"
+                "cwd": "${workspaceFolder:GUI}"
             }
         },
         {
@@ -48,7 +48,7 @@
                 "ninja-clang"
             ],
             "options": {
-                "cwd": "${workspaceFolder:Plugin (JUCE)}"
+                "cwd": "${workspaceFolder:Plugin}"
             }
         },
         {
@@ -61,7 +61,7 @@
                 "ninja-clang-debug"
             ],
             "options": {
-                "cwd": "${workspaceFolder:Plugin (JUCE)}"
+                "cwd": "${workspaceFolder:Plugin}"
             },
             "group": {
                 "kind": "build",
@@ -78,7 +78,7 @@
                 "--clean-first"
             ],
             "options": {
-                "cwd": "${workspaceFolder:Plugin (JUCE)}"
+                "cwd": "${workspaceFolder:Plugin}"
             },
             "group": "build"
         },
@@ -91,7 +91,7 @@
                 "dev"
             ],
             "options": {
-                "cwd": "${workspaceFolder:GUI (Vue.js)}"
+                "cwd": "${workspaceFolder:GUI}"
             },
             "isBackground": true
         }

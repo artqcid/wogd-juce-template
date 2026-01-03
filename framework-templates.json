@@ -1,0 +1,45 @@
+{
+  "frameworks": {
+    "vue": {
+      "name": "Vue.js",
+      "repository": "https://github.com/artqcid/wogd-juce-template-gui-vue.git",
+      "devScript": "dev",
+      "buildScript": "build",
+      "devPort": 5173,
+      "outputDir": "dist"
+    },
+    "react": {
+      "name": "React",
+      "repository": "https://github.com/artqcid/wogd-juce-template-gui-react.git",
+      "devScript": "dev",
+      "buildScript": "build",
+      "devPort": 5173,
+      "outputDir": "dist"
+    },
+    "angular": {
+      "name": "Angular",
+      "repository": "https://github.com/artqcid/wogd-juce-template-gui-angular.git",
+      "devScript": "start",
+      "buildScript": "build",
+      "devPort": 4200,
+      "outputDir": "dist"
+    },
+    "vanilla": {
+      "name": "Vanilla JS",
+      "repository": "https://github.com/artqcid/wogd-juce-template-gui-vanilla.git",
+      "devScript": "dev",
+      "buildScript": "build",
+      "devPort": 5173,
+      "outputDir": "dist"
+    },
+    "svelte": {
+      "name": "Svelte",
+      "repository": "https://github.com/artqcid/wogd-juce-template-gui-svelte.git",
+      "devScript": "dev",
+      "buildScript": "build",
+      "devPort": 5173,
+      "outputDir": "dist"
+    }
+  },
+  "default": "vue"
+}

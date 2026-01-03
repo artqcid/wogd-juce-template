@@ -3,7 +3,6 @@
         "llvm-vs-code-extensions.vscode-clangd",
         "ms-vscode.cpptools",
         "ms-vscode.cmake-tools",
-        "vue.volar",
         "esbenp.prettier-vscode",
         "ms-vscode.powershell"
     ],

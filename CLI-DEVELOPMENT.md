@@ -1,0 +1,397 @@
+# CLI-Only Development Guide
+
+This guide explains how to develop with this template using only the command line (without VS Code or other IDEs).
+
+## ✅ Current CLI-Friendliness Assessment
+
+**Good News:**
+- ✅ All core functionality works without VS Code
+- ✅ CMake-based build system (standard industry tooling)
+- ✅ npm scripts for GUI development
+- ✅ PowerShell scripts work in any terminal
+
+**Limitations:**
+- ⚠️ VS Code tasks need manual translation to commands
+- ⚠️ No IDE-agnostic project files (yet)
+- ⚠️ Workspace setup is VS Code-specific
+
+## 🚀 CLI Development Workflow
+
+### 1. Initial Setup (Command Line)
+
+```powershell
+# Clone your project
+git clone https://github.com/YOUR_USERNAME/YOUR_PROJECT.git
+cd YOUR_PROJECT
+
+# Run setup (works in any PowerShell terminal)
+.\setup.ps1
+
+# Initialize GUI submodule manually (if needed)
+git submodule update --init --recursive
+```
+
+### 2. Install Dependencies
+
+```powershell
+# Install GUI dependencies
+cd gui
+npm install
+cd ..
+```
+
+### 3. Configure CMake
+
+```powershell
+cd plugin
+
+# Option A: Use preset (recommended)
+cmake --preset ninja-clang
+
+# Option B: Manual configuration
+cmake -B build -G Ninja -DCMAKE_C_COMPILER=clang-cl -DCMAKE_CXX_COMPILER=clang-cl
+```
+
+### 4. Build Plugin
+
+```powershell
+# Build with preset
+cmake --build --preset ninja-clang-debug
+
+# Or manual build
+cmake --build build --config Debug
+
+# Build specific targets
+cmake --build build --target Pamplejuce_VST3
+cmake --build build --target Pamplejuce_Standalone
+cmake --build build --target Tests
+```
+
+### 5. Start GUI Dev Server
+
+```powershell
+cd gui
+npm run dev
+# Server starts on http://localhost:5173 (or port from project-config.json)
+```
+
+### 6. Test Plugin
+
+```powershell
+# Run standalone
+.\plugin\build\Pamplejuce_artefacts\Debug\Standalone\Pamplejuce.exe
+
+# Run tests
+.\plugin\build\Tests_artefacts\Debug\Tests.exe
+
+# Run benchmarks
+.\plugin\build\Benchmarks_artefacts\Debug\Benchmarks.exe
+```
+
+## 📋 Common CLI Commands
+
+### Building
+
+```powershell
+# Clean build
+cmake --build build --clean-first
+
+# Release build
+cmake --build --preset ninja-clang-release
+
+# Incremental build (fast)
+cmake --build build
+```
+
+### GUI Development
+
+```powershell
+cd gui
+
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Type checking (if available)
+npm run check  # Svelte only
+npm run build  # TypeScript compilation
+```
+
+### Testing
+
+```powershell
+# Build and run tests
+cd plugin
+cmake --build build --target Tests
+.\build\Tests_artefacts\Debug\Tests.exe
+
+# With specific test filter
+.\build\Tests_artefacts\Debug\Tests.exe "Plugin Basics"
+```
+
+## 🔧 IDE-Independent Development
+
+### With Any Editor/IDE
+
+You can use **any text editor or IDE** that supports:
+- C++ development
+- TypeScript/JavaScript
+- File navigation
+
+**Recommended Editors:**
+- VS Code (best integration, templates provided)
+- CLion (CMake native support)
+- Visual Studio (Windows, MSBuild or CMake)
+- Vim/Neovim + Language Servers
+- Emacs
+- Sublime Text
+
+### CLion Setup
+
+CLion automatically detects `CMakePresets.json` and requires no additional configuration!
+
+```powershell
+# Just open the 'plugin' folder in CLion
+# CLion will detect:
+# - CMakePresets.json (automatically loads presets)
+# - CMakeLists.txt (project structure)
+# - compile_commands.json (for code intelligence)
+
+# Select preset: "ninja-clang"
+# Build configuration: "ninja-clang-debug" or "ninja-clang-release"
+```
+
+**That's it!** CLion is fully CMake-native and works out of the box.
+
+### Visual Studio Setup
+
+Visual Studio 2022+ has native CMake support via `CMakePresets.json`.
+
+```powershell
+# Open the 'plugin' folder in Visual Studio
+# File → Open → Folder → Select 'plugin' directory
+
+# Visual Studio will:
+# - Detect CMakePresets.json
+# - Load available presets
+# - Generate project structure
+
+# Optional: setup.ps1 can generate .vs/launch.vs.json
+# This adds debug configurations for the Standalone target
+```
+
+**Run setup.ps1 and choose option 3** to auto-generate VS configs.
+
+### Vim/Neovim Setup
+
+```vim
+" Use clangd for C++ LSP
+" Install with: npm install -g clangd
+
+" compile_commands.json is generated in build/
+" Point clangd to it:
+let g:lsp_settings = {
+  \ 'clangd': {
+  \   'cmd': ['clangd', '--compile-commands-dir=plugin/build']
+  \ }
+  \}
+```
+
+## 🛠️ Advanced CLI Workflows
+
+### Parallel Building
+
+```powershell
+# Use all CPU cores (faster)
+cmake --build build --parallel
+
+# Specific number of jobs
+cmake --build build --parallel 8
+```
+
+### Cross-Platform CMake
+
+```powershell
+# List available presets
+cmake --list-presets
+
+# Use different generator
+cmake -B build -G "Visual Studio 17 2022"
+cmake -B build -G "Unix Makefiles"
+```
+
+### Watch Mode Development
+
+```powershell
+# Terminal 1: Watch GUI changes
+cd gui
+npm run dev
+
+# Terminal 2: Rebuild plugin on source changes (manual for now)
+cd plugin
+# Edit source files, then rebuild:
+cmake --build build
+```
+
+## 🎯 Script Translation Guide
+
+VS Code tasks can be replicated with these commands:
+
+| VS Code Task | CLI Command |
+|--------------|-------------|
+| `GUI: Start Dev Server` | `cd gui && npm run dev` |
+| `GUI: Build` | `cd gui && npm run build` |
+| `Plugin: Configure CMake` | `cd plugin && cmake --preset ninja-clang` |
+| `Plugin: Build` | `cd plugin && cmake --build build --config Debug` |
+| `Plugin: CMake Build (Incremental)` | `cd plugin && cmake --build build` |
+| `Plugin: CMake Clean Build` | `cd plugin && cmake --build build --clean-first` |
+| `Plugin: Build Standalone` | `cd plugin && cmake --build build --target Pamplejuce_Standalone` |
+| `Plugin: Build VST3` | `cd plugin && cmake --build build --target Pamplejuce_VST3` |
+
+## 📦 Packaging from CLI
+
+```powershell
+# Build release version
+cd plugin
+cmake --build --preset ninja-clang-release
+
+# Build production GUI
+cd ../gui
+npm run build
+
+# Artefacts location:
+# Plugin: plugin/build/Pamplejuce_artefacts/Release/
+# GUI: gui/dist/
+```
+
+## 🐛 Troubleshooting CLI Development
+
+### CMake not found
+```powershell
+# Install CMake
+choco install cmake  # Windows
+# Or download from https://cmake.org/download/
+```
+
+### Ninja not found
+```powershell
+# Install Ninja
+choco install ninja  # Windows
+```
+
+### Clang not found
+```powershell
+# Install LLVM/Clang
+choco install llvm  # Windows
+# Or use Visual Studio's clang-cl
+```
+
+### GUI port already in use
+```powershell
+# Check what's using the port
+netstat -ano | findstr :5173
+
+# Kill process or change port in project-config.json
+```
+
+## 🔮 Future Improvements
+
+Planned features for better CLI/IDE support:
+
+1. **Multi-IDE Support**: ✅ Implemented!
+   - CLion: Uses CMakePresets.json (native support)
+   - Visual Studio: Auto-generates .vs/launch.vs.json
+   - VS Code: Pre-configured workspace
+   - Xcode: Generates .xcodeproj via CMake (⚠️ untested)
+
+2. **Additional IDE Support** (Future):
+   - Qt Creator - uses CMakePresets.json natively
+   - Eclipse CDT - via `cmake -G "Eclipse CDT4 - Unix Makefiles"`
+
+3. **Watch Mode Scripts**:
+   - Auto-rebuild on file changes
+   - Integrated GUI + Plugin development
+
+4. **CI/CD Templates**:
+   - GitHub Actions
+   - GitLab CI
+   - Jenkins pipelines
+
+## 💡 IDE Selection
+
+**During setup.ps1, you can now choose your IDE:**
+
+```powershell
+./setup.ps1
+
+# IDE Selection prompt:
+#   1. VS Code (default) - Pre-configured workspace
+#   2. CLion - CMake-based IDE  
+#   3. Visual Studio - Windows native IDE
+#   4. Xcode - macOS IDE (⚠️ untested)
+#   5. Command Line Only - No IDE configuration
+#   6. Generate All - Create configs for all IDEs
+```
+
+**What each option does:**
+
+| Option | Generated Files | Details |
+|--------|----------------|---------|
+| VS Code | `<ProjectName>.code-workspace` | Workspace with tasks, launch configs |
+| CLion | None (uses CMakePresets.json) | Open 'plugin' folder directly |
+| Visual Studio | `plugin/.vs/launch.vs.json` | Debug configurations |
+| Xcode | `plugin/build-xcode/<Project>.xcodeproj` | ⚠️ Untested, macOS only |
+| CLI Only | None | Manual commands (see guide above) |
+| Generate All | All above | All IDE configs at once |
+
+### Xcode Setup (⚠️ Untested)
+
+**Requirements:**
+- macOS with Xcode installed
+- Xcode Command Line Tools
+
+**Setup:**
+```bash
+cd plugin
+cmake -G Xcode -B build-xcode
+open build-xcode/<YourProject>.xcodeproj
+```
+
+**Status:**
+- ⚠️ Not tested by template authors
+- Generated via CMake's Xcode generator
+- Should work in theory, but feedback needed
+- Please report issues to the template repository
+
+## 💡 Recommendations
+
+**For CLI-Only Developers:**
+1. Use CMake presets for consistency
+2. Create shell aliases/functions for common commands
+3. Use `compile_commands.json` for editor integration
+4. Consider `just` or `make` for task automation
+
+**For IDE Users:**
+1. CLion: Native CMake support (recommended)
+2. Visual Studio: Use CMake Tools extension
+3. VS Code: Use provided workspace templates
+4. Vim/Neovim: Use clangd + LSP
+
+## 🤝 Contributing
+
+Help make this template more IDE-agnostic!
+
+**Wanted:**
+- CLion project templates
+- Visual Studio solution files
+- Xcode project files
+- Makefiles or Justfiles
+- Shell script alternatives to PowerShell
+- Linux/macOS testing and fixes
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.

@@ -1,11 +1,11 @@
 {
   "folders": [
     {
-      "name": "GUI (Vue.js)",
+      "name": "GUI",
       "path": "gui"
     },
     {
-      "name": "Plugin (JUCE)",
+      "name": "Plugin",
       "path": "plugin"
     },
     {
@@ -18,8 +18,8 @@
       "**/node_modules": true,
       "**/.git": false
     },
-    "cmake.sourceDirectory": "${workspaceFolder:Plugin (JUCE)}",
-    "cmake.buildDirectory": "${workspaceFolder:Plugin (JUCE)}/build",
+    "cmake.sourceDirectory": "${workspaceFolder:Plugin}",
+    "cmake.buildDirectory": "${workspaceFolder:Plugin}/build",
     "cmake.configureOnOpen": false,
     "cmake.configureOnEdit": false,
     "typescript.tsc.autoDetect": "off",
@@ -29,9 +29,7 @@
   "extensions": {
     "recommendations": [
       "ms-vscode.cmake-tools",
-      "ms-vscode.cpptools",
-      "Vue.volar",
-      "Vue.vscode-typescript-vue-plugin"
+      "ms-vscode.cpptools"
     ]
   },
   "launch": {
@@ -41,8 +39,8 @@
         "name": "Debug Plugin (VST3)",
         "type": "cppdbg",
         "request": "launch",
-        "program": "${workspaceFolder:🎸 Plugin (JUCE)}/build/WOGD_JUCE_Template_artefacts/Debug/VST3/WOGD JUCE Template.vst3",
-        "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}",
+        "program": "${workspaceFolder:Plugin}/build/WOGD_JUCE_Template_artefacts/Debug/VST3/WOGD JUCE Template.vst3",
+        "cwd": "${workspaceFolder:Plugin}",
         "preLaunchTask": "PLUGIN CMake Build"
       }
     ]
@@ -93,7 +91,7 @@
           "install"
         ],
         "options": {
-          "cwd": "${workspaceFolder:GUI (Vue.js)}"
+          "cwd": "${workspaceFolder:GUI}"
         },
         "problemMatcher": []
       },
@@ -134,7 +132,7 @@
           "vs2026-clang"
         ],
         "options": {
-          "cwd": "${workspaceFolder:Plugin (JUCE)}"
+          "cwd": "${workspaceFolder:Plugin}"
         },
         "problemMatcher": []
       },
@@ -149,7 +147,7 @@
           "Debug"
         ],
         "options": {
-          "cwd": "${workspaceFolder:Plugin (JUCE)}"
+          "cwd": "${workspaceFolder:Plugin}"
         },
         "group": {
           "kind": "build",
@@ -167,7 +165,7 @@
           "--clean-first"
         ],
         "options": {
-          "cwd": "${workspaceFolder:Plugin (JUCE)}"
+          "cwd": "${workspaceFolder:Plugin}"
         },
         "group": "build",
         "problemMatcher": []
@@ -181,7 +179,7 @@
           "build"
         ],
         "options": {
-          "cwd": "${workspaceFolder:Plugin (JUCE)}"
+          "cwd": "${workspaceFolder:Plugin}"
         },
         "group": {
           "kind": "build",
@@ -199,7 +197,7 @@
           "--clean-first"
         ],
         "options": {
-          "cwd": "${workspaceFolder:🎸 Plugin (JUCE)}"
+          "cwd": "${workspaceFolder:Plugin}"
         },
         "group": "build",
         "problemMatcher": []
