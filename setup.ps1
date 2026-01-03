@@ -193,13 +193,63 @@ git commit -m "Setup: Configure project as '$pluginIdSpaces' by $companyName"
 Write-Host ""
 Write-Host "Setup complete!" -ForegroundColor Green
 Write-Host ""
-Write-Host "Next steps:" -ForegroundColor Cyan
-Write-Host "  1. Open $newWorkspacePath in VS Code"
-Write-Host "  2. Run task 'GUI Install Dependencies'"
-Write-Host "  3. Run task 'PLUGIN CMake Configure'"
-Write-Host "  4. Run task 'PLUGIN CMake Build'"
-Write-Host "  5. Run task 'GUI Start Dev Server'"
+Write-Host "━━━ Next Steps ━━━" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "Happy coding!" -ForegroundColor Magenta
+Write-Host "You have TWO options to complete the setup:" -ForegroundColor Yellow
+Write-Host ""
+
+Write-Host "Option A - Automatic (Recommended for first-time setup):" -ForegroundColor Green
+Write-Host "  Run quick-start.ps1 in project root:"
+Write-Host "  " -NoNewline
+Write-Host ".\quick-start.ps1" -ForegroundColor White -BackgroundColor DarkGray
+Write-Host ""
+Write-Host "  OR use VS Code task:"
+Write-Host "  1. Open $newWorkspacePath in VS Code"
+Write-Host "  2. Press Ctrl+Shift+P → 'Tasks: Run Task'"
+Write-Host "  3. Select 'PROJECT First Time Setup'"
+Write-Host ""
+Write-Host "  This will automatically:" -ForegroundColor Gray
+Write-Host "    • Initialize GUI submodule"
+Write-Host "    • Install GUI dependencies (npm install)"
+Write-Host "    • Configure CMake"
+Write-Host "    • Build plugin"
+Write-Host "    • Start GUI dev server"
+Write-Host ""
+
+Write-Host "Option B - Manual (For advanced users):" -ForegroundColor Yellow
+Write-Host "  # Initialize submodule"
+Write-Host "  git submodule update --init --recursive"
+Write-Host ""
+Write-Host "  # Install GUI dependencies"
+Write-Host "  cd gui && npm install && cd .."
+Write-Host ""
+Write-Host "  # Configure and build plugin"
+Write-Host "  cd plugin"
+Write-Host "  cmake --preset ninja-clang"
+Write-Host "  cmake --build build --config Debug"
+Write-Host "  cd .."
+Write-Host ""
+Write-Host "  # Start GUI dev server"
+Write-Host "  cd gui && npm run dev"
+Write-Host ""
+
+Write-Host "━━━ Optional Configuration ━━━" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Environment Variables:" -ForegroundColor Yellow
+Write-Host "  Set JUCE_DIR to use a central JUCE installation:"
+Write-Host '  $env:JUCE_DIR = "C:/path/to/juce"' -ForegroundColor Gray
+Write-Host '  [System.Environment]::SetEnvironmentVariable("JUCE_DIR", "C:/path/to/juce", "User")' -ForegroundColor Gray
+Write-Host ""
+Write-Host "  JUCE_DIR can point to:"
+Write-Host "    • JUCE source directory (containing CMakeLists.txt)"
+Write-Host "    • Installed JUCE (containing JUCEConfig.cmake)"
+Write-Host ""
+
+Write-Host "Documentation:" -ForegroundColor Yellow
+Write-Host "  • README.md - Full project documentation"
+Write-Host "  • plugin/BUILD_WITH_GUI.md - GUI integration guide"
+Write-Host "  • plugin/docs/WEBVIEW2_SETUP.md - WebView2 setup"
+Write-Host ""
+Write-Host "Happy coding! 🎵" -ForegroundColor Magenta
 Write-Host ""
 Read-Host "Press Enter to close..."
