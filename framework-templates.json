@@ -31,6 +31,14 @@
       "buildScript": "build",
       "devPort": 5173,
       "outputDir": "dist"
+    },
+    "svelte": {
+      "name": "Svelte",
+      "repository": "https://github.com/artqcid/wogd-juce-template-gui-svelte.git",
+      "devScript": "dev",
+      "buildScript": "build",
+      "devPort": 5173,
+      "outputDir": "dist"
     }
   },
   "default": "vue"

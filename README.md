@@ -1,10 +1,10 @@
 # WOGD JUCE Template
 
-Audio plugin template with JUCE 8 + Multi-Framework WebView2 GUI (Vue.js, React, Angular, Vanilla JS)
+Audio plugin template with JUCE 8 + Multi-Framework WebView2 GUI (Vue.js, React, Angular, Vanilla JS, Svelte)
 
 ## ✨ Features
 
-- 🎨 **Multi-Framework Support** - Choose between Vue.js, React, Angular, or Vanilla JS
+- 🎨 **Multi-Framework Support** - Choose between Vue.js, React, Angular, Vanilla JS, or Svelte
 - 🌐 **WebView2 Integration** - Native web-based GUI with direct C++ communication
 - 🚀 **Quick Setup** - Automated scripts for project initialization
 - 🔄 **Framework Migration** - Easy switching between GUI frameworks
@@ -26,6 +26,7 @@ Choose your preferred framework and create your GUI repository:
 - **React**: [wogd-juce-template-gui-react](https://github.com/artqcid/wogd-juce-template-gui-react)
 - **Angular**: [wogd-juce-template-gui-angular](https://github.com/artqcid/wogd-juce-template-gui-angular)
 - **Vanilla JS**: [wogd-juce-template-gui-vanilla](https://github.com/artqcid/wogd-juce-template-gui-vanilla)
+- **Svelte**: [wogd-juce-template-gui-svelte](https://github.com/artqcid/wogd-juce-template-gui-svelte)
 
 Click "Use this template" on your chosen GUI template to create your own GUI repository.
 

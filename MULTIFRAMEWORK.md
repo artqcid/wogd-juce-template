@@ -1,6 +1,6 @@
 # Multi-Framework Support
 
-This template supports multiple GUI frameworks (Vue.js, React, Angular, Vanilla JS) for building audio plugin interfaces.
+This template supports multiple GUI frameworks (Vue.js, React, Angular, Vanilla JS, Svelte) for building audio plugin interfaces.
 
 ## 🎯 Features
 
@@ -19,6 +19,7 @@ This template supports multiple GUI frameworks (Vue.js, React, Angular, Vanilla 
    - React: https://github.com/artqcid/wogd-juce-template-gui-react
    - Angular: https://github.com/artqcid/wogd-juce-template-gui-angular
    - Vanilla JS: https://github.com/artqcid/wogd-juce-template-gui-vanilla
+   - Svelte: https://github.com/artqcid/wogd-juce-template-gui-svelte
 
 2. **Run setup script**:
 ```powershell
@@ -49,6 +50,7 @@ The setup script will:
 2. **React**: `https://github.com/artqcid/wogd-juce-template-gui-react.git`
 3. **Angular**: `https://github.com/artqcid/wogd-juce-template-gui-angular.git`
 4. **Vanilla JS**: `https://github.com/artqcid/wogd-juce-template-gui-vanilla.git`
+5. **Svelte**: `https://github.com/artqcid/wogd-juce-template-gui-svelte.git`
 
 **Important**: These are templates! Click "Use this template" to create your own repository.
 
@@ -112,6 +114,13 @@ gui-template/
 - Port: 5173
 - Dev script: `dev`
 - Minimal setup, no framework overhead
+
+### Svelte
+- Uses Vite
+- Port: 5173
+- Dev script: `dev`
+- Compiles to vanilla JS, smallest bundle size
+- Build output: `dist/`
 
 ## 📝 Configuration
 
