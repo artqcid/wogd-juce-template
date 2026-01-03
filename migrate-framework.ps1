@@ -64,17 +64,19 @@ if (-not $Framework) {
     Write-Host "  2. React"
     Write-Host "  3. Angular"
     Write-Host "  4. Vanilla JavaScript"
-    Write-Host "  5. Custom"
+    Write-Host "  5. Svelte"
+    Write-Host "  6. Custom"
     Write-Host ""
     
-    $choice = Read-Host "Enter choice (1-5)"
+    $choice = Read-Host "Enter choice (1-6)"
     
     switch ($choice) {
         "1" { $Framework = "vue" }
         "2" { $Framework = "react" }
         "3" { $Framework = "angular" }
         "4" { $Framework = "vanilla" }
-        "5" { $Framework = "custom" }
+        "5" { $Framework = "svelte" }
+        "6" { $Framework = "custom" }
         default {
             Write-Error "Invalid choice!"
             Write-Host "Press any key to exit..." -ForegroundColor Gray
