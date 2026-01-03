@@ -307,9 +307,9 @@ Planned features for better CLI/IDE support:
    - CLion: Uses CMakePresets.json (native support)
    - Visual Studio: Auto-generates .vs/launch.vs.json
    - VS Code: Pre-configured workspace
+   - Xcode: Generates .xcodeproj via CMake (⚠️ untested)
 
 2. **Additional IDE Support** (Future):
-   - Xcode project files (macOS) - via `cmake -G Xcode`
    - Qt Creator - uses CMakePresets.json natively
    - Eclipse CDT - via `cmake -G "Eclipse CDT4 - Unix Makefiles"`
 
@@ -333,8 +333,9 @@ Planned features for better CLI/IDE support:
 #   1. VS Code (default) - Pre-configured workspace
 #   2. CLion - CMake-based IDE  
 #   3. Visual Studio - Windows native IDE
-#   4. Command Line Only - No IDE configuration
-#   5. Generate All - Create configs for all IDEs
+#   4. Xcode - macOS IDE (⚠️ untested)
+#   5. Command Line Only - No IDE configuration
+#   6. Generate All - Create configs for all IDEs
 ```
 
 **What each option does:**
@@ -344,8 +345,28 @@ Planned features for better CLI/IDE support:
 | VS Code | `<ProjectName>.code-workspace` | Workspace with tasks, launch configs |
 | CLion | None (uses CMakePresets.json) | Open 'plugin' folder directly |
 | Visual Studio | `plugin/.vs/launch.vs.json` | Debug configurations |
+| Xcode | `plugin/build-xcode/<Project>.xcodeproj` | ⚠️ Untested, macOS only |
 | CLI Only | None | Manual commands (see guide above) |
 | Generate All | All above | All IDE configs at once |
+
+### Xcode Setup (⚠️ Untested)
+
+**Requirements:**
+- macOS with Xcode installed
+- Xcode Command Line Tools
+
+**Setup:**
+```bash
+cd plugin
+cmake -G Xcode -B build-xcode
+open build-xcode/<YourProject>.xcodeproj
+```
+
+**Status:**
+- ⚠️ Not tested by template authors
+- Generated via CMake's Xcode generator
+- Should work in theory, but feedback needed
+- Please report issues to the template repository
 
 ## 💡 Recommendations
 

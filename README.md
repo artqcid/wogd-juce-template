@@ -4,7 +4,7 @@ Audio plugin template with JUCE 8 + Multi-Framework WebView2 GUI (Vue.js, React,
 
 > ⚠️ **Platform Support**: Currently tested **only on Windows**. Linux and macOS support is planned but untested. Contributions for other platforms are welcome!
 > 
-> 💻 **IDE Support**: Currently provides **only VS Code workspace templates**. Support for other IDEs (CLion, Visual Studio, Xcode) is planned. Contributions welcome!
+> 💻 **IDE Support**: Provides setup for **VS Code, CLion, Visual Studio, and Xcode**. VS Code is most thoroughly tested. CLion and Visual Studio have been configured. **Xcode support is untested** - contributions and feedback welcome!
 
 ## ✨ Features
 

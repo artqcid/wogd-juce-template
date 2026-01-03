@@ -310,11 +310,12 @@ Write-Host "Select your development environment:" -ForegroundColor Yellow
 Write-Host "  1. VS Code (default) - Pre-configured workspace"
 Write-Host "  2. CLion - CMake-based IDE"
 Write-Host "  3. Visual Studio - Windows native IDE"
-Write-Host "  4. Command Line Only - No IDE configuration"
-Write-Host "  5. Generate All - Create configs for all IDEs"
+Write-Host "  4. Xcode - macOS IDE (untested)" -ForegroundColor DarkGray
+Write-Host "  5. Command Line Only - No IDE configuration"
+Write-Host "  6. Generate All - Create configs for all IDEs"
 Write-Host ""
 
-$ideChoice = Read-Host "Enter choice (1-5) [default: 1]"
+$ideChoice = Read-Host "Enter choice (1-6) [default: 1]"
 if ([string]::IsNullOrWhiteSpace($ideChoice)) {
     $ideChoice = "1"
 }
@@ -358,6 +359,28 @@ switch ($ideChoice) {
         Write-Info "Visual Studio will detect CMakePresets.json automatically"
     }
     "4" {
+        Write-Host "  Generating Xcode project..." -ForegroundColor Gray
+        
+        Push-Location plugin
+        try {
+            $result = cmake -G Xcode -B build-xcode 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                Write-Success "Xcode project generated"
+                Write-Warning "⚠️  Xcode support is UNTESTED by template authors"
+                Write-Info "Open: plugin/build-xcode/$pluginId.xcodeproj"
+                Write-Info ""
+                Write-Info "This requires macOS and Xcode installed"
+                Write-Info "Please report any issues to the template repository"
+            } else {
+                Write-Error "Failed to generate Xcode project"
+                Write-Info "Error: $result"
+                Write-Info "Xcode support requires macOS and Xcode Command Line Tools"
+            }
+        } finally {
+            Pop-Location
+        }
+    }
+    "5" {
         Write-Success "CLI-only setup complete"
         Write-Info "See CLI-DEVELOPMENT.md for command-line workflows"
         Write-Info ""
@@ -366,7 +389,7 @@ switch ($ideChoice) {
         Write-Info "  cmake --build build --config Debug"
         Write-Info "  cd ../gui && npm run dev"
     }
-    "5" {
+    "6" {
         Write-Host "  Generating all IDE configurations..." -ForegroundColor Gray
         
         # VS Code (already done)
@@ -396,6 +419,19 @@ switch ($ideChoice) {
         
         $launchConfig | ConvertTo-Json -Depth 10 | Set-Content "$vsDir/launch.vs.json" -Encoding UTF8
         Write-Success "Visual Studio: Configuration generated"
+        
+        # Xcode (macOS only, untested)
+        Push-Location plugin
+        try {
+            $xcodeResult = cmake -G Xcode -B build-xcode 2>&1
+            if ($LASTEXITCODE -eq 0) {
+                Write-Success "Xcode: Project generated (untested)"
+            } else {
+                Write-Warning "Xcode: Skipped (requires macOS)"
+            }
+        } finally {
+            Pop-Location
+        }
         
         Write-Info ""
         Write-Info "All IDE configurations ready!"
