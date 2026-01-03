@@ -21,6 +21,8 @@
     "git.detectSubmodules": true,
     "git.detectSubmodulesLimit": 10,
     "git.enableSmartCommit": false,
+    "git.showUnpublishedCommitsButton": "always",
+    "git.repositories.sortOrder": "path",
     "cmake.sourceDirectory": "${workspaceFolder:Plugin}",
     "cmake.buildDirectory": "${workspaceFolder:Plugin}/build",
     "cmake.configureOnOpen": false,
