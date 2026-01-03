@@ -302,6 +302,111 @@ git add -A
 git commit -m "Setup: Configure project as '$pluginIdSpaces' by $companyName"
 
 Write-Host ""
+Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
+Write-Host "  IDE Configuration" -ForegroundColor Cyan
+Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Select your development environment:" -ForegroundColor Yellow
+Write-Host "  1. VS Code (default) - Pre-configured workspace"
+Write-Host "  2. CLion - CMake-based IDE"
+Write-Host "  3. Visual Studio - Windows native IDE"
+Write-Host "  4. Command Line Only - No IDE configuration"
+Write-Host "  5. Generate All - Create configs for all IDEs"
+Write-Host ""
+
+$ideChoice = Read-Host "Enter choice (1-5) [default: 1]"
+if ([string]::IsNullOrWhiteSpace($ideChoice)) {
+    $ideChoice = "1"
+}
+
+switch ($ideChoice) {
+    "1" {
+        Write-Success "VS Code workspace already configured: $newWorkspacePath"
+        Write-Info "Open with: code $newWorkspacePath"
+    }
+    "2" {
+        Write-Success "CLion: CMakePresets.json is already configured"
+        Write-Info "Open the 'plugin' folder in CLion"
+        Write-Info "CLion will automatically detect CMake presets"
+    }
+    "3" {
+        Write-Host "  Generating Visual Studio configuration..." -ForegroundColor Gray
+        
+        # Generate .vs/launch.vs.json
+        $launchConfig = @{
+            version = "0.2.1"
+            defaults = @{}
+            configurations = @(
+                @{
+                    type = "default"
+                    project = "CMakeLists.txt"
+                    projectTarget = "$pluginId`_Standalone.exe"
+                    name = "$pluginIdSpaces Standalone"
+                }
+            )
+        }
+        
+        $vsDir = "plugin/.vs"
+        if (-not (Test-Path $vsDir)) {
+            New-Item -ItemType Directory -Path $vsDir -Force | Out-Null
+        }
+        
+        $launchConfig | ConvertTo-Json -Depth 10 | Set-Content "$vsDir/launch.vs.json" -Encoding UTF8
+        
+        Write-Success "Visual Studio configuration generated"
+        Write-Info "Open the 'plugin' folder in Visual Studio 2022+"
+        Write-Info "Visual Studio will detect CMakePresets.json automatically"
+    }
+    "4" {
+        Write-Success "CLI-only setup complete"
+        Write-Info "See CLI-DEVELOPMENT.md for command-line workflows"
+        Write-Info ""
+        Write-Info "Quick start commands:"
+        Write-Info "  cd plugin && cmake --preset ninja-clang"
+        Write-Info "  cmake --build build --config Debug"
+        Write-Info "  cd ../gui && npm run dev"
+    }
+    "5" {
+        Write-Host "  Generating all IDE configurations..." -ForegroundColor Gray
+        
+        # VS Code (already done)
+        Write-Success "VS Code: $newWorkspacePath"
+        
+        # CLion (uses CMakePresets.json)
+        Write-Success "CLion: CMakePresets.json configured"
+        
+        # Visual Studio
+        $launchConfig = @{
+            version = "0.2.1"
+            defaults = @{}
+            configurations = @(
+                @{
+                    type = "default"
+                    project = "CMakeLists.txt"
+                    projectTarget = "$pluginId`_Standalone.exe"
+                    name = "$pluginIdSpaces Standalone"
+                }
+            )
+        }
+        
+        $vsDir = "plugin/.vs"
+        if (-not (Test-Path $vsDir)) {
+            New-Item -ItemType Directory -Path $vsDir -Force | Out-Null
+        }
+        
+        $launchConfig | ConvertTo-Json -Depth 10 | Set-Content "$vsDir/launch.vs.json" -Encoding UTF8
+        Write-Success "Visual Studio: Configuration generated"
+        
+        Write-Info ""
+        Write-Info "All IDE configurations ready!"
+    }
+    default {
+        Write-Warning "Invalid choice, defaulting to VS Code"
+        Write-Success "VS Code workspace: $newWorkspacePath"
+    }
+}
+
+Write-Host ""
 Write-Host "Setup complete!" -ForegroundColor Green
 Write-Host ""
 Write-Host "━━━ Next Steps ━━━" -ForegroundColor Cyan

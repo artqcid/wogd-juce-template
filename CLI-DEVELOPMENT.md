@@ -153,21 +153,39 @@ You can use **any text editor or IDE** that supports:
 
 ### CLion Setup
 
+CLion automatically detects `CMakePresets.json` and requires no additional configuration!
+
 ```powershell
-# CLion automatically detects CMakePresets.json
 # Just open the 'plugin' folder in CLion
+# CLion will detect:
+# - CMakePresets.json (automatically loads presets)
+# - CMakeLists.txt (project structure)
+# - compile_commands.json (for code intelligence)
 
 # Select preset: "ninja-clang"
 # Build configuration: "ninja-clang-debug" or "ninja-clang-release"
 ```
 
+**That's it!** CLion is fully CMake-native and works out of the box.
+
 ### Visual Studio Setup
 
+Visual Studio 2022+ has native CMake support via `CMakePresets.json`.
+
 ```powershell
-# Visual Studio 2022+ supports CMakePresets.json
-# Open folder: 'plugin'
-# Select configuration from dropdown
+# Open the 'plugin' folder in Visual Studio
+# File → Open → Folder → Select 'plugin' directory
+
+# Visual Studio will:
+# - Detect CMakePresets.json
+# - Load available presets
+# - Generate project structure
+
+# Optional: setup.ps1 can generate .vs/launch.vs.json
+# This adds debug configurations for the Standalone target
 ```
+
+**Run setup.ps1 and choose option 3** to auto-generate VS configs.
 
 ### Vim/Neovim Setup
 
@@ -285,15 +303,15 @@ netstat -ano | findstr :5173
 
 Planned features for better CLI/IDE support:
 
-1. **Multi-IDE Support**:
-   - CLion project files
-   - Visual Studio solution files
-   - Xcode project files (macOS)
+1. **Multi-IDE Support**: ✅ Implemented!
+   - CLion: Uses CMakePresets.json (native support)
+   - Visual Studio: Auto-generates .vs/launch.vs.json
+   - VS Code: Pre-configured workspace
 
-2. **Setup Script Enhancement**:
-   - IDE selection during setup
-   - Generate IDE-specific config files
-   - Optional VS Code workspace generation
+2. **Additional IDE Support** (Future):
+   - Xcode project files (macOS) - via `cmake -G Xcode`
+   - Qt Creator - uses CMakePresets.json natively
+   - Eclipse CDT - via `cmake -G "Eclipse CDT4 - Unix Makefiles"`
 
 3. **Watch Mode Scripts**:
    - Auto-rebuild on file changes
@@ -303,6 +321,31 @@ Planned features for better CLI/IDE support:
    - GitHub Actions
    - GitLab CI
    - Jenkins pipelines
+
+## 💡 IDE Selection
+
+**During setup.ps1, you can now choose your IDE:**
+
+```powershell
+./setup.ps1
+
+# IDE Selection prompt:
+#   1. VS Code (default) - Pre-configured workspace
+#   2. CLion - CMake-based IDE  
+#   3. Visual Studio - Windows native IDE
+#   4. Command Line Only - No IDE configuration
+#   5. Generate All - Create configs for all IDEs
+```
+
+**What each option does:**
+
+| Option | Generated Files | Details |
+|--------|----------------|---------|
+| VS Code | `<ProjectName>.code-workspace` | Workspace with tasks, launch configs |
+| CLion | None (uses CMakePresets.json) | Open 'plugin' folder directly |
+| Visual Studio | `plugin/.vs/launch.vs.json` | Debug configurations |
+| CLI Only | None | Manual commands (see guide above) |
+| Generate All | All above | All IDE configs at once |
 
 ## 💡 Recommendations
 
