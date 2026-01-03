@@ -27,11 +27,48 @@ if ([string]::IsNullOrWhiteSpace($guiRepo)) {
     $guiRepo = $guiRepoDefault
 }
 
+# Plugin Format Selection
+Write-Host ""
+Write-Host "Plugin Format Selection:" -ForegroundColor Cyan
+Write-Host "Available formats: VST3, AU, AUv3, AAX, Standalone, Unity"
+Write-Host ""
+
+# Multi-select prompt with checkboxes
+$formatSelection = @{
+    "VST3" = $true
+    "AU" = $false
+    "AUv3" = $true
+    "AAX" = $false
+    "Standalone" = $true
+    "Unity" = $false
+}
+
+Write-Host "Select plugin formats (y/n for each, press Enter to accept defaults):" -ForegroundColor Yellow
+foreach ($format in $formatSelection.Keys | Sort-Object) {
+    $default = if ($formatSelection[$format]) { "Y" } else { "N" }
+    $response = Read-Host "  Build $format? (y/n) [default: $default]"
+    if ([string]::IsNullOrWhiteSpace($response)) {
+        # Keep default
+    } elseif ($response -match '^[Yy]') {
+        $formatSelection[$format] = $true
+    } else {
+        $formatSelection[$format] = $false
+    }
+}
+
+$selectedFormats = ($formatSelection.GetEnumerator() | Where-Object { $_.Value } | ForEach-Object { $_.Key }) -join ' '
+if ([string]::IsNullOrWhiteSpace($selectedFormats)) {
+    Write-Host "[ERROR] At least one plugin format must be selected!" -ForegroundColor Red
+    Read-Host "Press Enter to exit..."
+    exit 1
+}
+
 Write-Host ""
 Write-Host "Configuration:" -ForegroundColor Yellow
 Write-Host "  Plugin Name: $pluginName"
 Write-Host "  Company: $companyName"
 Write-Host "  GUI Repo: $guiRepo"
+Write-Host "  Plugin Formats: $selectedFormats"
 Write-Host ""
 
 # Create safe identifiers (no spaces, special chars)
@@ -66,6 +103,8 @@ $cmakeContent = Get-Content $cmakePath -Raw
 $cmakeContent = $cmakeContent -replace 'set\(PRODUCT_NAME "WOGD JUCE Template"\)', "set(PRODUCT_NAME `"$pluginIdSpaces`")"
 $cmakeContent = $cmakeContent -replace 'set\(COMPANY_NAME "WordOfGearDevelopment"\)', "set(COMPANY_NAME `"$companyName`")"
 $cmakeContent = $cmakeContent -replace 'project\(WOGD_JUCE_Template', "project($pluginId"
+# Update plugin formats
+$cmakeContent = $cmakeContent -replace 'set\(FORMATS [^\)]+\)', "set(FORMATS $selectedFormats)"
 Set-Content $cmakePath -Value $cmakeContent
 
 # Update VERSION file
