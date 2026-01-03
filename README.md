@@ -1,13 +1,35 @@
 # WOGD JUCE Template
 
-Audio plugin template with JUCE 8 + Vue.js 3 WebView2 GUI
+Audio plugin template with JUCE 8 + Multi-Framework WebView2 GUI (Vue.js, React, Angular, Vanilla JS)
+
+## ✨ Features
+
+- 🎨 **Multi-Framework Support** - Choose between Vue.js, React, Angular, or Vanilla JS
+- 🌐 **WebView2 Integration** - Native web-based GUI with direct C++ communication
+- 🚀 **Quick Setup** - Automated scripts for project initialization
+- 🔄 **Framework Migration** - Easy switching between GUI frameworks
+- 🛠️ **Modern Build System** - CMake with Ninja/Clang
+- 📦 **Zero-Config JUCE** - Automatic download if not installed
+- 🎯 **VS Code Integration** - Pre-configured tasks and workspace
+- 🔧 **Hot Reload** - Dev server with live updates during development
 
 ## 🚀 Quick Start
 
 ### 1. Create New Project
 Click "Use this template" on GitHub to create your own plugin project.
 
-### 2. Clone Repository
+### 2. Create GUI Repository
+Choose your preferred framework and create your GUI repository:
+
+**Available GUI Templates:**
+- **Vue.js**: [wogd-juce-template-gui-vue](https://github.com/artqcid/wogd-juce-template-gui)
+- **React**: [wogd-juce-template-gui-react](https://github.com/artqcid/wogd-juce-template-gui-react)
+- **Angular**: [wogd-juce-template-gui-angular](https://github.com/artqcid/wogd-juce-template-gui-angular)
+- **Vanilla JS**: [wogd-juce-template-gui-vanilla](https://github.com/artqcid/wogd-juce-template-gui-vanilla)
+
+Click "Use this template" on your chosen GUI template to create your own GUI repository.
+
+### 3. Clone Repository
 ```bash
 git clone https://github.com/YOUR_USERNAME/YOUR_PROJECT.git
 cd YOUR_PROJECT
@@ -47,16 +69,24 @@ cd YOUR_PROJECT
 ```
 
 **Was macht das Setup-Script?**
-- 📝 Fragt nach **Plugin Name**, **Company Name** und **GUI Repository**
+- 🎨 Fragt nach **GUI Framework** (Vue.js, React, Angular, Vanilla JS, Custom)
+- 📝 Fragt nach **Plugin Name**, **Company Name**, **Plugin Codes**
+- 🌐 Fragt nach **deinem GUI Repository** (das du aus dem Template erstellt hast)
 - 🔄 Aktualisiert `project-config.json` mit deinen Daten
-- 📦 Ersetzt GUI-Submodule mit deinem eigenen Repository (optional)
+- 📦 Ersetzt GUI-Submodule mit deinem eigenen Repository
 - 📄 Benennt Workspace-Datei um nach deinem Plugin-Namen
 - ⚠️ **Wichtig:** Baut NICHT das Projekt - nur Konfiguration!
 
+**Workflow:**
+1. Framework auswählen (z.B. Angular)
+2. Eigenes GUI-Repository angeben (das du zuvor aus dem Template erstellt hast)
+3. Plugin-Informationen eingeben
+4. Submodule wird mit deinem Repository verbunden
+
 **Wann verwenden?**
-- Du willst nur die Projekt-Namen anpassen
-- Du hast ein eigenes GUI-Repository
-- Du möchtest manuell bauen
+- Erstes Setup des Templates
+- Du willst Framework und Projekt-Namen konfigurieren
+- Du hast dein GUI-Repository bereits erstellt
 
 #### 3b. Open in VS Code
 ```powershell

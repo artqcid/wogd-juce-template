@@ -1,28 +1,39 @@
-# Multi-Framework Support Branch
+# Multi-Framework Support
 
-This branch adds support for multiple GUI frameworks (Vue.js, React, Angular, Vanilla JS).
+This template supports multiple GUI frameworks (Vue.js, React, Angular, Vanilla JS) for building audio plugin interfaces.
 
 ## 🎯 Features
 
 - **Framework Selection** during setup
-- **Easy Migration** between frameworks
+- **Easy Migration** between frameworks with `migrate-framework.ps1`
 - **Pre-configured Templates** for each framework
 - **Automatic Port Configuration**
+- **Framework-agnostic** workspace and build system
 
 ## 🚀 Quick Start
 
 ### New Project with Framework Selection
 
+1. **Create your GUI repository** from one of the templates:
+   - Vue.js: https://github.com/artqcid/wogd-juce-template-gui
+   - React: https://github.com/artqcid/wogd-juce-template-gui-react
+   - Angular: https://github.com/artqcid/wogd-juce-template-gui-angular
+   - Vanilla JS: https://github.com/artqcid/wogd-juce-template-gui-vanilla
+
+2. **Run setup script**:
 ```powershell
 .\setup.ps1
 ```
 
-The setup script will ask you to choose a GUI framework:
-1. Vue.js (default)
-2. React
-3. Angular
-4. Vanilla JavaScript
-5. Custom (provide your own repository)
+3. **Follow the prompts**:
+   - Choose your framework (1-5)
+   - Enter **your GUI repository URL** (that you created in step 1)
+   - Enter plugin name, company name, codes
+
+The setup script will:
+- Configure the project for your chosen framework
+- Link your GUI repository as a submodule
+- Update workspace and build files
 
 ### Migrate Existing Project
 
@@ -30,14 +41,16 @@ The setup script will ask you to choose a GUI framework:
 .\migrate-framework.ps1
 ```
 
-## 📦 Required GUI Template Repositories
+## 📦 GUI Template Repositories
 
-You need to create these repositories for each framework:
+### Official Templates (Use as starting point)
 
-1. **Vue.js**: `https://github.com/artqcid/wogd-juce-template-gui-vue.git`
+1. **Vue.js**: `https://github.com/artqcid/wogd-juce-template-gui.git`
 2. **React**: `https://github.com/artqcid/wogd-juce-template-gui-react.git`
 3. **Angular**: `https://github.com/artqcid/wogd-juce-template-gui-angular.git`
 4. **Vanilla JS**: `https://github.com/artqcid/wogd-juce-template-gui-vanilla.git`
+
+**Important**: These are templates! Click "Use this template" to create your own repository.
 
 ## 🛠️ GUI Template Requirements
 
