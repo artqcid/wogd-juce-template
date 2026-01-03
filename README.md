@@ -24,7 +24,7 @@ cd YOUR_PROJECT
 **Was macht das Quick-Start-Script?**
 1. ✅ **Prüft alle Voraussetzungen** (Git, CMake, Node.js, Visual Studio, Clang, Ninja)
 2. 🔧 **Installiert VS Code Extensions** (optional, C++, CMake, Vue.js, etc.)
-3. 🌐 **Hilft bei Environment Variables** (optional, z.B. WOGD_JUCE_DIR)
+3. 🌐 **Hilft bei Environment Variables** (optional, z.B. JUCE_DIR)
 4. 🚀 **Führt komplettes First-Time Setup durch** (Submodul, Dependencies, Build)
 5. ✓ **Plugin ist sofort einsatzbereit!**
 
@@ -162,12 +162,16 @@ The project supports **4 flexible options** for JUCE integration. Choose the one
 Use a central JUCE installation shared across multiple projects:
 
 ```powershell
-# Set environment variable
-$env:WOGD_JUCE_DIR = "C:/dev/juce-8.0.4"
+# Set environment variable (works with both source code and installed JUCE)
+$env:JUCE_DIR = "C:/dev/juce-8.0.4"
 
 # Make it permanent (optional)
-[System.Environment]::SetEnvironmentVariable('WOGD_JUCE_DIR', 'C:/dev/juce-8.0.4', 'User')
+[System.Environment]::SetEnvironmentVariable('JUCE_DIR', 'C:/dev/juce-8.0.4', 'User')
 ```
+
+**Note:** `JUCE_DIR` can point to either:
+- JUCE source directory (containing `CMakeLists.txt`)
+- Installed JUCE with config files (containing `JUCEConfig.cmake`)
 
 **Pros:** Shared across projects, faster builds, easy updates  
 **Cons:** Requires manual JUCE installation
@@ -215,7 +219,7 @@ Optional environment variables for advanced configuration:
 
 | Variable | Purpose | Example |
 |----------|---------|---------|
-| `WOGD_JUCE_DIR` | Path to JUCE installation | `C:/dev/juce-8.0.4` |
+| `JUCE_DIR` | Path to JUCE source or installation | `C:/dev/juce-8.0.4` |
 | `CLAP_JUCE_EXTENSIONS_DIR` | Path to clap-juce-extensions | `C:/dev/clap-juce-extensions` |
 | `WEBVIEW2_SDK_DIR` | Path to WebView2 SDK | `C:/dev/webview2-sdk` |
 | `JUCE_AUDIO_PLUGIN_HOST` | Path to AudioPluginHost.exe (debugging) | `C:/path/to/AudioPluginHost.exe` |
@@ -331,7 +335,7 @@ This template builds upon the excellent work of the open-source community:
 **Solution:**
 1. Set environment variable:
    ```powershell
-   $env:WOGD_JUCE_DIR = "C:/path/to/juce-installation"
+   $env:JUCE_DIR = "C:/path/to/juce-source-or-installation"
    ```
 2. OR add JUCE as submodule:
    ```bash
@@ -458,7 +462,7 @@ npm install
    - Prettier - Code Formatter
 
 3. **Environment Variables (optional):**
-   - Hilft bei WOGD_JUCE_DIR Setup
+   - Hilft bei JUCE_DIR Setup
    - WebView2 SDK Path
    - AudioPluginHost für Debugging
 
