@@ -494,6 +494,10 @@ npm install
    - Plugin Name eingeben (z.B. "My Awesome Synth")
    - Company Name eingeben
    - Optional: Eigenes GUI-Repository URL
+   - **Plugin-Formate auswählen:**
+     - Für jedes Format (AUv3, VST3, Standalone, AU, AAX, Unity) wirst du gefragt, ob es gebaut werden soll (y/n, Standard: AUv3, VST3, Standalone aktiviert)
+     - Mindestens ein Format muss gewählt werden
+     - Die Auswahl wird automatisch in die `plugin/CMakeLists.txt` übernommen
 
 2. **project-config.json Update:**
    - Aktualisiert Namen und IDs
@@ -513,6 +517,8 @@ npm install
 - Baut NICHT das Projekt
 - Nur Konfiguration, keine Dependencies
 - Du musst danach manuell bauen (First-Time Setup Task)
+- **Plugin-Formate:** Die Standard-Formate sind jetzt **AUv3, VST3 und Standalone**. Du kannst beim Setup weitere Formate aktivieren/deaktivieren.
+- Die Auswahl wird in der Zeile `set(FORMATS ...)` in der `plugin/CMakeLists.txt` gespeichert und steuert, welche Binaries gebaut werden.
 
 **Typischer Workflow:**
 ```powershell
