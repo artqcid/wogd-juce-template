@@ -65,7 +65,13 @@ if (Test-Path $frameworkConfigPath) {
     Write-Host "  2. React"
     Write-Host "  3. Angular"
     Write-Host "  4. Vanilla JavaScript"
-    Write-Host "  5. Custom (provide your own repository URL)"
+    Write-Host "  5. Custom"
+    Write-Host ""
+    Write-Host "Template repositories available at:" -ForegroundColor Gray
+    Write-Host "  Vue.js:  $($frameworkConfig.frameworks.vue.repository)" -ForegroundColor DarkGray
+    Write-Host "  React:   $($frameworkConfig.frameworks.react.repository)" -ForegroundColor DarkGray
+    Write-Host "  Angular: $($frameworkConfig.frameworks.angular.repository)" -ForegroundColor DarkGray
+    Write-Host "  Vanilla: $($frameworkConfig.frameworks.vanilla.repository)" -ForegroundColor DarkGray
     Write-Host ""
     
     $frameworkChoice = Read-Host "Enter choice (1-5) [default: 1]"
@@ -76,31 +82,31 @@ if (Test-Path $frameworkConfigPath) {
     switch ($frameworkChoice) {
         "1" {
             $selectedFramework = "vue"
-            $guiRepo = $frameworkConfig.frameworks.vue.repository
+            $templateRepo = $frameworkConfig.frameworks.vue.repository
             $devPort = $frameworkConfig.frameworks.vue.devPort
             $devScript = $frameworkConfig.frameworks.vue.devScript
         }
         "2" {
             $selectedFramework = "react"
-            $guiRepo = $frameworkConfig.frameworks.react.repository
+            $templateRepo = $frameworkConfig.frameworks.react.repository
             $devPort = $frameworkConfig.frameworks.react.devPort
             $devScript = $frameworkConfig.frameworks.react.devScript
         }
         "3" {
             $selectedFramework = "angular"
-            $guiRepo = $frameworkConfig.frameworks.angular.repository
+            $templateRepo = $frameworkConfig.frameworks.angular.repository
             $devPort = $frameworkConfig.frameworks.angular.devPort
             $devScript = $frameworkConfig.frameworks.angular.devScript
         }
         "4" {
             $selectedFramework = "vanilla"
-            $guiRepo = $frameworkConfig.frameworks.vanilla.repository
+            $templateRepo = $frameworkConfig.frameworks.vanilla.repository
             $devPort = $frameworkConfig.frameworks.vanilla.devPort
             $devScript = $frameworkConfig.frameworks.vanilla.devScript
         }
         "5" {
             $selectedFramework = "custom"
-            $guiRepo = Read-Host "GUI Repository URL"
+            $templateRepo = "N/A"
             $devPort = Read-Host "Dev Server Port [default: 5173]"
             if ([string]::IsNullOrWhiteSpace($devPort)) {
                 $devPort = 5173
@@ -117,10 +123,27 @@ if (Test-Path $frameworkConfigPath) {
         }
     }
     
+    # Now ask for the developer's own GUI repository
+    Write-Host ""
+    if ($selectedFramework -ne "custom") {
+        Write-Host "Template Repository: $templateRepo" -ForegroundColor Gray
+        Write-Host ""
+        Write-Host "Please create your own GUI repository from the template above," -ForegroundColor Yellow
+        Write-Host "then provide your repository URL below:" -ForegroundColor Yellow
+    }
+    Write-Host ""
+    $guiRepo = Read-Host "Your GUI Repository URL"
+    if ([string]::IsNullOrWhiteSpace($guiRepo)) {
+        Write-Host "[ERROR] GUI repository URL is required!" -ForegroundColor Red
+        Read-Host "Press Enter to exit..."
+        exit 1
+    }
+    
     Write-Host ""
     Write-Host "Selected Framework: $selectedFramework" -ForegroundColor Green
-    Write-Host "GUI Repository: $guiRepo" -ForegroundColor Gray
+    Write-Host "Your GUI Repository: $guiRepo" -ForegroundColor Green
     Write-Host "Dev Port: $devPort" -ForegroundColor Gray
+    Write-Host "Dev Script: $devScript" -ForegroundColor Gray
     Write-Host ""
 } else {
     # Fallback if config file doesn't exist
@@ -128,6 +151,7 @@ if (Test-Path $frameworkConfigPath) {
     $guiRepo = Read-Host "GUI Repository URL"
     $devPort = 5173
     $devScript = "dev"
+    $selectedFramework = "custom"
 }
 
 # Plugin Format Selection
