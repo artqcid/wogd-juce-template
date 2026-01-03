@@ -9,9 +9,9 @@
                     "manufacturerCode":  "WOGD"
                 },
     "gui":  {
-                "framework":  "angular",
-                "repository":  "https://github.com/artqcid/wogd-juce-template-gui-angular.git",
-                "devPort":  4200,
-                "devScript":  "start"
+                "framework":  "vue",
+                "repository":  "https://github.com/artqcid/wogd-juce-template-gui-vue.git",
+                "devPort":  5173,
+                "devScript":  "dev"
             }
 }

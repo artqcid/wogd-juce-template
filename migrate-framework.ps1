@@ -123,40 +123,51 @@ if ($confirm -ne 'y') {
 }
 
 Write-Host ""
+Write-Warning "IMPORTANT: Before proceeding, ensure:"
+Write-Host "  • The 'gui' folder is NOT open in VS Code workspace"
+Write-Host "  • No terminal is in the gui folder (cd ..)" 
+Write-Host "  • All dev servers are stopped"
+Write-Host ""
+$confirm2 = Read-Host "Ready to proceed? (y/n)"
+if ($confirm2 -ne 'y') {
+    Write-Warning "Migration cancelled."
+    Write-Host "Press any key to exit..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit 0
+}
+
+Write-Host ""
 Write-Info "Starting migration..."
 Write-Host ""
 
 # Step 1: Remove existing GUI submodule
 Write-Host "Step 1/5: Removing current GUI submodule..." -ForegroundColor Cyan
 if (Test-Path "gui") {
+    # First deinit and remove from git
     git submodule deinit -f gui 2>$null
     git rm -f gui 2>$null
     Remove-Item -Recurse -Force .git/modules/gui -ErrorAction SilentlyContinue
     
-    # Try multiple times to remove gui folder (files might be locked)
-    $retryCount = 0
-    while ((Test-Path "gui") -and ($retryCount -lt 3)) {
-        try {
-            Remove-Item -Recurse -Force gui -ErrorAction Stop
-            Start-Sleep -Milliseconds 500
-        } catch {
-            $retryCount++
-            if ($retryCount -lt 3) {
-                Write-Warning "Retry $retryCount/3: Could not remove gui folder, retrying..."
-                Start-Sleep -Seconds 1
-            }
-        }
-    }
-    
-    # Verify removal
-    if (Test-Path "gui") {
-        Write-Error "Failed to remove gui folder after 3 attempts. Please close any programs accessing the folder and try again."
+    # Try to remove gui folder
+    try {
+        Remove-Item -Recurse -Force gui -ErrorAction Stop
+        Write-Success "Old GUI removed"
+    } catch {
+        Write-Error "Failed to remove gui folder!"
+        Write-Warning "Possible causes:"
+        Write-Host "  • VS Code workspace has the gui folder open - Try removing 'gui' from workspace folders"
+        Write-Host "  • A terminal's working directory is in the gui folder - Change directory in all terminals"
+        Write-Host "  • Dev server or other process is running - Stop all running tasks"
+        Write-Host "  • File Explorer has the folder open - Close File Explorer"
+        Write-Host ""
+        Write-Host "Error details: $_" -ForegroundColor Red
+        Write-Host ""
+        Write-Host "Try manually running: Remove-Item -Recurse -Force gui" -ForegroundColor Yellow
+        Write-Host ""
         Write-Host "Press any key to exit..." -ForegroundColor Gray
         $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         exit 1
     }
-    
-    Write-Success "Old GUI removed"
 } else {
     Write-Info "No existing GUI submodule found"
 }
