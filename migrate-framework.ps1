@@ -40,6 +40,17 @@ $frameworkConfig = Get-Content $frameworkConfigPath -Raw | ConvertFrom-Json
 
 # Show current framework
 $projectConfig = Get-Content "project-config.json" -Raw | ConvertFrom-Json
+
+# Initialize gui object if it doesn't exist
+if (-not $projectConfig.gui) {
+    $projectConfig | Add-Member -MemberType NoteProperty -Name "gui" -Value ([PSCustomObject]@{
+        framework = "none"
+        repository = ""
+        devPort = 0
+        devScript = "dev"
+    })
+}
+
 $currentFramework = $projectConfig.gui.framework
 $currentPort = $projectConfig.gui.devPort
 

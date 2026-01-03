@@ -7,5 +7,11 @@
                     "bundleId":  "com.wogd.jucetemplate",
                     "pluginCode":  "WD01",
                     "manufacturerCode":  "WOGD"
-                }
+                },
+    "gui":  {
+                "framework":  "angular",
+                "repository":  "https://github.com/artqcid/wogd-juce-template-gui-angular.git",
+                "devPort":  4200,
+                "devScript":  "start"
+            }
 }
