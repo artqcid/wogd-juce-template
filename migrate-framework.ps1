@@ -132,7 +132,30 @@ if (Test-Path "gui") {
     git submodule deinit -f gui 2>$null
     git rm -f gui 2>$null
     Remove-Item -Recurse -Force .git/modules/gui -ErrorAction SilentlyContinue
-    Remove-Item -Recurse -Force gui -ErrorAction SilentlyContinue
+    
+    # Try multiple times to remove gui folder (files might be locked)
+    $retryCount = 0
+    while ((Test-Path "gui") -and ($retryCount -lt 3)) {
+        try {
+            Remove-Item -Recurse -Force gui -ErrorAction Stop
+            Start-Sleep -Milliseconds 500
+        } catch {
+            $retryCount++
+            if ($retryCount -lt 3) {
+                Write-Warning "Retry $retryCount/3: Could not remove gui folder, retrying..."
+                Start-Sleep -Seconds 1
+            }
+        }
+    }
+    
+    # Verify removal
+    if (Test-Path "gui") {
+        Write-Error "Failed to remove gui folder after 3 attempts. Please close any programs accessing the folder and try again."
+        Write-Host "Press any key to exit..." -ForegroundColor Gray
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        exit 1
+    }
+    
     Write-Success "Old GUI removed"
 } else {
     Write-Info "No existing GUI submodule found"
