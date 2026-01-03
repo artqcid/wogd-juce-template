@@ -14,14 +14,42 @@ if ([string]::IsNullOrWhiteSpace($pluginName)) {
     exit 1
 }
 
-$companyName = Read-Host "Company Name (e.g., 'WordOfGearDevelopment')"
+$companyName = Read-Host "Company Name (e.g., 'My Company LLC')"
 if ([string]::IsNullOrWhiteSpace($companyName)) {
     Write-Host "[ERROR] Company name is required!" -ForegroundColor Red
     Read-Host "Press Enter to exit..."
     exit 1
 }
 
-$guiRepoDefault = "https://github.com/artqcid/wogd-juce-template-gui.git"
+# Plugin Code (4 characters, at least one uppercase)
+do {
+    $pluginCode = Read-Host "Plugin Code (4 characters, at least one uppercase, e.g., 'MyAs')"
+    if ([string]::IsNullOrWhiteSpace($pluginCode)) {
+        Write-Host "[ERROR] Plugin code is required!" -ForegroundColor Red
+    } elseif ($pluginCode.Length -ne 4) {
+        Write-Host "[ERROR] Plugin code must be exactly 4 characters!" -ForegroundColor Red
+    } elseif ($pluginCode -cnotmatch '[A-Z]') {
+        Write-Host "[ERROR] Plugin code must contain at least one uppercase letter!" -ForegroundColor Red
+    } else {
+        break
+    }
+} while ($true)
+
+# Manufacturer Code (4 characters, first character MUST be uppercase for AU)
+do {
+    $manufacturerCode = Read-Host "Manufacturer Code (4 characters, first MUST be uppercase, e.g., 'MyCo')"
+    if ([string]::IsNullOrWhiteSpace($manufacturerCode)) {
+        Write-Host "[ERROR] Manufacturer code is required!" -ForegroundColor Red
+    } elseif ($manufacturerCode.Length -ne 4) {
+        Write-Host "[ERROR] Manufacturer code must be exactly 4 characters!" -ForegroundColor Red
+    } elseif ($manufacturerCode[0] -cnotmatch '[A-Z]') {
+        Write-Host "[ERROR] First character of manufacturer code MUST be uppercase (required for AU format)!" -ForegroundColor Red
+    } else {
+        break
+    }
+} while ($true)
+
+$guiRepoDefault = "please Provide a valid GUI repository URL"
 $guiRepo = Read-Host "GUI Repository URL (press Enter for default template)"
 if ([string]::IsNullOrWhiteSpace($guiRepo)) {
     $guiRepo = $guiRepoDefault
@@ -46,7 +74,8 @@ $formatSelection = @{
 Write-Host "Select plugin formats (y/n for each, press Enter to accept defaults):" -ForegroundColor Yellow
 foreach ($format in $formatSelection.Keys | Sort-Object) {
     $default = if ($formatSelection[$format]) { "Y" } else { "N" }
-    $response = Read-Host "  Build $format? (y/n) [default: $default]"
+    $promptText = "  Build ${format}? (y/n) [default: $default]"
+    $response = Read-Host $promptText
     if ([string]::IsNullOrWhiteSpace($response)) {
         # Keep default
     } elseif ($response -match '^[Yy]') {
@@ -67,6 +96,8 @@ Write-Host ""
 Write-Host "Configuration:" -ForegroundColor Yellow
 Write-Host "  Plugin Name: $pluginName"
 Write-Host "  Company: $companyName"
+Write-Host "  Plugin Code: $pluginCode"
+Write-Host "  Manufacturer Code: $manufacturerCode"
 Write-Host "  GUI Repo: $guiRepo"
 Write-Host "  Plugin Formats: $selectedFormats"
 Write-Host ""
@@ -82,6 +113,8 @@ if (Test-Path $configPath) {
     $configContent.project.name = $pluginId
     $configContent.project.displayName = $pluginName
     $configContent.project.company = $companyName
+    $configContent.project.pluginCode = $pluginCode
+    $configContent.project.manufacturerCode = $manufacturerCode
     $json = $configContent | ConvertTo-Json -Depth 10
     [System.IO.File]::WriteAllText($configPath, $json, [System.Text.Encoding]::UTF8)
 }
