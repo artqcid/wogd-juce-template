@@ -46,6 +46,3 @@ plugin/.cpm/
 # JUCE submodule (if using Option 2)
 # Uncomment if you don't want to commit JUCE as submodule
 # juce/
-
-# GUI submodule - created by setup.ps1
-gui/
