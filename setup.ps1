@@ -3,9 +3,20 @@
 # This script configures a new plugin project from the template
 
 # Helper functions for colored output
-function Write-Success { param([string]$Message) Write-Host "✓ $Message" -ForegroundColor Green }
-function Write-Info { param([string]$Message) Write-Host "ℹ $Message" -ForegroundColor Cyan }
-function Write-Error { param([string]$Message) Write-Host "✗ $Message" -ForegroundColor Red }
+function Write-Success {
+    param([string]$Message)
+    Write-Host "[SUCCESS] $Message" -ForegroundColor Green
+}
+
+function Write-Info {
+    param([string]$Message)
+    Write-Host "[INFO] $Message" -ForegroundColor Cyan
+}
+
+function Write-Error {
+    param([string]$Message)
+    Write-Host "[ERROR] $Message" -ForegroundColor Red
+}
 
 Write-Host "WOGD JUCE Template Setup" -ForegroundColor Cyan
 Write-Host "================================" -ForegroundColor Cyan
@@ -307,9 +318,9 @@ git add -A
 git commit -m "Setup: Configure project as '$pluginIdSpaces' by $companyName"
 
 Write-Host ""
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
+Write-Host "====================================================" -ForegroundColor Cyan
 Write-Host "  IDE Configuration" -ForegroundColor Cyan
-Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
+Write-Host "====================================================" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Select your development environment:" -ForegroundColor Yellow
 Write-Host "  1. VS Code (default) - Pre-configured workspace"
@@ -450,7 +461,7 @@ switch ($ideChoice) {
 Write-Host ""
 Write-Host "Setup complete!" -ForegroundColor Green
 Write-Host ""
-Write-Host "━━━ Next Steps ━━━" -ForegroundColor Cyan
+Write-Host "=== Next Steps ===" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "You have TWO options to complete the setup:" -ForegroundColor Yellow
 Write-Host ""
@@ -462,15 +473,15 @@ Write-Host ".\quick-start.ps1" -ForegroundColor White -BackgroundColor DarkGray
 Write-Host ""
 Write-Host "  OR use VS Code task:"
 Write-Host "  1. Open $newWorkspacePath in VS Code"
-Write-Host "  2. Press Ctrl+Shift+P → 'Tasks: Run Task'"
+Write-Host "  2. Press Ctrl+Shift+P -> 'Tasks: Run Task'"
 Write-Host "  3. Select 'PROJECT First Time Setup'"
 Write-Host ""
 Write-Host "  This will automatically:" -ForegroundColor Gray
-Write-Host "    • Initialize GUI submodule"
-Write-Host "    • Install GUI dependencies (npm install)"
-Write-Host "    • Configure CMake"
-Write-Host "    • Build plugin"
-Write-Host "    • Start GUI dev server"
+Write-Host "    - Initialize GUI submodule"
+Write-Host "    - Install GUI dependencies (npm install)"
+Write-Host "    - Configure CMake"
+Write-Host "    - Build plugin"
+Write-Host "    - Start GUI dev server"
 Write-Host ""
 
 Write-Host "Option B - Manual (For advanced users):" -ForegroundColor Yellow
@@ -490,7 +501,7 @@ Write-Host "  # Start GUI dev server"
 Write-Host "  cd gui && npm run dev"
 Write-Host ""
 
-Write-Host "━━━ Optional Configuration ━━━" -ForegroundColor Cyan
+Write-Host "=== Optional Configuration ===" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Environment Variables:" -ForegroundColor Yellow
 Write-Host "  Set JUCE_DIR to use a central JUCE installation:"
@@ -498,15 +509,15 @@ Write-Host '  $env:JUCE_DIR = "C:/path/to/juce"' -ForegroundColor Gray
 Write-Host '  [System.Environment]::SetEnvironmentVariable("JUCE_DIR", "C:/path/to/juce", "User")' -ForegroundColor Gray
 Write-Host ""
 Write-Host "  JUCE_DIR can point to:"
-Write-Host "    • JUCE source directory (containing CMakeLists.txt)"
-Write-Host "    • Installed JUCE (containing JUCEConfig.cmake)"
+Write-Host "    - JUCE source directory (containing CMakeLists.txt)"
+Write-Host "    - Installed JUCE (containing JUCEConfig.cmake)"
 Write-Host ""
 
 Write-Host "Documentation:" -ForegroundColor Yellow
-Write-Host "  • README.md - Full project documentation"
-Write-Host "  • plugin/BUILD_WITH_GUI.md - GUI integration guide"
-Write-Host "  • plugin/docs/WEBVIEW2_SETUP.md - WebView2 setup"
+Write-Host "  - README.md - Full project documentation"
+Write-Host "  - plugin/BUILD_WITH_GUI.md - GUI integration guide"
+Write-Host "  - plugin/docs/WEBVIEW2_SETUP.md - WebView2 setup"
 Write-Host ""
-Write-Host "Happy coding! 🎵" -ForegroundColor Magenta
+Write-Host "Happy coding!" -ForegroundColor Magenta
 Write-Host ""
 Read-Host "Press Enter to close..."
