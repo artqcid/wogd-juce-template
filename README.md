@@ -303,9 +303,6 @@ This template builds upon the excellent work of the open-source community:
   CMake's missing package manager
 
 ### JUCE Modules & Extensions
-- **[Melatonin Inspector](https://github.com/sudara/melatonin_inspector)** by Sudara  
-  Visual debugging tool for JUCE UI components
-
 - **[clap-juce-extensions](https://github.com/free-audio/clap-juce-extensions)** by free-audio  
   CLAP plugin format support for JUCE
 

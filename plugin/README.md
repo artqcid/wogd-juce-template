@@ -12,9 +12,8 @@ Out-of-the-box, it provides:
 2. **CPM** for dependency management
 3. **CMake 3.25+** for cross-platform building
 4. **Catch2 v3.7.1** for testing framework
-5. **Melatonin Inspector** for UI debugging
-6. **WebView2** integration for Vue.js GUI
-7. **Clang/LLVM** support with MSVC toolchain
+5. **WebView2** integration for Vue.js GUI
+6. **Clang/LLVM** support with MSVC toolchain
 
 ### Build Targets
 - `<PluginName>_VST3` - VST3 plugin

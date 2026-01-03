@@ -160,9 +160,6 @@ endif()
 # Add any other modules you want modules here, before the juce_add_plugin call
 # juce_add_module(modules/my_module)
 
-# This adds the melatonin inspector module
-# add_subdirectory(modules/melatonin_inspector)
-
 # See `docs/CMake API.md` in the JUCE repo for all config options
 juce_add_plugin("${PROJECT_NAME}"
     # Icons for the standalone app
