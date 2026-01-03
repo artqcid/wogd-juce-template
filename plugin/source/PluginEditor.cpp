@@ -14,8 +14,14 @@ PluginEditor::PluginEditor (PluginProcessor& p)
 
 // Load GUI - Dev server in Debug, embedded files in Release
 #if defined(DEBUG) || defined(_DEBUG)
-    webView.goToURL ("http://localhost:5173/");
-    DBG ("🔧 Debug Mode: Loading GUI from dev server (localhost:5173)");
+    // Port is configured via CMake from project-config.json
+    #ifndef GUI_DEV_PORT
+        #define GUI_DEV_PORT 5173
+    #endif
+    
+    juce::String devServerUrl = "http://localhost:" + juce::String(GUI_DEV_PORT) + "/";
+    webView.goToURL (devServerUrl);
+    DBG ("🔧 Debug Mode: Loading GUI from dev server (" << devServerUrl << ")");
 #else
     webView.goToURL ("/");
     webView.setResourceProvider ([] (const juce::String& path) {

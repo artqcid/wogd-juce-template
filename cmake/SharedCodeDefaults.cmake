@@ -1,6 +1,6 @@
 # Set compile options for SharedCode target
 
-target_compile_features(SharedCode INTERFACE cxx_std_17)
+target_compile_features(SharedCode INTERFACE cxx_std_17)\n\n# Add GUI dev port as preprocessor definition\ntarget_compile_definitions(SharedCode INTERFACE GUI_DEV_PORT=${GUI_DEV_PORT})
 
 # Disable JUCE's default /W4 and /external:W0 on MSVC
 target_compile_options(SharedCode INTERFACE
