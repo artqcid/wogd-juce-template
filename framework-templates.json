@@ -2,7 +2,7 @@
   "frameworks": {
     "vue": {
       "name": "Vue.js",
-      "repository": "https://github.com/artqcid/wogd-juce-template-gui-vue.git",
+      "repository": "https://github.com/artqcid/wogd-juce-template-gui.git",
       "devScript": "dev",
       "buildScript": "build",
       "devPort": 5173,
