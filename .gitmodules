@@ -1,3 +1,0 @@
-[submodule "gui"]
-	path = gui
-	url = https://github.com/artqcid/wogd-juce-template-gui-vue.git
