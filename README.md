@@ -2,6 +2,10 @@
 
 Audio plugin template with JUCE 8 + Multi-Framework WebView2 GUI (Vue.js, React, Angular, Vanilla JS, Svelte)
 
+> ⚠️ **Platform Support**: Currently tested **only on Windows**. Linux and macOS support is planned but untested. Contributions for other platforms are welcome!
+> 
+> 💻 **IDE Support**: Currently provides **only VS Code workspace templates**. Support for other IDEs (CLion, Visual Studio, Xcode) is planned. Contributions welcome!
+
 ## ✨ Features
 
 - 🎨 **Multi-Framework Support** - Choose between Vue.js, React, Angular, Vanilla JS, or Svelte
@@ -309,7 +313,13 @@ After setup, customize:
 - GUI in `gui/src/views/PluginView.vue`
 - Styles in `gui/src/assets/master.css`
 
-## 📚 Resources
+## 📚 Documentation
+
+- **[CLI Development Guide](CLI-DEVELOPMENT.md)** - Develop without VS Code, use any IDE or text editor
+- **[Multi-Framework Guide](MULTIFRAMEWORK.md)** - Switch between GUI frameworks
+- **[Contributing Guide](CONTRIBUTING.md)** - Help improve this template
+
+### External Resources
 
 - [JUCE Documentation](https://juce.com/learn/documentation)
 - [Vue.js 3 Guide](https://vuejs.org/guide/)
