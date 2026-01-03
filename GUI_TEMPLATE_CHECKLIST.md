@@ -8,6 +8,7 @@ Use this checklist when creating each framework-specific GUI template repository
 - [ ] `wogd-juce-template-gui-react`
 - [ ] `wogd-juce-template-gui-angular`
 - [ ] `wogd-juce-template-gui-vanilla`
+- [ ] `wogd-juce-template-gui-svelte`
 
 ## 📦 Required Files (All Frameworks)
 

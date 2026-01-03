@@ -74,7 +74,7 @@ cd YOUR_PROJECT
 ```
 
 **Was macht das Setup-Script?**
-- 🎨 Fragt nach **GUI Framework** (Vue.js, React, Angular, Vanilla JS, Custom)
+- 🎨 Fragt nach **GUI Framework** (Vue.js, React, Angular, Vanilla JS, Svelte, Custom)
 - 📝 Fragt nach **Plugin Name**, **Company Name**, **Plugin Codes**
 - 🌐 Fragt nach **deinem GUI Repository** (das du aus dem Template erstellt hast)
 - 🔄 Aktualisiert `project-config.json` mit deinen Daten

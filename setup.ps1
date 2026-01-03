@@ -68,7 +68,7 @@ do {
 # GUI Framework Selection
 Write-Host ""
 Write-Host "GUI Framework Selection:" -ForegroundColor Cyan
-Write-Host "Available frameworks: Vue.js, React, Angular, Vanilla JS"
+Write-Host "Available frameworks: Vue.js, React, Angular, Vanilla JS, Svelte"
 Write-Host ""
 
 # Load framework templates
@@ -81,16 +81,18 @@ if (Test-Path $frameworkConfigPath) {
     Write-Host "  2. React"
     Write-Host "  3. Angular"
     Write-Host "  4. Vanilla JavaScript"
-    Write-Host "  5. Custom"
+    Write-Host "  5. Svelte"
+    Write-Host "  6. Custom"
     Write-Host ""
     Write-Host "Template repositories available at:" -ForegroundColor Gray
     Write-Host "  Vue.js:  $($frameworkConfig.frameworks.vue.repository)" -ForegroundColor DarkGray
     Write-Host "  React:   $($frameworkConfig.frameworks.react.repository)" -ForegroundColor DarkGray
     Write-Host "  Angular: $($frameworkConfig.frameworks.angular.repository)" -ForegroundColor DarkGray
     Write-Host "  Vanilla: $($frameworkConfig.frameworks.vanilla.repository)" -ForegroundColor DarkGray
+    Write-Host "  Svelte:  $($frameworkConfig.frameworks.svelte.repository)" -ForegroundColor DarkGray
     Write-Host ""
     
-    $frameworkChoice = Read-Host "Enter choice (1-5) [default: 1]"
+    $frameworkChoice = Read-Host "Enter choice (1-6) [default: 1]"
     if ([string]::IsNullOrWhiteSpace($frameworkChoice)) {
         $frameworkChoice = "1"
     }
@@ -121,6 +123,12 @@ if (Test-Path $frameworkConfigPath) {
             $devScript = $frameworkConfig.frameworks.vanilla.devScript
         }
         "5" {
+            $selectedFramework = "svelte"
+            $templateRepo = $frameworkConfig.frameworks.svelte.repository
+            $devPort = $frameworkConfig.frameworks.svelte.devPort
+            $devScript = $frameworkConfig.frameworks.svelte.devScript
+        }
+        "6" {
             $selectedFramework = "custom"
             $templateRepo = "N/A"
             $devPort = Read-Host "Dev Server Port [default: 5173]"
