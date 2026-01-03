@@ -2,6 +2,11 @@
 # WOGD JUCE Template Setup Script
 # This script configures a new plugin project from the template
 
+# Helper functions for colored output
+function Write-Success { param([string]$Message) Write-Host "✓ $Message" -ForegroundColor Green }
+function Write-Info { param([string]$Message) Write-Host "ℹ $Message" -ForegroundColor Cyan }
+function Write-Error { param([string]$Message) Write-Host "✗ $Message" -ForegroundColor Red }
+
 Write-Host "WOGD JUCE Template Setup" -ForegroundColor Cyan
 Write-Host "================================" -ForegroundColor Cyan
 Write-Host ""
