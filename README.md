@@ -117,15 +117,15 @@ Verwende die VS Code Tasks mit den neuen Namen:
 ```
 wogd-juce-template/
 ├── plugin/                    # JUCE C++ plugin code
-├── gui/                       # Vue.js GUI (git submodule)
+├── gui/                       # GUI (git submodule)
 ├── cmake/                     # CMake configuration files
 ├── template.code-workspace    # VS Code workspace (renamed after setup)
 └── setup.ps1                  # Setup script
 ```
 
 ### Workspace Folders
-- **GUI (Vue.js)** - Frontend development
-- **Plugin (JUCE)** - C++ plugin development
+- **GUI** - Frontend development
+- **Plugin** - C++ plugin development
 - **Root** - Project configuration
 
 ## 🎨 GUI Development

@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Automatic Visual Studio detection via vswhere.exe
 - JUCE hybrid dependency management (4 acquisition methods)
 - Environment variable support for flexible paths
-- WebView2 integration for Vue.js GUI
+- WebView2 integration for web-based GUI
 - CPM package manager integration
 - Extensions recommendations (`.vscode/extensions.json`)
 - EditorConfig for consistent code formatting (`.editorconfig`)

@@ -12,7 +12,7 @@ Out-of-the-box, it provides:
 2. **CPM** for dependency management
 3. **CMake 3.25+** for cross-platform building
 4. **Catch2 v3.7.1** for testing framework
-5. **WebView2** integration for Vue.js GUI
+5. **WebView2** integration for web-based GUI
 6. **Clang/LLVM** support with MSVC toolchain
 
 ### Build Targets
@@ -82,7 +82,7 @@ void PluginProcessor::addParameters()
 ```
 
 ### GUI Integration
-The plugin editor loads the Vue.js GUI via WebView2:
+The plugin editor loads the GUI via WebView2:
 - **Debug builds**: Loads from `http://localhost:5173` (hot reload)
 - **Release builds**: Loads from bundled `dist/index.html`
 
