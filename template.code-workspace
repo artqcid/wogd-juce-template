@@ -18,6 +18,9 @@
       "**/node_modules": true,
       "**/.git": false
     },
+    "git.detectSubmodules": true,
+    "git.detectSubmodulesLimit": 10,
+    "git.enableSmartCommit": false,
     "cmake.sourceDirectory": "${workspaceFolder:Plugin}",
     "cmake.buildDirectory": "${workspaceFolder:Plugin}/build",
     "cmake.configureOnOpen": false,
